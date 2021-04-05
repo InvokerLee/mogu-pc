@@ -1,18 +1,40 @@
 <template>
-  <div class="dashboard-editor-container">
-    <panel-group :datas="orderDaily" />
+  <div class="dashboard">
+    <daily-data :datas="orderDaily" />
+
+    <el-card class="wait-for-deal">
+      <div slot="header" class="clearfix">
+        <el-row type="flex" justify="space-between">
+          <strong>待处理事务</strong>
+          <el-button size="mini" type="primary">刷新</el-button>
+        </el-row>
+      </div>
+      <el-row gutter="20">
+        <el-col :span="8">
+          <el-row type="flex" justify="space-between" class="item">
+            <span>待审核订单</span>
+            <span>(<span class="num">10</span>)</span>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" justify="space-between" class="item">
+            <span>待出库订单</span>
+            <span>(<span class="num">10</span>)</span>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" justify="space-between" class="item">
+            <span>待入库订单</span>
+            <span>(<span class="num">10</span>)</span>
+          </el-row>
+        </el-col>
+      </el-row>
+    </el-card>
+
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData" title="30天订单量" />
     </el-row>
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="3">
-        <div class="chart-wrapper">
-          <div class="btns">
-            <h3>操作按钮</h3>
-            <el-button type="primary" @click="clearCache" v-loading="clearLoading">清空缓存</el-button>
-          </div>
-        </div>
-      </el-col>
       <el-col :xs="24" :sm="24" :lg="7">
         <div class="chart-wrapper">
           <raddar-chart />
@@ -37,9 +59,9 @@
 import LineChart from '@/components/Charts/LineChart';
 import PieChart from '@/components/Charts/PieChart';
 import BarChart from '@/components/Charts/BarChart';
-import PanelGroup from './components/PanelGroup';
+import dailyData from './components/daily-data';
 import RaddarChart from './components/RaddarChart';
-import { getHomeData, cacheClear, getPieData } from '@/api/dashboard';
+import { getHomeData, getPieData } from '@/api/dashboard';
 
 export default {
   name: 'DashboardAdmin',
@@ -47,22 +69,21 @@ export default {
     LineChart,
     PieChart,
     BarChart,
-    PanelGroup,
-    RaddarChart,
+    dailyData,
+    RaddarChart
   },
   data() {
     return {
-      clearLoading: false,
       orderDaily: {},
       lineChartData: {
         categoryData: [],
-        valueData: [],
+        valueData: []
       },
-      pieCardData: [],
+      pieCardData: []
     };
   },
   created() {
-    this.fetchData();
+    // this.fetchData();
   },
   methods: {
     fetchData() {
@@ -74,32 +95,30 @@ export default {
       getPieData().then(res => {
         this.pieCardData = res.data;
       });
-    },
-    clearCache() {
-      this.$confirm('此操作将清空前台缓存, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }).then(() => {
-        this.clearLoading = true;
-        cacheClear().then(res => {
-          this.$message.success(`操作成功`);
-          this.clearLoading = false;
-        });
-      }).catch(() => {
-
-      });
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.dashboard-editor-container {
+.dashboard {
   width: 100%;
-  padding: 32px;
+  padding: 0px 16px;
   background-color: rgb(240, 242, 245);
   position: relative;
+
+  .wait-for-deal {
+    .item {
+      cursor: pointer;
+      font-size: 12px;
+      &:hover {
+        color: #42B983;
+      }
+      .num {
+        color: red;
+      }
+    }
+  }
 
   .github-corner {
     position: absolute;

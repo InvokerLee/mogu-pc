@@ -5,13 +5,13 @@ const getters = {
   cachedViews: state => state.tagsView.cachedViews,
   routes: state => state.permission.routes,
   getConstByGroup: state => (group) => {
-    const g = state.app.consts.find(item => item.group === group)
-    const obj = {}
+    const g = state.app.consts.find(item => item.group === group);
+    const obj = {};
     if (g && g.itemList) {
-      obj.itemList = g.itemList
-      g.itemList.forEach((item) => { obj[item.code] = item.name })
+      obj.itemList = g.itemList;
+      g.itemList.forEach((item) => { obj[item.code] = item.name; });
     }
-    return obj
+    return obj;
   }
-}
-export default getters
+};
+export default getters;

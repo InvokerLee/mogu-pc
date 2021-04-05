@@ -1,6 +1,6 @@
 <template>
   <el-row class="base-wrapper" type="flex">
-    <div class="wrapper-head" v-if="showHead">
+    <div v-if="showHead" class="wrapper-head">
       <slot name="head" />
     </div>
     <div class="wrapper-content">
@@ -14,8 +14,8 @@ export default {
   computed: {
     showHead() {
       return this.$slots.head;
-    },
-  },
+    }
+  }
 };
 </script>
 

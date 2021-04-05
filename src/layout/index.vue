@@ -20,7 +20,7 @@ export default {
     Navbar,
     Sidebar,
     AppMain,
-    TagsView,
+    TagsView
   },
   computed: {
     sidebar() {
@@ -30,10 +30,10 @@ export default {
       return {
         hideSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
+        withoutAnimation: this.sidebar.withoutAnimation
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

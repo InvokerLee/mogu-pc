@@ -1,4 +1,4 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { asyncRoutes, constantRoutes } from '@/router';
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -7,15 +7,15 @@ import { asyncRoutes, constantRoutes } from '@/router'
  */
 function hasPermission(permissionList, route) {
   if (route.hidden) {
-    return true
+    return true;
   } else if (route.path) {
-    const per = permissionList.find(p => p.route === route.name)
+    const per = permissionList.find(p => p.route === route.name);
     if (per) {
-      route.meta.title = per.name
+      route.meta.title = per.name;
     }
-    return !!per
+    return !!per;
   } else {
-    return false
+    return false;
   }
 }
 /**
@@ -24,50 +24,50 @@ function hasPermission(permissionList, route) {
  * @param roles
  */
 export function filterAsyncRoutes(routes, permissionList) {
-  const res = []
+  const res = [];
   routes.forEach(route => {
-    const tmp = { ...route }
+    const tmp = { ...route };
     if (hasPermission(permissionList, tmp)) {
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, permissionList)
+        tmp.children = filterAsyncRoutes(tmp.children, permissionList);
       }
-      res.push(tmp)
+      res.push(tmp);
     }
-  })
+  });
 
-  return res
+  return res;
 }
 
 const state = {
   routes: [],
   addRoutes: []
-}
+};
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
-    state.addRoutes = routes
-    state.routes = constantRoutes.concat(routes)
+    state.addRoutes = routes;
+    state.routes = constantRoutes.concat(routes);
   },
   SET_EMPTY_ROUTES: (state, routes) => {
-    state.addRoutes = []
-    state.routes = []
+    state.addRoutes = [];
+    state.routes = [];
   }
-}
+};
 
 const actions = {
   generateRoutes({ commit }, permissionList) {
     return new Promise(resolve => {
       // const accessedRoutes = filterAsyncRoutes(asyncRoutes, permissionList);
       // commit('SET_ROUTES', accessedRoutes);
-      commit('SET_ROUTES', asyncRoutes)
-      resolve(asyncRoutes)
-    })
+      commit('SET_ROUTES', asyncRoutes);
+      resolve(asyncRoutes);
+    });
   }
-}
+};
 
 export default {
   namespaced: true,
   state,
   mutations,
   actions
-}
+};

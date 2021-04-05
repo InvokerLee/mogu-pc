@@ -24,10 +24,13 @@ import variables from '@/assets/styles/variables.scss';
 
 export default {
   components: { SidebarItem },
+  created() {
+    console.log(this.routes);
+  },
   computed: {
     ...mapGetters([
       'sidebar',
-      'routes',
+      'routes'
     ]),
     activeMenu() {
       const route = this.$route;
@@ -43,7 +46,7 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened;
-    },
-  },
+    }
+  }
 };
 </script>

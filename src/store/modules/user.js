@@ -9,8 +9,8 @@ const getDefaultState = () => {
       id: '',
       username: '',
       realname: '',
-      menuList: [],
-    },
+      menuList: []
+    }
   };
 };
 
@@ -24,7 +24,7 @@ const mutations = {
     Object.keys(state.userInfo).forEach((key) => {
       state.userInfo[key] = user_info[key];
     });
-  },
+  }
 };
 
 const actions = {
@@ -65,13 +65,13 @@ const actions = {
     commit('RESET_USER_STATE'); // 清除用户信息
     commit('permission/SET_EMPTY_ROUTES', [], { root: true }); // 清除路由信息
     removeToken(); // 清除Token
-  },
+  }
 };
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions,
+  actions
 };
 

@@ -18,7 +18,7 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start();
 
   const hasToken = getToken();
-  if (hasToken) {
+  if (!hasToken) {
     if (to.path === '/login') {
       next({ path: '/' });
       NProgress.done();
@@ -27,10 +27,11 @@ router.beforeEach(async(to, from, next) => {
       if (hasMenus) {
         next();
       } else {
-        store.dispatch('app/getConsts');
+        // store.dispatch('app/getConsts');
         try {
-          const permissionList = await store.dispatch('user/getUserInfo');
-          const accessRoutes = await store.dispatch('permission/generateRoutes', permissionList);
+          // const permissionList = await store.dispatch('user/getUserInfo');
+          // const accessRoutes = await store.dispatch('permission/generateRoutes', permissionList);
+          const accessRoutes = await store.dispatch('permission/generateRoutes', []);
 
           router.addRoutes(accessRoutes);
           // set the replace: true, so the navigation will not leave a history record

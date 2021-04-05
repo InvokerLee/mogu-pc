@@ -25,5 +25,5 @@ export default {
       const item = menuList.find(v => v.route === permisionArr[0]);
       return item.name;
     };
-  },
+  }
 };
