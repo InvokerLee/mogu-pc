@@ -1,28 +1,35 @@
 <template>
   <div class="login-container">
-    <el-form ref="accountForm" class="login-form" :model="loginForm" :rules="rules">
-      <div class="title-container">
-        <h3 class="title">
-          立创商城外贸ERP
-        </h3>
+    <section class="box">
+      <div class="sys-info">
+        <div class="logo">
+          <img :src="require('@/assets/imgs/login/in.png')" alt="">
+        </div>
+        <div class="title">
+          <div class="zh">小摩菇智慧管理系统</div>
+          <div class="en">Mogu smart Management System</div>
+        </div>
       </div>
-      <!-- 用户名输入框 -->
-      <el-form-item prop="username">
-        <el-input
-          placeholder="账户名"
-          v-model.trim="loginForm.username"
-        />
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input
-          type="password"
-          placeholder="密码"
-          v-model="loginForm.password"
-          @keyup.enter.native="handleLogin"
-        />
-      </el-form-item>
-      <el-button class="login-btn" type="primary" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
-    </el-form>
+      <el-form ref="accountForm" inline :model="loginForm" :rules="rules" class="form">
+        <el-form-item prop="username">
+          <el-input
+            v-model.trim="loginForm.username"
+            class="w280"
+            placeholder="请输入用户名称"
+          />
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            v-model="loginForm.password"
+            class="w280"
+            type="password"
+            placeholder="请输入登录密码"
+            @keyup.enter.native="handleLogin"
+          />
+        </el-form-item>
+        <el-button type="primary" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
+      </el-form>
+    </section>
   </div>
 </template>
 
@@ -34,19 +41,19 @@ export default {
     return {
       loginForm: {
         username: '',
-        password: '',
+        password: ''
       },
       rules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, message: '至少输入六位', trigger: 'blur' },
-        ],
+          { min: 6, message: '至少输入六位', trigger: 'blur' }
+        ]
       },
       loading: false,
-      redirect: undefined,
+      redirect: undefined
     };
   },
   watch: {
@@ -54,8 +61,8 @@ export default {
       handler: function(route) {
         this.redirect = route.query && route.query.redirect;
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     handleLogin() {
@@ -71,8 +78,8 @@ export default {
             this.loading = false;
           });
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -80,29 +87,53 @@ export default {
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: #2d3a4b;
+  background: url('~@/assets/imgs/login/bg.jpg') no-repeat;
+  background-size: cover;
   overflow: hidden;
 
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
-    overflow: hidden;
-    .title-container {
-      position: relative;
+  .box {
+    width: 100%;
+    background-color: rgba(0,0,0, 0.5);
+    min-height: 300px;
+    margin-top: 160px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .sys-info {
+      display: flex;
+      align-items: center;
+      .logo {
+          background: url('~@/assets/imgs/login/out.png') no-repeat;
+          width: 80px;
+          height: 88px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
       .title {
-        font-size: 26px;
-        color: #fff;
-        margin: 0px auto 40px auto;
-        text-align: center;
-        font-weight: bold;
+        margin-left: 20px;
+        .zh {
+          line-height: 67px;
+          font-size: 48px;
+          font-weight: bold;
+        }
+        .en {
+          line-height: 50px;
+          font-size: 36px;
+        }
       }
     }
-    .login-btn {
-      width: 100%;
-      margin-bottom: 30px;
+  }
+
+  .form {
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+    text-align: center;
+    .w280 {
+      width: 280px;
     }
   }
 }
