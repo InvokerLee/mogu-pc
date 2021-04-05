@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <base-wrapper class="dashboard">
     <daily-data :datas="orderDaily" />
 
     <el-card class="wait-for-deal">
@@ -9,7 +9,7 @@
           <el-button size="mini" type="primary">刷新</el-button>
         </el-row>
       </div>
-      <el-row gutter="20">
+      <el-row :gutter="20">
         <el-col :span="8">
           <el-row type="flex" justify="space-between" class="item">
             <span>待审核订单</span>
@@ -31,7 +31,10 @@
       </el-row>
     </el-card>
 
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+    <fast-nav />
+
+    <error-data />
+    <el-row>
       <line-chart :chart-data="lineChartData" title="30天订单量" />
     </el-row>
     <el-row :gutter="32">
@@ -51,7 +54,7 @@
         </div>
       </el-col>
     </el-row>
-  </div>
+  </base-wrapper>
 </template>
 
 <script>
@@ -60,6 +63,9 @@ import LineChart from '@/components/Charts/LineChart';
 import PieChart from '@/components/Charts/PieChart';
 import BarChart from '@/components/Charts/BarChart';
 import dailyData from './components/daily-data';
+import fastNav from './components/fast-nav';
+import errorData from './components/error-data';
+
 import RaddarChart from './components/RaddarChart';
 import { getHomeData, getPieData } from '@/api/dashboard';
 
@@ -70,6 +76,8 @@ export default {
     PieChart,
     BarChart,
     dailyData,
+    fastNav,
+    errorData,
     RaddarChart
   },
   data() {
@@ -102,9 +110,6 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard {
-  width: 100%;
-  padding: 0px 16px;
-  background-color: rgb(240, 242, 245);
   position: relative;
 
   .wait-for-deal {

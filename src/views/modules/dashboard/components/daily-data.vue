@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="40" class="panel-group">
+  <el-row :gutter="20" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper">
@@ -52,7 +52,7 @@
       <div class="card-panel">
         <div class="card-panel-icon-wrapper">
           <img :src="require('@/assets/imgs/dashboard/u256.png')" alt="">
-          <el-row type="flex" justify="space-around" align="bottom">
+          <el-row type="flex" justify="space-around" align="bottom" style="margin-top: -8px;">
             <img :src="require('@/assets/imgs/dashboard/u258.png')" height="100%" alt="">
             <img :src="require('@/assets/imgs/dashboard/u264.png')" height="100%" alt="">
             <img :src="require('@/assets/imgs/dashboard/u260.png')" height="100%" alt="">
@@ -98,7 +98,7 @@ export default {
 
 <style lang="scss" scoped>
 .panel-group {
-  margin-top: 16px;
+  margin: 16px 16px 0;
   .card-panel {
     font-size: 12px;
     display: flex;
