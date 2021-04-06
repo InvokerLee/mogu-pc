@@ -34,51 +34,32 @@
     <fast-nav />
 
     <error-data />
-    <el-row>
-      <line-chart :chart-data="lineChartData" title="30天订单量" />
-    </el-row>
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="7">
-        <div class="chart-wrapper">
-          <raddar-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="7">
-        <div class="chart-wrapper">
-          <pie-chart :datas="pieCardData" />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="7">
-        <div class="chart-wrapper">
-          <bar-chart />
-        </div>
-      </el-col>
-    </el-row>
+
+    <sale-chart />
+
+    <!-- <bar-chart /> -->
+
   </base-wrapper>
 </template>
 
 <script>
 // 因为这个组件常用故抽出到公共组件库
-import LineChart from '@/components/Charts/LineChart';
-import PieChart from '@/components/Charts/PieChart';
-import BarChart from '@/components/Charts/BarChart';
+// import BarChart from '@/components/Charts/BarChart';
 import dailyData from './components/daily-data';
 import fastNav from './components/fast-nav';
 import errorData from './components/error-data';
+import saleChart from './components/sale-chart';
 
-import RaddarChart from './components/RaddarChart';
 import { getHomeData, getPieData } from '@/api/dashboard';
 
 export default {
   name: 'DashboardAdmin',
   components: {
-    LineChart,
-    PieChart,
-    BarChart,
+    // BarChart,
     dailyData,
     fastNav,
     errorData,
-    RaddarChart
+    saleChart
   },
   data() {
     return {
@@ -124,22 +105,5 @@ export default {
       }
     }
   }
-
-  .github-corner {
-    position: absolute;
-    top: 0px;
-    border: 0;
-    right: 0;
-  }
-
-  .chart-wrapper {
-    background: #fff;
-    padding: 16px 16px 0;
-    margin-bottom: 32px;
-  }
-}
-.btns {
-  text-align: center;
-  height: 280px;
 }
 </style>

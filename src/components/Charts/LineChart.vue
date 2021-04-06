@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :style="{height:height,width:width}" />
 </template>
 
 <script>
@@ -10,42 +10,22 @@ import resize from './mixins/resize';
 export default {
   mixins: [resize],
   props: {
-    title: {
-      type: String,
-      default: '',
-    },
-    type: {
-      type: String,
-      default: 'bar',
-    },
-    className: {
-      type: String,
-      default: 'chart',
-    },
     width: {
       type: String,
-      default: '100%',
+      default: '100%'
     },
     height: {
       type: String,
-      default: '350px',
-    },
-    autoResize: {
-      type: Boolean,
-      default: true,
+      default: '350px'
     },
     chartData: {
       type: Object,
-      required: true,
-    },
-    isMultiple: {
-      type: Boolean,
-      default: false,
-    },
+      required: true
+    }
   },
   data() {
     return {
-      chart: null,
+      chart: null
     };
   },
   watch: {
@@ -53,8 +33,8 @@ export default {
       deep: true,
       handler(val) {
         this.setOptions(val);
-      },
-    },
+      }
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -75,92 +55,34 @@ export default {
     },
     setOptions({ categoryData, valueData } = {}) {
       const options = {
-        title: {
-          text: this.title,
-          left: 10,
-        },
-        toolbox: {
-          feature: {
-            dataZoom: {
-              yAxisIndex: false,
-            },
-            saveAsImage: {
-              pixelRatio: 2,
-            },
-          },
-        },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow',
-          },
+          trigger: 'axis'
         },
-        grid: {
-          bottom: 90,
-        },
-        dataZoom: [{
-          startValue: categoryData[categoryData.length - 30],
-        }, {
-          type: 'inside',
-        }, {
-          type: 'slider',
-        }],
+        // dataZoom: [{
+        //   startValue: categoryData[categoryData.length - 30]
+        // }, {
+        //   type: 'inside'
+        // }, {
+        //   type: 'slider'
+        // }],
         xAxis: {
-          data: categoryData,
-          silent: false,
-          splitLine: {
-            show: false,
-          },
-          splitArea: {
-            show: false,
-          },
+          type: 'category',
+          boundaryGap: false,
+          data: categoryData
         },
         yAxis: {
-          splitArea: {
-            show: false,
-          },
+          type: 'value'
         },
-        series: [],
-      };
-      if (this.isMultiple) {
-        const labelOption = {
-          show: true,
-          position: 'insideBottom',
-          distance: 15,
-          align: 'left',
-          verticalAlign: 'middle',
-          rotate: 0,
-          formatter: '{c}',
-          fontSize: 16,
-          rich: {
-            name: {
-              textBorderColor: '#fff',
-            },
-          },
-        };
-        valueData.forEach(item => {
-          options.series.push(
-            {
-              name: item.name,
-              type: 'bar',
-              barGap: 0,
-              label: labelOption,
-              data: item.data,
-            },
-          );
-        });
-      } else {
-        options.series = [{
-          type: this.type,
+        series: [{
           data: valueData,
-          itemStyle: { normal: { label: { show: true }}},
+          type: 'line',
+          smooth: true,
+          areaStyle: {}
+        }]
+      };
 
-          // Set `large` for large data amount
-          // large: true
-        }];
-      }
       this.chart.setOption(options);
-    },
-  },
+    }
+  }
 };
 </script>
