@@ -37,6 +37,8 @@
 
     <sale-chart />
 
+    <rank-customer />
+
     <!-- <bar-chart /> -->
 
   </base-wrapper>
@@ -49,6 +51,7 @@ import dailyData from './components/daily-data';
 import fastNav from './components/fast-nav';
 import errorData from './components/error-data';
 import saleChart from './components/sale-chart';
+import rankCustomer from './components/rank-customer';
 
 import { getHomeData, getPieData } from '@/api/dashboard';
 
@@ -59,7 +62,8 @@ export default {
     dailyData,
     fastNav,
     errorData,
-    saleChart
+    saleChart,
+    rankCustomer
   },
   data() {
     return {
