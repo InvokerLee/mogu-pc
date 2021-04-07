@@ -5,52 +5,52 @@
         <el-col>
           <el-form ref="searchForm" size="mini" inline :model="params">
             <el-form-item label="关键词">
-              <el-input placeholder="请输入账号、名称" v-model.trim="params.key"></el-input>
+              <el-input v-model.trim="params.key" placeholder="请输入账号、名称" />
             </el-form-item>
             <el-form-item label="授权等级">
-              <el-select placeholder="请选择" v-model="params.level">
-                <el-option label="全部" value=""></el-option>
-                <el-option label="无" :value="0"></el-option>
-                <el-option label="低" :value="1"></el-option>
-                <el-option label="中" :value="2"></el-option>
-                <el-option label="高" :value="3"></el-option>
+              <el-select v-model="params.level" placeholder="请选择">
+                <el-option label="全部" value="" />
+                <el-option label="无" :value="0" />
+                <el-option label="低" :value="1" />
+                <el-option label="中" :value="2" />
+                <el-option label="高" :value="3" />
               </el-select>
             </el-form-item>
             <el-form-item label="用户状态">
-              <el-select placeholder="请选择" v-model="params.status">
-                <el-option label="全部" value=""></el-option>
-                <el-option label="启用" :value="1"></el-option>
-                <el-option label="禁用" :value="2"></el-option>
+              <el-select v-model="params.status" placeholder="请选择">
+                <el-option label="全部" value="" />
+                <el-option label="启用" :value="1" />
+                <el-option label="禁用" :value="2" />
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" v-if="$hasPermission('searchUser')" @click="search">{{ $hasPermission('searchUser') }}</el-button>
+              <el-button v-if="$hasPermission('searchUser')" type="primary" @click="search">{{ $hasPermission('searchUser') }}</el-button>
               <el-button type="info" @click="reset">重置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col class="tar">
-          <el-button type="success" size="mini" v-if="$hasPermission('addUser')" @click="add">{{ $hasPermission('addUser') }}</el-button>
-          <el-button type="warning" size="mini" v-if="$hasPermission('updateUser')" @click="edit">{{ $hasPermission('updateUser') }}</el-button>
-          <el-button type="primary" size="mini" v-if="$hasPermission('updateAuthLevel')" @click="updateUserLevel">{{ $hasPermission('updateAuthLevel') }}</el-button>
-          <el-button type="primary" size="mini" v-if="$hasPermission('updatePassword')" @click="updatePwd">{{ $hasPermission('updatePassword') }}</el-button>
-          <el-button type="danger" size="mini" v-if="$hasPermission('delUser')" @click="del">{{ $hasPermission('delUser') }}</el-button>
+          <el-button v-if="$hasPermission('addUser')" type="success" size="mini" @click="add">{{ $hasPermission('addUser') }}</el-button>
+          <el-button v-if="$hasPermission('updateUser')" type="warning" size="mini" @click="edit">{{ $hasPermission('updateUser') }}</el-button>
+          <el-button v-if="$hasPermission('updateAuthLevel')" type="primary" size="mini" @click="updateUserLevel">{{ $hasPermission('updateAuthLevel') }}</el-button>
+          <el-button v-if="$hasPermission('updatePassword')" type="primary" size="mini" @click="updatePwd">{{ $hasPermission('updatePassword') }}</el-button>
+          <el-button v-if="$hasPermission('delUser')" type="danger" size="mini" @click="del">{{ $hasPermission('delUser') }}</el-button>
         </el-col>
       </el-row>
       <div>
         <el-table
+          v-adaptive-height="{bottomOffset: 100}"
+          v-loading="loading"
           border
           size="mini"
           height="120px"
-          v-adaptive-height="{bottomOffset: 100}"
-          v-loading="loading"
           :data="tableData"
           @selection-change="(val) => { selectItems = val }"
         >
-          <el-table-column width="55" type="selection" align="center"></el-table-column>
-          <el-table-column prop="username" label="账号" align="center"></el-table-column>
-          <el-table-column prop="realname" label="名称" align="center"></el-table-column>
-          <el-table-column prop="phone" label="手机" align="center"></el-table-column>
+          <el-table-column width="55" type="selection" align="center" />
+          <el-table-column prop="username" label="账号" align="center" />
+          <el-table-column prop="realname" label="名称" align="center" />
+          <el-table-column prop="phone" label="手机" align="center" />
           <el-table-column label="部门" align="center">
             <template slot-scope="scope">
               <span>{{ branchs[scope.row.branch] }}</span>
@@ -70,11 +70,11 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="remarks" label="备注" align="center" width="300px" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="remarks" label="备注" align="center" width="300px" :show-overflow-tooltip="true" />
         </el-table>
         <el-pagination
-          layout="total, sizes, prev, pager, next, jumper"
           v-if="tableData.length"
+          layout="total, sizes, prev, pager, next, jumper"
           class="pagination"
           :current-page.sync="params.page"
           :page-size="params.limit"
@@ -82,8 +82,7 @@
           :page-sizes="[10,20,30]"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-        >
-        </el-pagination>
+        />
       </div>
     </div>
     <user-info-form
@@ -92,23 +91,20 @@
       :item="dialog.item"
       @success="actionSuccess"
       @cancel="closeDialog"
-    >
-    </user-info-form>
+    />
     <user-level
       v-if="dialog.show && dialog.name === 'USER_LEVEL'"
       :visible="dialog.show"
       :item="selectItems[0]"
       @success="actionSuccess"
       @cancel="closeDialog"
-    >
-    </user-level>
+    />
     <user-password
       v-if="dialog.show && dialog.name === 'USER_PASSWORD'"
       :visible="dialog.show"
       :item="selectItems[0]"
       @cancel="closeDialog"
-    >
-    </user-password>
+    />
   </base-wrapper>
 </template>
 
@@ -119,11 +115,11 @@ import userLevel from './components/user-level';
 import userPassword from './components/user-password';
 
 export default {
-  name: 'user',
+  name: 'User',
   components: {
     userInfoForm,
     userLevel,
-    userPassword,
+    userPassword
   },
   data() {
     return {
@@ -133,7 +129,7 @@ export default {
         level: '',
         status: '',
         page: 1,
-        limit: 20,
+        limit: 20
       },
       total: 0,
       tableData: [],
@@ -141,14 +137,14 @@ export default {
       dialog: {
         show: false,
         name: '',
-        item: {},
-      },
+        item: {}
+      }
     };
   },
   computed: {
     branchs() {
       return this.$store.getters.getConstByGroup('branch');
-    },
+    }
   },
   created() {
     this.getList();
@@ -199,12 +195,12 @@ export default {
         return;
       }
       const params = {
-        user_id: this.selectItems.map(v => v.id).join(','),
+        user_id: this.selectItems.map(v => v.id).join(',')
       };
       this.$confirm('确认要删除所选用户吗?', '删除提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
-        type: 'warning',
+        type: 'warning'
       }).then(() => delUser(params)).then(() => {
         this.$message.success('删除成功');
         this.getList();
@@ -236,8 +232,8 @@ export default {
         return false;
       }
       return true;
-    },
-  },
+    }
+  }
 };
 </script>
 

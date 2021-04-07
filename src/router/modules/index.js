@@ -1,7 +1,7 @@
 import auth from './auth';
-import order from './order';
+import config from './config';
 
 export const asyncRoutes = [
   auth,
-  order
+  config
 ];
