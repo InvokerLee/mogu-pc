@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :style="{height:height,width:width}" />
 </template>
 
 <script>
@@ -10,27 +10,31 @@ import resize from './mixins/resize';
 export default {
   mixins: [resize],
   props: {
-    title: {
-      type: String,
-      default: '',
-    },
-    className: {
-      type: String,
-      default: 'chart',
-    },
     width: {
       type: String,
-      default: '100%',
+      default: '100%'
     },
     height: {
       type: String,
-      default: '300px',
+      default: '350px'
     },
+    chartData: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
-      chart: null,
+      chart: null
     };
+  },
+  watch: {
+    chartData: {
+      deep: true,
+      handler(val) {
+        this.setOptions(val);
+      }
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -46,27 +50,29 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons');
-
-      this.chart.setOption({
-        title: {
-          text: this.title,
-          left: 10,
-        },
-        color: ['#3398DB'],
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        },
-        yAxis: {
-          type: 'value',
-        },
-        series: [{
-          data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'bar',
-        }],
-      });
+      this.chart = echarts.init(this.$el);
+      this.setOptions(this.chartData);
     },
-  },
+    setOptions({ dimensions, source } = {}) {
+      const options = {
+        legend: {
+          left: 40
+        },
+        tooltip: {},
+        dataset: {
+          dimensions,
+          source
+        },
+        xAxis: { type: 'category' },
+        yAxis: {},
+        series: [
+          { type: 'bar' },
+          { type: 'bar' }
+        ]
+      };
+
+      this.chart.setOption(options);
+    }
+  }
 };
 </script>

@@ -27,7 +27,6 @@ router.beforeEach(async(to, from, next) => {
       if (hasMenus) {
         next();
       } else {
-        // store.dispatch('app/getConsts');
         try {
           // const permissionList = await store.dispatch('user/getUserInfo');
           // const accessRoutes = await store.dispatch('permission/generateRoutes', permissionList);

@@ -63,8 +63,8 @@
         <el-row type="flex">
           <el-col class="cell" :span="6">跟进人</el-col>
           <el-col class="cell" :span="6">{{ detail.basic.follower }}</el-col>
-          <el-col class="cell" :span="6"></el-col>
-          <el-col class="cell" :span="6"></el-col>
+          <el-col class="cell" :span="6" />
+          <el-col class="cell" :span="6" />
         </el-row>
         <el-row type="flex">
           <el-col class="cell" :span="6">
@@ -72,7 +72,7 @@
             <el-button class="btn-margin" type="text" size="mini" @click="addOrderRemark(1)">新增订单备注</el-button>
           </el-col>
           <el-col class="cell justify-start" :span="18">
-            <remark-list v-if="detail.basic.order_remarks" :remarkList="detail.basic.order_remarks"></remark-list>
+            <remark-list v-if="detail.basic.order_remarks" :remark-list="detail.basic.order_remarks" />
           </el-col>
         </el-row>
         <el-row type="flex">
@@ -81,7 +81,7 @@
             <el-button class="btn-margin" type="text" size="mini" @click="addOrderRemark(2)">新增发货备注</el-button>
           </el-col>
           <el-col class="cell justify-start" :span="18">
-            <remark-list v-if="detail.basic.shipping_remarks" :remarkList="detail.basic.shipping_remarks"></remark-list>
+            <remark-list v-if="detail.basic.shipping_remarks" :remark-list="detail.basic.shipping_remarks" />
           </el-col>
         </el-row>
       </div>
@@ -106,7 +106,7 @@
           <el-col class="cell" :span="3">人民币换算金额</el-col>
           <el-col class="cell" :span="3">
             <span v-if="detail.cost.convert_total">￥{{ detail.cost.convert_total }}</span>
-            <el-button class="btn-margin" type="text" size="mini" v-if="detail.cost.is_lock_convert === 1" @click="convertToRmb">换算人民币</el-button>
+            <el-button v-if="detail.cost.is_lock_convert === 1" class="btn-margin" type="text" size="mini" @click="convertToRmb">换算人民币</el-button>
           </el-col>
         </el-row>
         <el-row type="flex">
@@ -137,7 +137,7 @@
           <el-col class="cell" :span="3">${{ detail.cost.handle_fee }}</el-col>
           <el-col class="cell" :span="3">手续费优惠</el-col>
           <el-col class="cell" :span="3">${{ detail.cost.handle_fee_off }}</el-col>
-          <el-col class="cell" :span="12"></el-col>
+          <el-col class="cell" :span="12" />
         </el-row>
       </div>
       <div>
@@ -230,7 +230,7 @@
         <div class="title">
           <span>商品信息</span>
           <div class="fr">
-            <el-button size="mini" type="primary" v-if="$hasPermission('updateShipQuntity')" @click="editSendCount">{{ $hasPermission('updateShipQuntity') }}</el-button>
+            <el-button v-if="$hasPermission('updateShipQuntity')" size="mini" type="primary" @click="editSendCount">{{ $hasPermission('updateShipQuntity') }}</el-button>
           </div>
         </div>
         <el-table
@@ -240,13 +240,13 @@
           :data="detail.products"
           @selection-change="(val) => { selectItems = val }"
         >
-          <el-table-column width="55px" type="selection" align="center"></el-table-column>
-          <el-table-column width="55px" type="index" label="序号" align="center"></el-table-column>
+          <el-table-column width="55px" type="selection" align="center" />
+          <el-table-column width="55px" type="index" label="序号" align="center" />
           <el-table-column label="商品编号" align="center">
             <template slot-scope="scope">
               <div>{{ scope.row.product_number }}</div>
-              <div class="font-red" v-if="scope.row.is_back_order">(订货)</div>
-              <div class="font-red" v-if="scope.row.showDelayStatus">({{ scope.row.delayStatusText }})</div>
+              <div v-if="scope.row.is_back_order" class="font-red">(订货)</div>
+              <div v-if="scope.row.showDelayStatus" class="font-red">({{ scope.row.delayStatusText }})</div>
             </template>
           </el-table-column>
           <el-table-column label="厂商型号/品牌/客户参考号" align="center">
@@ -256,8 +256,8 @@
               <div>{{ scope.row.customer_tag }}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="categories" label="商品目录" align="center"></el-table-column>
-          <el-table-column prop="quantity" label="下单数量" align="center"></el-table-column>
+          <el-table-column prop="categories" label="商品目录" align="center" />
+          <el-table-column prop="quantity" label="下单数量" align="center" />
           <el-table-column label="仓库信息" align="center">
             <template slot-scope="scope">
               <div>深圳：{{ scope.row.warehouse_sz }}</div>
@@ -265,12 +265,12 @@
               <div>香港：{{ scope.row.warehouse_hk }}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="price" label="单价(USD)" align="center"></el-table-column>
-          <el-table-column prop="total_price" label="金额(USD)" align="center"></el-table-column>
-          <el-table-column prop="total_off" label="优惠金额(USD)" align="center"></el-table-column>
-          <el-table-column prop="shipment_quantity" label="发货数量" align="center"></el-table-column>
-          <el-table-column prop="split_shipment_quantity" label="拆单补发数量" align="center"></el-table-column>
-          <el-table-column prop="weight_total" label="系统重量(g)" align="center"></el-table-column>
+          <el-table-column prop="price" label="单价(USD)" align="center" />
+          <el-table-column prop="total_price" label="金额(USD)" align="center" />
+          <el-table-column prop="total_off" label="优惠金额(USD)" align="center" />
+          <el-table-column prop="shipment_quantity" label="发货数量" align="center" />
+          <el-table-column prop="split_shipment_quantity" label="拆单补发数量" align="center" />
+          <el-table-column prop="weight_total" label="系统重量(g)" align="center" />
           <el-table-column label="是否Real服务" align="center">
             <template slot-scope="scope">
               <div>{{ scope.row.is_reel ? '是' : '否' }}</div>
@@ -286,28 +286,25 @@
       <remark-dialog
         v-if="dialog.show && dialog.name === 'REARK_DIALOG'"
         :visible="dialog.show"
-        :orderId="detail.basic.id"
+        :order-id="detail.basic.id"
         :type="remarkDialogType"
         @success="actionSuccess"
         @cancel="closeDialog"
-      >
-      </remark-dialog>
+      />
       <info-dialog
         v-if="dialog.show && dialog.name === 'INFO_DIALOG'"
         :visible="dialog.show"
-        :orderId="detail.basic.id"
+        :order-id="detail.basic.id"
         @cancel="closeDialog"
-      >
-      </info-dialog>
+      />
       <edit-send-count
         v-if="dialog.show && dialog.name === 'EDIT_SEND_COUNT'"
         :visible="dialog.show"
         :products="selectItems"
-        :orderInfo="detail.basic"
+        :order-info="detail.basic"
         @success="actionSuccess"
         @cancel="closeDialog"
-      >
-      </edit-send-count>
+      />
     </div>
   </base-wrapper>
 </template>
@@ -318,47 +315,47 @@ import {
   getOrderEmail,
   convertRmb,
   lockConvert,
-  getOrderCompany,
+  getOrderCompany
 } from '@/api/order';
 
 import remarkDialog from './components/remark-dialog';
 import infoDialog from './components/info-dialog';
 import editSendCount from './components/edit-send-count';
-import remarkList from '@/components/commons/remark-list';
+// import remarkList from '@/components/commons/remark-list';
 
 export default {
   components: {
     remarkDialog,
     infoDialog,
-    editSendCount,
-    remarkList,
+    editSendCount
+    // remarkList,
   },
   data() {
     return {
       loading: false,
       dialog: {
         show: false,
-        name: '',
+        name: ''
       },
       detail: {
         basic: {},
         addresses: {
           bill_address: {},
-          receipt_address: {},
+          receipt_address: {}
         },
         cost: {},
         customer_and_express: {},
-        products: [],
+        products: []
       },
       productList: [],
       selectItems: [],
-      remarkDialogType: '',
+      remarkDialogType: ''
     };
   },
   computed: {
     delayStatus() {
       return this.$store.getters.getConstByGroup('delay_status');
-    },
+    }
   },
   created() {
     this.getDetail();
@@ -373,13 +370,13 @@ export default {
             ...res.data,
             addresses: {
               bill_address: res.data.addresses.bill_address || {},
-              receipt_address: res.data.addresses.receipt_address || {},
+              receipt_address: res.data.addresses.receipt_address || {}
             },
             products: res.data.products.map(v => ({
               ...v,
               showDelayStatus: [2, 3].includes(v.delay_status),
-              delayStatusText: this.delayStatus[v.delay_status],
-            })),
+              delayStatusText: this.delayStatus[v.delay_status]
+            }))
           };
         })
         .catch(() => {})
@@ -428,7 +425,7 @@ export default {
     },
     lockOrUnlock() {
       const params = {
-        is_lock: this.detail.cost.is_lock_convert === 1 ? 2 : 1,
+        is_lock: this.detail.cost.is_lock_convert === 1 ? 2 : 1
       };
       lockConvert(this.detail.basic.id, params)
         .then(() => {
@@ -445,8 +442,8 @@ export default {
         return;
       }
       this.openDialog('EDIT_SEND_COUNT');
-    },
-  },
+    }
+  }
 };
 </script>
 

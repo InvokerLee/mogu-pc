@@ -4,20 +4,14 @@ export function login(data) {
   return request({
     url: '/login',
     method: 'post',
-    data,
+    data
   });
 }
 
 export function logout() {
   return request({
     url: '/logout',
-    method: 'post',
+    method: 'post'
   });
 }
 
-export function getConsts() {
-  return request({
-    url: '/constants',
-    method: 'get',
-  });
-}

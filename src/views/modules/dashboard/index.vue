@@ -39,31 +39,34 @@
 
     <rank-customer />
 
-    <!-- <bar-chart /> -->
+    <rank-salesman />
+
+    <rank-product />
 
   </base-wrapper>
 </template>
 
 <script>
-// 因为这个组件常用故抽出到公共组件库
-// import BarChart from '@/components/Charts/BarChart';
 import dailyData from './components/daily-data';
 import fastNav from './components/fast-nav';
 import errorData from './components/error-data';
 import saleChart from './components/sale-chart';
 import rankCustomer from './components/rank-customer';
+import rankSalesman from './components/rank-salesman';
+import rankProduct from './components/rank-product';
 
 import { getHomeData, getPieData } from '@/api/dashboard';
 
 export default {
   name: 'DashboardAdmin',
   components: {
-    // BarChart,
     dailyData,
     fastNav,
     errorData,
     saleChart,
-    rankCustomer
+    rankCustomer,
+    rankSalesman,
+    rankProduct
   },
   data() {
     return {

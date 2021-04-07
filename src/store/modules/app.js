@@ -1,12 +1,10 @@
 import Cookies from 'js-cookie';
-import { getConsts } from '@/api/login';
 
 const state = {
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
-  },
-  consts: [] // 常量
+  }
 };
 
 const mutations = {
@@ -23,9 +21,6 @@ const mutations = {
     Cookies.set('sidebarStatus', 0);
     state.sidebar.opened = false;
     state.sidebar.withoutAnimation = withoutAnimation;
-  },
-  SET_CONSTS: (state, consts) => {
-    state.consts = consts;
   }
 };
 
@@ -35,15 +30,8 @@ const actions = {
   },
   closeSideBar({ commit }, { withoutAnimation }) {
     commit('CLOSE_SIDEBAR', withoutAnimation);
-  },
-  getConsts({ commit, state }) {
-    new Promise((resolve, reject) => {
-      getConsts().then(response => {
-        const { data } = response;
-        commit('SET_CONSTS', data);
-      }).catch(() => {});
-    });
   }
+
 };
 
 export default {
