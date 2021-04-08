@@ -25,6 +25,18 @@ export default {
       component: () => import('@/views/modules/config/categoryList'),
       name: 'categoryList',
       meta: { title: '类别' }
+    },
+    {
+      path: 'warehouseList',
+      component: () => import('@/views/modules/config/warehouseList'),
+      name: 'warehouseList',
+      meta: { title: '仓库' }
+    },
+    {
+      path: 'supplierList',
+      component: () => import('@/views/modules/config/supplierList'),
+      name: 'supplierList',
+      meta: { title: '供应商' }
     }
   ]
 };
