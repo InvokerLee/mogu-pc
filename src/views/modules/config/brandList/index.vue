@@ -1,11 +1,11 @@
 <template>
   <base-wrapper>
-    <div class="employee-list">
+    <div class="brand-list">
       <el-row type="flex" justify="space-between">
         <el-col>
           <el-form ref="searchForm" size="mini" inline :model="params">
-            <el-form-item label="姓名">
-              <el-input v-model.trim="params.key" placeholder="请输入姓名" />
+            <el-form-item label="品牌">
+              <el-input v-model.trim="params.key" placeholder="请输入品牌" />
             </el-form-item>
             <el-form-item label="状态">
               <el-select v-model="params.status" placeholder="请选择">
@@ -34,12 +34,7 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column prop="username" label="姓名" align="center" />
-          <el-table-column prop="realname" label="手机" align="center" />
-          <el-table-column label="是否业务员" align="center">
-            <template>
-            </template>
-          </el-table-column>
+          <el-table-column prop="username" label="品牌" align="center" />
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
               <span :class="[scope.row.status === 1 ? 'font-green' : 'font-red']">
@@ -78,11 +73,11 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/auth/user';
+// import { getUserList } from '@/api/auth/user';
 import formDialog from './components/form-dialog';
 
 export default {
-  name: 'employeeList',
+  name: 'brandList',
   components: {
     formDialog
   },
@@ -97,7 +92,7 @@ export default {
         limit: 20
       },
       total: 0,
-      tableData: [{}],
+      tableData: [],
       dialog: {
         show: false,
         name: '',
@@ -117,12 +112,12 @@ export default {
         }
       });
       this.loading = true;
-      getUserList(params).then(({ data }) => {
-        this.tableData = data.data;
-        this.total = data.total;
-      }).catch(() => {}).finally(() => {
-        this.loading = false;
-      });
+      // getUserList(params).then(({ data }) => {
+      //   this.tableData = data.data;
+      //   this.total = data.total;
+      // }).catch(() => {}).finally(() => {
+      //   this.loading = false;
+      // });
     },
     search() {
       this.params.page = 1;
@@ -160,7 +155,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.employee-list {
+.brand-list {
   width: 100%;
   .tar {
     width: auto;

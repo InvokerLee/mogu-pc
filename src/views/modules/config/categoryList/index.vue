@@ -1,11 +1,11 @@
 <template>
   <base-wrapper>
-    <div class="employee-list">
+    <div class="category-list">
       <el-row type="flex" justify="space-between">
         <el-col>
-          <el-form ref="searchForm" size="mini" inline :model="params">
-            <el-form-item label="姓名">
-              <el-input v-model.trim="params.key" placeholder="请输入姓名" />
+          <el-form size="mini" inline :model="params">
+            <el-form-item label="类别">
+              <el-input v-model.trim="params.key" placeholder="请输入" />
             </el-form-item>
             <el-form-item label="状态">
               <el-select v-model="params.status" placeholder="请选择">
@@ -34,12 +34,8 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column prop="username" label="姓名" align="center" />
-          <el-table-column prop="realname" label="手机" align="center" />
-          <el-table-column label="是否业务员" align="center">
-            <template>
-            </template>
-          </el-table-column>
+          <el-table-column prop="username" label="上级类别" align="center" />
+          <el-table-column prop="username" label="列表名称" align="center" />
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
               <span :class="[scope.row.status === 1 ? 'font-green' : 'font-red']">
@@ -54,7 +50,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
+        <!-- <el-pagination
           v-if="tableData.length"
           layout="total, sizes, prev, pager, next, jumper"
           class="pagination"
@@ -64,7 +60,7 @@
           :page-sizes="[10,20,30]"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-        />
+        /> -->
       </div>
     </div>
     <form-dialog
@@ -78,11 +74,11 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/auth/user';
+// import { getUserList } from '@/api/auth/user';
 import formDialog from './components/form-dialog';
 
 export default {
-  name: 'employeeList',
+  name: 'categoryList',
   components: {
     formDialog
   },
@@ -97,10 +93,9 @@ export default {
         limit: 20
       },
       total: 0,
-      tableData: [{}],
+      tableData: [],
       dialog: {
         show: false,
-        name: '',
         item: {}
       }
     };
@@ -117,12 +112,12 @@ export default {
         }
       });
       this.loading = true;
-      getUserList(params).then(({ data }) => {
-        this.tableData = data.data;
-        this.total = data.total;
-      }).catch(() => {}).finally(() => {
-        this.loading = false;
-      });
+      // getUserList(params).then(({ data }) => {
+      //   this.tableData = data.data;
+      //   this.total = data.total;
+      // }).catch(() => {}).finally(() => {
+      //   this.loading = false;
+      // });
     },
     search() {
       this.params.page = 1;
@@ -160,7 +155,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.employee-list {
+.category-list {
   width: 100%;
   .tar {
     width: auto;
