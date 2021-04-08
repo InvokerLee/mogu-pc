@@ -34,18 +34,18 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column prop="username" label="品牌" align="center" />
-          <el-table-column label="状态" align="center">
-            <template slot-scope="scope">
-              <span :class="[scope.row.status === 1 ? 'font-green' : 'font-red']">
-                {{ ['', '启用', '禁用'][scope.row.status] }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="remarks" label="备注" align="center" />
           <el-table-column label="操作" type="action" align="center">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="username" label="品牌" align="center" />
+          <el-table-column prop="remarks" label="备注" align="center" />
+          <el-table-column label="状态" align="center">
+            <template slot-scope="scope">
+              <span>
+                {{ ['', '启用', '禁用'][scope.row.status] }}
+              </span>
             </template>
           </el-table-column>
         </el-table>
