@@ -55,6 +55,12 @@ export default {
       component: () => import('@/views/modules/config/batchList'),
       name: 'batchList',
       meta: { title: '批号管理' }
+    },
+    {
+      path: 'companyList',
+      component: () => import('@/views/modules/config/companyList'),
+      name: 'companyList',
+      meta: { title: '公司管理' }
     }
   ]
 };
