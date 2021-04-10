@@ -35,7 +35,7 @@
             </el-input-number>
           </el-form-item>
           <el-form-item label="原供价(未税)：">
-            <el-input v-model.trim="form.phone" disabled></el-input>
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="赠品基数：">
             <el-input v-model.trim="form.phone"></el-input>
@@ -43,7 +43,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="产品：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <product-selector :params="form" paramsKey="productId"></product-selector>
           </el-form-item>
           <el-form-item label="变价属性：">
             <el-select v-model="form.status" placeholder="请选择" class="w100">
@@ -78,7 +78,7 @@
             </el-input-number>
           </el-form-item>
           <el-form-item label="现供价(未税)：">
-            <el-input v-model.trim="form.phone" disabled></el-input>
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="备注：">
             <el-input v-model.trim="form.phone"></el-input>
@@ -97,10 +97,12 @@
 <script>
 // import { addUser, editUser } from '@/api/auth/user';
 import CustomerSelector from '@/components/CustomerSelector';
+import ProductSelector from '@/components/ProductSelector';
 
 export default {
   components: {
-    CustomerSelector
+    CustomerSelector,
+    ProductSelector
   },
   props: ['visible', 'item'],
   data() {

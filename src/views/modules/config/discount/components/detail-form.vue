@@ -10,25 +10,31 @@
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="产品：" prop="realname">
+          <el-form-item label="赠送产品：" prop="realname">
             <product-selector :params="form" paramsKey="productId" @selectChange="selectChange"></product-selector>
           </el-form-item>
-          <el-form-item label="条码：" required>
-            <el-input v-model.trim="form.phone" disabled></el-input>
+          <el-form-item label="单位：">
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="供货价(含税)：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="未税赠品单价：">
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="货号">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="条码">
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="单位：" required>
-            <el-input v-model.trim="form.phone" disabled></el-input>
+          <el-form-item label="含税赠品单价：">
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="供货价(未税)：" required>
-            <el-input v-model.trim="form.phone" disabled></el-input>
+          <el-form-item label="限量：">
+            <el-input-number
+              v-model="form.quantity"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
           </el-form-item>
         </el-col>
       </el-row>

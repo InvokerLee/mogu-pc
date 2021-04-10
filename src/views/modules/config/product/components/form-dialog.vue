@@ -66,7 +66,7 @@
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
           <el-form-item label="发货价(未税)：">
-            <el-input v-model.trim="form.phone" disabled></el-input>
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
         </el-col>
       </el-row>

@@ -1,24 +1,11 @@
 <template>
   <el-card shadow="never" class="detail-list">
     <div slot="header">
-      <el-form ref="searchForm" size="mini" inline :model="params">
-        <el-form-item label="">
-          <el-tag type="info">合同产品</el-tag>
-        </el-form-item>
-        <el-form-item label="输入搜索">
-          <el-input v-model.trim="params.key" placeholder="品名/规格/条码" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="search">查询</el-button>
-          <el-button type="info" @click="reset">重置</el-button>
-          <span style="margin: 0 20px;">
-            <el-divider direction="vertical"></el-divider>
-          </span>
-          <el-button type="success" size="mini" @click="add">新增</el-button>
-          <el-button type="primary" size="mini">导入</el-button>
-          <el-button type="primary" size="mini">导出</el-button>
-        </el-form-item>
-      </el-form>
+      <el-tag type="info">赠品明细</el-tag>
+      <span style="margin: 0 20px;">
+        <el-divider direction="vertical"></el-divider>
+      </span>
+      <el-button size="mini" type="primary" @click="add">新增</el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -33,12 +20,12 @@
           <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="品名规格" align="center" />
-      <el-table-column prop="remarks" label="货号" align="center" />
+      <el-table-column prop="username" label="赠送产品" align="center" />
       <el-table-column prop="remarks" label="条码" align="center" />
       <el-table-column prop="remarks" label="单位" align="center" />
-      <el-table-column prop="remarks" label="供货价(含税)" align="center" />
-      <el-table-column prop="remarks" label="供货价(未税)" align="center" />
+      <el-table-column prop="remarks" label="含税赠品单价" align="center" />
+      <el-table-column prop="remarks" label="未税赠品单价" align="center" />
+      <el-table-column prop="remarks" label="限量" align="center" />
     </el-table>
     <el-pagination
       v-if="tableData.length"

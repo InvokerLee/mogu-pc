@@ -13,7 +13,7 @@
             <product-selector :params="form" paramsKey="productId" @selectChange="selectChange"></product-selector>
           </el-form-item>
           <el-form-item label="条码：" required>
-            <el-input v-model.trim="form.phone" disabled></el-input>
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="供货价(含税)：">
             <el-input v-model.trim="form.phone"></el-input>
@@ -24,10 +24,10 @@
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
           <el-form-item label="单位：" required>
-            <el-input v-model.trim="form.phone" disabled></el-input>
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="供货价(未税)：" required>
-            <el-input v-model.trim="form.phone" disabled></el-input>
+            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
