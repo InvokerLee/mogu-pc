@@ -61,6 +61,12 @@ export default {
       component: () => import('@/views/modules/config/companyList'),
       name: 'companyList',
       meta: { title: '公司管理' }
+    },
+    {
+      path: 'saleContract',
+      component: () => import('@/views/modules/config/saleContract'),
+      name: 'saleContract',
+      meta: { title: '销售合同' }
     }
   ]
 };

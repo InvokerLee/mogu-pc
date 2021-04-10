@@ -1,51 +1,26 @@
 <template>
   <el-dialog
     width="750px"
-    :title="isEdit ? '客户编辑' : '客户新增'"
+    :title="isEdit ? '合同产品编辑(主表)' : '合同产品新增(主表)'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
   >
-    <el-form ref="hqForm" size="mini" label-width="100px" :model="form" :rules="rules">
+    <el-form ref="itemForm" size="mini" label-width="120px" :model="form" :rules="rules">
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="客户名称：" prop="realname">
-            <el-input v-model.trim="form.realname"></el-input>
-          </el-form-item>
-          <el-form-item label="助记符：" prop="">
-            <el-input v-model.trim="form.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="是否结账：" prop="status">
-            <el-radio-group v-model="form.status">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="2">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="客户类型：">
-            <el-input v-model.trim="form.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="地址：">
-            <el-input v-model.trim="form.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="联系人：">
-            <el-input v-model.trim="form.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="备注：">
-            <el-input v-model.trim="form.phone"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="上级客户：">
+          <el-form-item label="产品：" prop="realname">
             <el-select
               v-model="form.upCus"
               class="w100"
               filterable
               remote
               reserve-keyword
-              placeholder="请输入关键词"
+              placeholder="通过品名、规格、条码搜索"
               :remote-method="remoteMethod"
               :loading="remoteLoading"
+              @change="selectChange"
             >
               <el-option
                 v-for="i in options"
@@ -56,26 +31,22 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="业务员：">
+          <el-form-item label="条码：" required>
+            <el-input v-model.trim="form.phone" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="供货价(含税)：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="单价含税：">
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="货号">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="账期：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="单位：" required>
+            <el-input v-model.trim="form.phone" disabled></el-input>
           </el-form-item>
-          <el-form-item label="电话：">
-            <el-input v-model.trim="form.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="付款方式：">
-            <el-input v-model.trim="form.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="状态：" prop="status">
-            <el-radio-group v-model="form.status">
-              <el-radio :label="1">有效</el-radio>
-              <el-radio :label="2">停用</el-radio>
-            </el-radio-group>
+          <el-form-item label="供货价(未税)：" required>
+            <el-input v-model.trim="form.phone" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -98,13 +69,13 @@ export default {
       loading: false,
       remoteLoading: false,
       isEdit: false,
+      options: [],
       form: {
         realname: '',
         phone: '',
         status: 1,
         remarks: ''
       },
-      options: [],
       rules: {
         realname: [
           { required: true, message: '必填', trigger: 'blur' }
@@ -121,6 +92,8 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
+      // 默认给一个筛选框
+      // this.options = [{ value: this.form.id, label: this.form.label }];
     }
   },
   methods: {
@@ -135,8 +108,11 @@ export default {
         this.options = [{ value: 1, label: 'asdasd' }];
       }, 200);
     },
+    selectChange(product) {
+      console.log(product);
+    },
     confirm() {
-      this.$refs.hqForm.validate((valid) => {
+      this.$refs.itemForm.validate((valid) => {
         if (!valid) return;
         this.loading = true;
         this.saveForm().then(() => {
