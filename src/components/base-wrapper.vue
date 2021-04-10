@@ -27,13 +27,13 @@ export default {
   .wrapper-head {
     flex: 0 0 auto;
     height: 28px;;
-    margin: 15px 15px 0;
+    margin: 3px 3px 0;
     overflow: hidden;
   }
   .wrapper-content {
     height: 100%;
-    margin-top: 15px;
-    padding: 0 15px 15px;
+    margin-top: 3px;
+    padding: 0 3px 3px;
     flex: 1 1 auto;
     overflow: auto;
   }

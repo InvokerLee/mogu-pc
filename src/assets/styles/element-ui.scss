@@ -1,10 +1,20 @@
 // cover some element-ui styles
 
-.el-breadcrumb__inner,
-.el-breadcrumb__inner a {
-  font-weight: 400 !important;
+// Form
+.el-form[hide-details] .el-form-item {
+  margin-bottom: 3px !important;
 }
 
+// Table
+.el-table--mini th, .el-table--mini td {
+  padding: 2px 0 !important;
+}
+// Divider
+.el-divider--horizontal {
+  margin: 0px !important;
+}
+
+// --------------------分割线-----------------------
 .el-upload {
   input[type="file"] {
     display: none !important;

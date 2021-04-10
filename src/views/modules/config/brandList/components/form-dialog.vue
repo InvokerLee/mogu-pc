@@ -8,7 +8,7 @@
   >
     <el-row type="flex" justify="center">
       <el-col :span="20">
-        <el-form ref="brandForm" size="mini" label-width="100px" :model="form" :rules="rules">
+        <el-form ref="brandForm" size="mini" label-width="80px" :model="form" :rules="rules">
           <el-form-item label="品牌：" prop="realname">
             <el-input v-model.trim="form.realname"></el-input>
           </el-form-item>

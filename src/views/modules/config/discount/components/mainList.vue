@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="never" class="main-list">
     <div slot="header">
-      <el-form ref="searchForm" size="mini" inline :model="params">
+      <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item>
           <el-tag type="info">促销列表</el-tag>
         </el-form-item>
@@ -75,7 +75,7 @@
     <el-pagination
       v-if="tableData.length"
       layout="total, sizes, prev, pager, next, jumper"
-      class="pagination"
+      class="pagination py-3"
       :current-page.sync="params.page"
       :page-size="params.limit"
       :total="total"
@@ -163,7 +163,6 @@ export default {
   width: 100%;
   .pagination {
     text-align: center;
-    margin-top: 20px;
   }
 }
 </style>

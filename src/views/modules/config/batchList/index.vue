@@ -2,7 +2,7 @@
 <template>
   <base-wrapper>
     <div class="batch-list">
-      <el-form ref="searchForm" size="mini" inline :model="params">
+      <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="供应商">
           <el-input v-model.trim="params.key" placeholder="请输入公司名" />
         </el-form-item>
@@ -45,7 +45,7 @@
       </el-row>
       <div>
         <el-table
-          v-adaptive-height="{bottomOffset: 100}"
+          v-adaptive-height="{bottomOffset: 40}"
           v-loading="loading"
           border
           size="mini"
@@ -78,7 +78,7 @@
         <el-pagination
           v-if="tableData.length"
           layout="total, sizes, prev, pager, next, jumper"
-          class="pagination"
+          class="pagination py-3"
           :current-page.sync="params.page"
           :page-size="params.limit"
           :total="total"
@@ -188,7 +188,6 @@ export default {
   }
   .pagination {
     text-align: center;
-    margin: 20px 0;
   }
 }
 </style>

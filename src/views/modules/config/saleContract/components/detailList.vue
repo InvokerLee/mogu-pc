@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="never" class="detail-list">
     <div slot="header">
-      <el-form ref="searchForm" size="mini" inline :model="params">
+      <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="">
           <el-tag type="info">合同产品</el-tag>
         </el-form-item>
@@ -43,7 +43,7 @@
     <el-pagination
       v-if="tableData.length"
       layout="total, sizes, prev, pager, next, jumper"
-      class="pagination"
+      class="pagination py-3"
       :current-page.sync="params.page"
       :page-size="params.limit"
       :total="total"
@@ -128,10 +128,9 @@ export default {
 <style lang="scss" scoped>
 .detail-list {
   width: 100%;
-  margin-top: 15px;
+  margin-top: 3px;
   .pagination {
     text-align: center;
-    margin-top: 20px;
   }
 }
 </style>
