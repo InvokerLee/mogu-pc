@@ -10,7 +10,26 @@
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <el-form-item label="客户：" prop="">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-select
+              v-model="form.upCus"
+              class="w100"
+              filterable
+              remote
+              multiple
+              collapse-tags
+              reserve-keyword
+              placeholder="模糊查询有效客户，可多选"
+              :remote-method="customerSearch"
+              :loading="remoteSearch.loading"
+            >
+              <el-option
+                v-for="i in remoteSearch.customerOptions"
+                :key="i.value"
+                :label="i.label"
+                :value="i.value"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="条码：" prop="realname">
             <el-input v-model.trim="form.realname"></el-input>
@@ -116,6 +135,11 @@ export default {
         status: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
+      },
+      remoteSearch: {
+        loading: false,
+        customerOptions: [],
+        productOptions: []
       }
     };
   },
@@ -128,6 +152,17 @@ export default {
     }
   },
   methods: {
+    customerSearch(query) {
+      if (query === '') {
+        this.remoteSearch.customerOptions = [];
+        return;
+      }
+      this.remoteSearch.loading = true;
+      setTimeout(() => {
+        this.remoteSearch.loading = false;
+        this.remoteSearch.customerOptions = [{ value: 1, label: 'asdasd' }, { value: 2, label: '22222' }];
+      }, 200);
+    },
     confirm() {
       this.$refs.contractForm.validate((valid) => {
         if (!valid) return;
