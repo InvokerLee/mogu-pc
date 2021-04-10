@@ -8,7 +8,7 @@
     :multiple="multiple"
     :collapse-tags="multiple"
     reserve-keyword
-    placeholder="模糊查询有效客户"
+    placeholder="通过品名、规格、条码搜索"
     :remote-method="remoteMethod"
     :loading="loading"
     @change="change"
@@ -67,7 +67,7 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
-        this.options = [{ id: 1, label: 'aaa' }, { id: 2, label: 'bbb' }];
+        this.options = [{ id: 1, label: '产品1' }, { id: 2, label: '产品2' }];
       }, 200);
     },
     change(val) {
