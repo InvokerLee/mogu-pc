@@ -26,13 +26,13 @@ import Hamburger from '@/components/Hamburger';
 
 export default {
   components: {
-    Hamburger,
+    Hamburger
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'realname',
-    ]),
+      'realname'
+    ])
   },
   methods: {
     toggleSideBar() {
@@ -43,8 +43,8 @@ export default {
       await this.$store.dispatch('user/logout');
       loading.close();
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-    },
-  },
+    }
+  }
 };
 </script>
 
