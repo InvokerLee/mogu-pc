@@ -37,24 +37,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="上级客户：">
-            <el-select
-              v-model="form.upCus"
-              class="w100"
-              filterable
-              remote
-              reserve-keyword
-              placeholder="请输入关键词"
-              :remote-method="remoteMethod"
-              :loading="remoteLoading"
-            >
-              <el-option
-                v-for="i in options"
-                :key="i.value"
-                :label="i.label"
-                :value="i.value"
-              >
-              </el-option>
-            </el-select>
+            <customer-selector :params="form" paramsKey="customerId"></customer-selector>
           </el-form-item>
           <el-form-item label="业务员：">
             <el-input v-model.trim="form.phone"></el-input>
@@ -89,14 +72,17 @@
 </template>
 
 <script>
+import CustomerSelector from '@/components/CustomerSelector';
 // import { addUser, editUser } from '@/api/auth/user';
 
 export default {
+  components: {
+    CustomerSelector
+  },
   props: ['visible', 'item'],
   data() {
     return {
       loading: false,
-      remoteLoading: false,
       isEdit: false,
       form: {
         realname: '',
@@ -104,7 +90,6 @@ export default {
         status: 1,
         remarks: ''
       },
-      options: [],
       rules: {
         realname: [
           { required: true, message: '必填', trigger: 'blur' }
@@ -124,17 +109,6 @@ export default {
     }
   },
   methods: {
-    remoteMethod(query) {
-      if (query === '') {
-        this.options = [];
-        return;
-      }
-      this.remoteLoading = true;
-      setTimeout(() => {
-        this.remoteLoading = false;
-        this.options = [{ value: 1, label: 'asdasd' }];
-      }, 200);
-    },
     confirm() {
       this.$refs.hqForm.validate((valid) => {
         if (!valid) return;
