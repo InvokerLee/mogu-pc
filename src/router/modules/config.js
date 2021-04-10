@@ -67,6 +67,12 @@ export default {
       component: () => import('@/views/modules/config/saleContract'),
       name: 'saleContract',
       meta: { title: '销售合同' }
+    },
+    {
+      path: 'discount',
+      component: () => import('@/views/modules/config/discount'),
+      name: 'discount',
+      meta: { title: '促销管理VIP' }
     }
   ]
 };
