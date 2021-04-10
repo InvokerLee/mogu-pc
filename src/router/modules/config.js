@@ -49,6 +49,12 @@ export default {
       component: () => import('@/views/modules/config/product'),
       name: 'product',
       meta: { title: '产品' }
+    },
+    {
+      path: 'batchList',
+      component: () => import('@/views/modules/config/batchList'),
+      name: 'batchList',
+      meta: { title: '批号管理' }
     }
   ]
 };

@@ -2,7 +2,6 @@
   <el-card shadow="never" class="detail-list">
     <div slot="header">
       <el-tag type="info">安全库存</el-tag>
-      </el-form>
     </div>
     <el-table
       v-loading="loading"
