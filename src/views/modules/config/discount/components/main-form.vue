@@ -10,26 +10,7 @@
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <el-form-item label="客户：" prop="">
-            <el-select
-              v-model="form.upCus"
-              class="w100"
-              filterable
-              remote
-              multiple
-              collapse-tags
-              reserve-keyword
-              placeholder="模糊查询有效客户，可多选"
-              :remote-method="customerSearch"
-              :loading="remoteSearch.loading"
-            >
-              <el-option
-                v-for="i in remoteSearch.customerOptions"
-                :key="i.value"
-                :label="i.label"
-                :value="i.value"
-              >
-              </el-option>
-            </el-select>
+            <customer-selector :params="form" paramsKey="customerId" :multiple="true"></customer-selector>
           </el-form-item>
           <el-form-item label="条码：" prop="realname">
             <el-input v-model.trim="form.realname"></el-input>
@@ -115,14 +96,19 @@
 
 <script>
 // import { addUser, editUser } from '@/api/auth/user';
+import CustomerSelector from '@/components/CustomerSelector';
 
 export default {
+  components: {
+    CustomerSelector
+  },
   props: ['visible', 'item'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
+        customerId: '',
         realname: '',
         phone: '',
         status: 1,
@@ -135,11 +121,6 @@ export default {
         status: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
-      },
-      remoteSearch: {
-        loading: false,
-        customerOptions: [],
-        productOptions: []
       }
     };
   },
@@ -152,17 +133,6 @@ export default {
     }
   },
   methods: {
-    customerSearch(query) {
-      if (query === '') {
-        this.remoteSearch.customerOptions = [];
-        return;
-      }
-      this.remoteSearch.loading = true;
-      setTimeout(() => {
-        this.remoteSearch.loading = false;
-        this.remoteSearch.customerOptions = [{ value: 1, label: 'asdasd' }, { value: 2, label: '22222' }];
-      }, 200);
-    },
     confirm() {
       this.$refs.contractForm.validate((valid) => {
         if (!valid) return;
