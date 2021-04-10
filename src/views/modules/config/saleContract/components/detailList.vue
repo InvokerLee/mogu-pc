@@ -132,5 +132,10 @@ export default {
   .pagination {
     text-align: center;
   }
+  ::v-deep {
+    .el-card__header, .el-card__body  {
+        padding: 3px 3px 0;
+    }
+  }
 }
 </style>

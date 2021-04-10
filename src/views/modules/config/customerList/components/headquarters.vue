@@ -163,12 +163,10 @@ export default {
   .pagination {
     text-align: center;
   }
-}
-</style>
-<style lang="scss">
-.headquarters {
-  .el-card__header, .el-card__body {
-    padding: 3px 3px 0;
+  ::v-deep {
+    .el-card__header, .el-card__body  {
+        padding: 3px 3px 0;
+    }
   }
 }
 </style>

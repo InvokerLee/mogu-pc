@@ -36,13 +36,12 @@
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
           <el-button type="info" @click="reset">重置</el-button>
+          <span style="margin: 0 20px;">
+            <el-divider direction="vertical"></el-divider>
+          </span>
+          <el-button type="primary" size="mini">批量设置无效</el-button>
         </el-form-item>
       </el-form>
-      <el-row class="m-b-10">
-        <el-button type="success" size="mini" @click="add">新增</el-button>
-        <el-button type="primary" size="mini">导出</el-button>
-        <el-button type="primary" size="mini">批量设置无效</el-button>
-      </el-row>
       <div>
         <el-table
           v-adaptive-height="{bottomOffset: 40}"
@@ -158,10 +157,6 @@ export default {
     },
     handleCurrentChange() {
       this.getList();
-    },
-    add() {
-      this.dialog.item = {};
-      this.dialog.show = true;
     },
     edit(item) {
       this.dialog.item = item;
