@@ -2,37 +2,38 @@
   <div class="return-list">
     <el-form ref="searchForm" size="mini" :inline="true" :model="params">
       <el-form-item label="退货单号" prop="backgood_apply_no">
-        <el-input class="input-width" v-model="params.backgood_apply_no"></el-input>
+        <el-input v-model="params.backgood_apply_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="订单号" prop="order_no">
-        <el-input class="input-width" v-model="params.order_no"></el-input>
+        <el-input v-model="params.order_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="国内单号" prop="szlcsc_no">
-        <el-input class="input-width" v-model="params.szlcsc_no"></el-input>
+        <el-input v-model="params.szlcsc_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="客户编号" prop="customer_code">
-        <el-input class="input-width" v-model="params.customer_code"></el-input>
+        <el-input v-model="params.customer_code" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="处理方式" prop="handle_way">
-        <el-select class="input-width" placeholder="请选择" v-model="params.handle_way">
+        <el-select v-model="params.handle_way" class="input-width" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in backgoodWay.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="审核状态" prop="audit_status">
-        <el-select class="input-width" placeholder="请选择" v-model="params.audit_status">
+        <el-select v-model="params.audit_status" class="input-width" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in refundAuditStatus.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="入库状态" prop="status">
-        <el-select class="input-width" placeholder="请选择" v-model="params.status">
+        <el-select v-model="params.status" class="input-width" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in backgoodStatus.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="申请时间" prop="created_at">
         <el-date-picker
+          v-model="params.created_at"
           type="daterange"
           unlink-panels
           range-separator="至"
@@ -41,7 +42,6 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           :editable="false"
           :default-time="['00:00:00', '23:59:59']"
-          v-model="params.created_at"
         >
         </el-date-picker>
       </el-form-item>
@@ -56,11 +56,11 @@
     </div>
     <div class="m-t-10">
       <el-table
+        v-adaptive-height="{bottomOffset: 100}"
+        v-loading="loading"
         border
         size="mini"
         height="120px"
-        v-adaptive-height="{bottomOffset: 100}"
-        v-loading="loading"
         :data="tableData"
         @selection-change="(val) => { selectItems = val }"
       >
@@ -103,8 +103,8 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        layout="total, sizes, prev, pager, next, jumper"
         v-if="tableData.length"
+        layout="total, sizes, prev, pager, next, jumper"
         class="pagination"
         :current-page.sync="params.page"
         :page-size="params.limit"
@@ -133,7 +133,7 @@ import auditDialog from './components/audit-dialog';
 export default {
   name: 'returnList',
   components: {
-    auditDialog,
+    auditDialog
   },
   data() {
     return {
@@ -148,7 +148,7 @@ export default {
         audit_status: 1,
         status: '',
         page: 1,
-        limit: 20,
+        limit: 10
       },
       total: 0,
       tableData: [],
@@ -156,8 +156,8 @@ export default {
       auditDialog: {
         show: false,
         isApproved: false,
-        uuid: '',
-      },
+        uuid: ''
+      }
     };
   },
   computed: {
@@ -172,7 +172,7 @@ export default {
     },
     backgoodStatus() {
       return this.$store.getters.getConstByGroup('backgood_status');
-    },
+    }
   },
   created() {
     this.getList();
@@ -222,8 +222,8 @@ export default {
     },
     closeDialog() {
       this.auditDialog.show = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -2,43 +2,44 @@
   <div class="pending-order-list">
     <el-form ref="searchForm" size="mini" :inline="true" :model="params">
       <el-form-item label="订单号" prop="order_no">
-        <el-input class="input-width" v-model="params.order_no"></el-input>
+        <el-input v-model="params.order_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="国内单号" prop="szlcsc_no">
-        <el-input class="input-width" v-model="params.szlcsc_no"></el-input>
+        <el-input v-model="params.szlcsc_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="客户编号" prop="customer_code">
-        <el-input class="input-width" v-model="params.customer_code"></el-input>
+        <el-input v-model="params.customer_code" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="商品编号" prop="product_number">
-        <el-input class="input-width" v-model="params.product_number"></el-input>
+        <el-input v-model="params.product_number" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="挂单状态" prop="status">
-        <el-select class="input-width" placeholder="请选择" v-model="params.status">
+        <el-select v-model="params.status" class="input-width" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in delayListDelayStatus.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="挂单原因" prop="reason">
-        <el-select class="input-width" placeholder="请选择" v-model="params.reason">
+        <el-select v-model="params.reason" class="input-width" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in delayReason.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="客服处理状态" prop="ask_status">
-        <el-select class="input-width" placeholder="请选择" v-model="params.ask_status">
+        <el-select v-model="params.ask_status" class="input-width" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in askStatus.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="客服选择处理方式" prop="ask_handle_method">
-        <el-select class="input-width" placeholder="请选择" v-model="params.ask_handle_method">
+        <el-select v-model="params.ask_handle_method" class="input-width" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in askHandleMethod.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="挂单时间" prop="created_at">
         <el-date-picker
+          v-model="params.created_at"
           type="daterange"
           unlink-panels
           range-separator="至"
@@ -47,7 +48,6 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           :editable="false"
           :default-time="['00:00:00', '23:59:59']"
-          v-model="params.created_at"
         >
         </el-date-picker>
       </el-form-item>
@@ -55,21 +55,21 @@
         <el-checkbox v-model="params.is_ask">拦截中</el-checkbox>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" v-if="$hasPermission('searchPendingOrderList')" @click="search">{{ $hasPermission('searchPendingOrderList') }}</el-button>
+        <el-button v-if="$hasPermission('searchPendingOrderList')" type="primary" @click="search">{{ $hasPermission('searchPendingOrderList') }}</el-button>
         <el-button type="info" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <div>
-      <el-button type="primary" size="mini" v-if="$hasPermission('markAsking')" @click="markToAsk">{{ $hasPermission('markAsking') }}</el-button>
-      <el-button type="primary" size="mini" v-if="$hasPermission('markAskEnd')" @click="markAsked">{{ $hasPermission('markAskEnd') }}</el-button>
+      <el-button v-if="$hasPermission('markAsking')" type="primary" size="mini" @click="markToAsk">{{ $hasPermission('markAsking') }}</el-button>
+      <el-button v-if="$hasPermission('markAskEnd')" type="primary" size="mini" @click="markAsked">{{ $hasPermission('markAskEnd') }}</el-button>
     </div>
     <div class="m-t-10">
       <el-table
+        v-adaptive-height="{bottomOffset: 100}"
+        v-loading="loading"
         border
         size="mini"
         height="120px"
-        v-adaptive-height="{bottomOffset: 100}"
-        v-loading="loading"
         :data="tableData"
         @selection-change="(val) => { selectItems = val }"
       >
@@ -101,8 +101,8 @@
         <el-table-column prop="by_user" label="处理人" align="center"></el-table-column>
       </el-table>
       <el-pagination
-        layout="total, sizes, prev, pager, next, jumper"
         v-if="tableData.length"
+        layout="total, sizes, prev, pager, next, jumper"
         class="pagination"
         :current-page.sync="params.page"
         :page-size="params.limit"
@@ -131,7 +131,7 @@ import markAsked from './components/mark-asked';
 export default {
   name: 'pendingOrderList',
   components: {
-    markAsked,
+    markAsked
   },
   data() {
     return {
@@ -148,14 +148,14 @@ export default {
         is_ask: true,
         created_at: [],
         page: 1,
-        limit: 20,
+        limit: 10
       },
       total: 0,
       tableData: [],
       selectItems: [],
       dialog: {
-        show: false,
-      },
+        show: false
+      }
     };
   },
   computed: {
@@ -170,7 +170,7 @@ export default {
     },
     delayListDelayStatus() {
       return this.$store.getters.getConstByGroup('delay_list_delay_status');
-    },
+    }
   },
   created() {
     this.getList();
@@ -232,8 +232,8 @@ export default {
         return false;
       }
       return true;
-    },
-  },
+    }
+  }
 };
 </script>
 

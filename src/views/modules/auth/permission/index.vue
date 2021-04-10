@@ -144,7 +144,7 @@ export default {
         key: '',
         auth_level: '',
         page: 1,
-        limit: 20,
+        limit: 10,
       },
       tableData: [],
       total: 0,

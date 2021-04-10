@@ -2,31 +2,31 @@
   <div class="offline-remittance">
     <el-form ref="searchForm" size="mini" :inline="true" :model="params">
       <el-form-item label="订单号" prop="order_no">
-        <el-input class="input-width" v-model="params.order_no"></el-input>
+        <el-input v-model="params.order_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="国内订单号" prop="szlcsc_no">
-        <el-input class="input-width" v-model="params.szlcsc_no"></el-input>
+        <el-input v-model="params.szlcsc_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="客户编号" prop="customer_code">
-        <el-input class="input-width" v-model="params.customer_code"></el-input>
+        <el-input v-model="params.customer_code" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="跟进人" prop="follow_by">
-        <el-input class="input-width" v-model="params.follow_by"></el-input>
+        <el-input v-model="params.follow_by" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select class="input-width" v-model="params.status">
+        <el-select v-model="params.status" class="input-width">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in status.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="分类" prop="type">
-        <el-select class="input-width" v-model="params.type">
+        <el-select v-model="params.type" class="input-width">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in type.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="是否结款" prop="is_paid_done">
-        <el-select class="input-width" v-model="params.is_paid_done">
+        <el-select v-model="params.is_paid_done" class="input-width">
           <el-option label="全部" value=""></el-option>
           <el-option label="是" :value="2"></el-option>
           <el-option label="否" :value="1"></el-option>
@@ -34,6 +34,7 @@
       </el-form-item>
       <el-form-item label="支付到期时间" prop="expired_date">
         <el-date-picker
+          v-model="params.expired_date"
           type="daterange"
           unlink-panels
           range-separator="至"
@@ -42,12 +43,12 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           :editable="false"
           :default-time="['00:00:00', '23:59:59']"
-          v-model="params.expired_date"
         >
         </el-date-picker>
       </el-form-item>
       <el-form-item label="下单时间" prop="created_at">
         <el-date-picker
+          v-model="params.created_at"
           type="daterange"
           unlink-panels
           range-separator="至"
@@ -56,26 +57,25 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           :editable="false"
           :default-time="['00:00:00', '23:59:59']"
-          v-model="params.created_at"
         >
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" v-if="$hasPermission('searchRemittanceOrder')" @click="search">{{ $hasPermission('searchRemittanceOrder') }}</el-button>
+        <el-button v-if="$hasPermission('searchRemittanceOrder')" type="primary" @click="search">{{ $hasPermission('searchRemittanceOrder') }}</el-button>
         <el-button type="info" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <div>
-      <el-button type="primary" size="mini" v-if="$hasPermission('addReceipt')" @click="addOrder">{{ $hasPermission('addReceipt') }}</el-button>
-      <el-button type="primary" size="mini" v-if="$hasPermission('markRemittancePay')" @click="markPay">{{ $hasPermission('markRemittancePay') }}</el-button>
+      <el-button v-if="$hasPermission('addReceipt')" type="primary" size="mini" @click="addOrder">{{ $hasPermission('addReceipt') }}</el-button>
+      <el-button v-if="$hasPermission('markRemittancePay')" type="primary" size="mini" @click="markPay">{{ $hasPermission('markRemittancePay') }}</el-button>
     </div>
     <div class="m-t-10">
       <el-table
+        v-adaptive-height="{bottomOffset: 100}"
+        v-loading="loading"
         border
         size="mini"
         height="120px"
-        v-adaptive-height="{bottomOffset: 100}"
-        v-loading="loading"
         :data="tableData"
         @selection-change="(val) => { selectItems = val }"
       >
@@ -128,8 +128,8 @@
         <el-table-column label="分类/最短报价有效期" align="center">
           <template slot-scope="scope">
             <div>{{ scope.row.type_name }}</div>
-            <el-button type="text" size="mini" v-if="$hasPermission('enquiryInfo')" @click="watchEnquiry(scope.row)">{{ scope.row.min_inquiry }}</el-button>
-            <div class="font-red" v-if="scope.row.showMinValidateDateTip">(即将失效)</div>
+            <el-button v-if="$hasPermission('enquiryInfo')" type="text" size="mini" @click="watchEnquiry(scope.row)">{{ scope.row.min_inquiry }}</el-button>
+            <div v-if="scope.row.showMinValidateDateTip" class="font-red">(即将失效)</div>
           </template>
         </el-table-column>
         <el-table-column prop="status_name" label="状态" align="center"></el-table-column>
@@ -165,8 +165,8 @@
         <el-table-column prop="follow_name" label="跟进人" align="center"></el-table-column>
       </el-table>
       <el-pagination
-        layout="total, sizes, prev, pager, next, jumper"
         v-if="tableData.length"
+        layout="total, sizes, prev, pager, next, jumper"
         class="pagination"
         :current-page.sync="params.page"
         :page-size="params.limit"
@@ -197,7 +197,7 @@ import markPay from './components/mark-pay';
 export default {
   name: 'offlineRemittance',
   components: {
-    markPay,
+    markPay
   },
   data() {
     return {
@@ -213,15 +213,15 @@ export default {
         expired_date: [],
         created_at: [],
         page: 1,
-        limit: 20,
+        limit: 10
       },
       total: 0,
       tableData: [],
       selectItems: [],
       dialog: {
         show: false,
-        name: '',
-      },
+        name: ''
+      }
     };
   },
   computed: {
@@ -230,7 +230,7 @@ export default {
     },
     type() {
       return this.$store.getters.getConstByGroup('type');
-    },
+    }
   },
   created() {
     this.getList();
@@ -251,7 +251,7 @@ export default {
       getOrderTransfer(params).then(({ data }) => {
         this.tableData = data.data.map(v => ({
           ...v,
-          showMinValidateDateTip: this.isLess2DayFromNow(v.min_inquiry),
+          showMinValidateDateTip: this.isLess2DayFromNow(v.min_inquiry)
         }));
         this.total = data.total;
       }).finally(() => {
@@ -287,7 +287,7 @@ export default {
       }
       if (![5, 7].includes(this.selectItems[0].pay_type)) {
         this.$alert('只支持支付方式为月结和钱包余额的订单进行标记支付。', '异常提醒', {
-          confirmButtonText: '确定',
+          confirmButtonText: '确定'
         });
         return;
       }
@@ -302,8 +302,8 @@ export default {
         path: '/order/enquiryPrice',
         query: {
           szlcsc_no: row.szlcsc_no,
-          order_status: row.status_name,
-        },
+          order_status: row.status_name
+        }
       });
     },
     openDialog(name) {
@@ -317,8 +317,8 @@ export default {
     isLess2DayFromNow(dateStr) {
       if (!dateStr) return false;
       return dayjs().diff(dayjs(dateStr), 'day') <= 2;
-    },
-  },
+    }
+  }
 };
 </script>
 

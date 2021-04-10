@@ -2,19 +2,19 @@
   <div class="fill-money-list">
     <el-form ref="searchForm" size="mini" :inline="true" :model="params">
       <el-form-item label="补款单号" prop="supply_apply_no">
-        <el-input class="input-width" v-model="params.supply_apply_no"></el-input>
+        <el-input v-model="params.supply_apply_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="订单号" prop="order_no">
-        <el-input class="input-width" v-model="params.order_no"></el-input>
+        <el-input v-model="params.order_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="国内单号" prop="szlcsc_no">
-        <el-input class="input-width" v-model="params.szlcsc_no"></el-input>
+        <el-input v-model="params.szlcsc_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="客户编号" prop="customer_code">
-        <el-input class="input-width" v-model="params.customer_code"></el-input>
+        <el-input v-model="params.customer_code" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="审核状态" prop="audit_status">
-        <el-select class="input-width" v-model="params.audit_status">
+        <el-select v-model="params.audit_status" class="input-width">
           <el-option label="全部" value=""></el-option>
           <el-option label="待审核" :value="1"></el-option>
           <el-option label="审核通过" :value="2"></el-option>
@@ -22,41 +22,41 @@
         </el-select>
       </el-form-item>
       <el-form-item label="补款类型" prop="supply_type">
-        <el-select class="input-width" v-model="params.supply_type">
+        <el-select v-model="params.supply_type" class="input-width">
           <el-option label="全部" value=""></el-option>
           <el-option label="应收补款 " :value="1"></el-option>
           <el-option label="费用补款" :value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="支付方式" prop="pay_type">
-        <el-select class="input-width" placeholder="请选择" v-model="params.pay_type">
+        <el-select v-model="params.pay_type" class="input-width" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in payType.itemList" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="支付状态" prop="pay_status">
-        <el-select class="input-width" v-model="params.pay_status">
+        <el-select v-model="params.pay_status" class="input-width">
           <el-option label="全部" value=""></el-option>
           <el-option label="待支付 " :value="1"></el-option>
           <el-option label="支付成功" :value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" v-if="$hasPermission('searchFillMoneyList')" @click="search">{{ $hasPermission('searchFillMoneyList') }}</el-button>
+        <el-button v-if="$hasPermission('searchFillMoneyList')" type="primary" @click="search">{{ $hasPermission('searchFillMoneyList') }}</el-button>
         <el-button type="info" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <div>
-      <el-button type="primary" size="mini" v-if="$hasPermission('fillMoneyAuditPass')" @click="audit(true)">{{ $hasPermission('fillMoneyAuditPass') }}</el-button>
-      <el-button type="danger" size="mini" v-if="$hasPermission('fillMoneyAuditFail')" @click="audit(false)">{{ $hasPermission('fillMoneyAuditFail') }}</el-button>
+      <el-button v-if="$hasPermission('fillMoneyAuditPass')" type="primary" size="mini" @click="audit(true)">{{ $hasPermission('fillMoneyAuditPass') }}</el-button>
+      <el-button v-if="$hasPermission('fillMoneyAuditFail')" type="danger" size="mini" @click="audit(false)">{{ $hasPermission('fillMoneyAuditFail') }}</el-button>
     </div>
     <div class="m-t-10">
       <el-table
+        v-adaptive-height="{bottomOffset: 100}"
+        v-loading="loading"
         border
         size="mini"
         height="120px"
-        v-adaptive-height="{bottomOffset: 100}"
-        v-loading="loading"
         :data="tableData"
         @selection-change="(val) => { selectItems = val }"
       >
@@ -99,8 +99,8 @@
         <el-table-column prop="audit_remark" label="审核备注" align="center" width="180px" :show-overflow-tooltip="true"></el-table-column>
       </el-table>
       <el-pagination
-        layout="total, sizes, prev, pager, next, jumper"
         v-if="tableData.length"
+        layout="total, sizes, prev, pager, next, jumper"
         class="pagination"
         :current-page.sync="params.page"
         :page-size="params.limit"
@@ -130,7 +130,7 @@ import auditDialog from './components/audit-dialog';
 export default {
   name: 'fillMoneyList',
   components: {
-    auditDialog,
+    auditDialog
   },
   data() {
     return {
@@ -145,21 +145,21 @@ export default {
         pay_status: '',
         audit_status: 1,
         page: 1,
-        limit: 20,
+        limit: 10
       },
       total: 0,
       tableData: [],
       selectItems: [],
       auditDialog: {
         show: false,
-        isApproved: false,
-      },
+        isApproved: false
+      }
     };
   },
   computed: {
     payType() {
       return this.$store.getters.getConstByGroup('pay_type');
-    },
+    }
   },
   created() {
     this.getList();
@@ -213,8 +213,8 @@ export default {
         return false;
       }
       return true;
-    },
-  },
+    }
+  }
 };
 </script>
 

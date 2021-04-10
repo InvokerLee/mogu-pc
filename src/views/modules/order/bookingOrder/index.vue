@@ -2,31 +2,32 @@
   <div class="booking-order">
     <el-form ref="searchForm" size="mini" :inline="true" :model="params">
       <el-form-item label="订单号" prop="order_no">
-        <el-input class="input-width" v-model="params.order_no"></el-input>
+        <el-input v-model="params.order_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="国内订单号" prop="szlcsc_no">
-        <el-input class="input-width" v-model="params.szlcsc_no"></el-input>
+        <el-input v-model="params.szlcsc_no" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="客户编号" prop="customer_code">
-        <el-input class="input-width" v-model="params.customer_code"></el-input>
+        <el-input v-model="params.customer_code" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="跟进人" prop="follow_by">
-        <el-input class="input-width" v-model="params.follow_by"></el-input>
+        <el-input v-model="params.follow_by" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="订单状态" prop="order_status">
-        <el-select placeholder="请选择" v-model="params.order_status">
+        <el-select v-model="params.order_status" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in status.itemList" :key="item.value" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="订货状态" prop="inquiry_status">
-        <el-select placeholder="请选择" v-model="params.inquiry_status">
+        <el-select v-model="params.inquiry_status" placeholder="请选择">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="item in inquiryStatus.itemList" :key="item.value" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="下单时间" prop="created_at">
         <el-date-picker
+          v-model="params.created_at"
           type="daterange"
           unlink-panels
           range-separator="至"
@@ -35,12 +36,12 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           :editable="false"
           :default-time="['00:00:00', '23:59:59']"
-          v-model="params.created_at"
         >
         </el-date-picker>
       </el-form-item>
       <el-form-item label="支付到期时间" prop="expired_date">
         <el-date-picker
+          v-model="params.expired_date"
           type="daterange"
           unlink-panels
           range-separator="至"
@@ -49,12 +50,11 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           :editable="false"
           :default-time="['00:00:00', '23:59:59']"
-          v-model="params.expired_date"
         >
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" v-if="$hasPermission('searchBackOrder')" @click="search">{{ $hasPermission('searchBackOrder') }}</el-button>
+        <el-button v-if="$hasPermission('searchBackOrder')" type="primary" @click="search">{{ $hasPermission('searchBackOrder') }}</el-button>
         <el-button type="info" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
@@ -72,11 +72,11 @@
     </el-alert>
     <div class="m-t-10">
       <el-table
+        v-adaptive-height="{bottomOffset: 100}"
+        v-loading="loading"
         border
         size="mini"
         height="120px"
-        v-adaptive-height="{bottomOffset: 100}"
-        v-loading="loading"
         :data="tableData"
       >
         <el-table-column label="客户编号" align="center" width="100px">
@@ -85,7 +85,7 @@
               <span>{{ scope.row.customer_code }}</span>
               <span v-if="scope.row.is_top" class="font-red">(头部客户)</span>
             </div>
-            <el-button type="text" size="mini" v-if="$hasPermission('searchBackOrder')" @click="reset({customer_code: scope.row.customer_code})">历史订单</el-button>
+            <el-button v-if="$hasPermission('searchBackOrder')" type="text" size="mini" @click="reset({customer_code: scope.row.customer_code})">历史订单</el-button>
           </template>
         </el-table-column>
         <el-table-column label="订单号" align="center" width="135px">
@@ -117,20 +117,20 @@
         <el-table-column label="最短报价有效期" align="center">
           <template slot-scope="scope">
             <div>{{ scope.row.min_validate_date }}</div>
-            <div class="font-red" v-if="scope.row.showMinValidateDateTip">(即将失效)</div>
+            <div v-if="scope.row.showMinValidateDateTip" class="font-red">(即将失效)</div>
           </template>
         </el-table-column>
         <el-table-column prop="expired_date" label="支付到期时间" align="center"></el-table-column>
         <el-table-column prop="follow_by" label="跟进人" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" v-if="$hasPermission('enquiryInfo')" @click="watchEnquiry(scope.row)">{{ $hasPermission('enquiryInfo') }}</el-button>
+            <el-button v-if="$hasPermission('enquiryInfo')" size="mini" type="primary" @click="watchEnquiry(scope.row)">{{ $hasPermission('enquiryInfo') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-        layout="total, sizes, prev, pager, next, jumper"
         v-if="tableData.length"
+        layout="total, sizes, prev, pager, next, jumper"
         class="pagination"
         :current-page.sync="params.page"
         :page-size="params.limit"
@@ -164,10 +164,10 @@ export default {
         created_at: [],
         expired_date: [],
         page: 1,
-        limit: 20,
+        limit: 10
       },
       total: 0,
-      tableData: [],
+      tableData: []
     };
   },
   computed: {
@@ -176,7 +176,7 @@ export default {
     },
     inquiryStatus() {
       return this.$store.getters.getConstByGroup('inquiry_status');
-    },
+    }
   },
   created() {
     this.getList();
@@ -197,7 +197,7 @@ export default {
       orderInquiryList(params).then(({ data }) => {
         this.tableData = data.data.map(v => ({
           ...v,
-          showMinValidateDateTip: this.isLess2DayFromNow(v.min_validate_date),
+          showMinValidateDateTip: this.isLess2DayFromNow(v.min_validate_date)
         }));
         this.total = data.total;
       }).finally(() => {
@@ -224,15 +224,15 @@ export default {
         path: '/order/enquiryPrice',
         query: {
           szlcsc_no: row.szlcsc_no,
-          order_status: row.order_status,
-        },
+          order_status: row.order_status
+        }
       });
     },
     isLess2DayFromNow(dateStr) {
       if (!dateStr) return false;
       return dayjs().diff(dayjs(dateStr), 'day') <= 2;
-    },
-  },
+    }
+  }
 };
 </script>
 
