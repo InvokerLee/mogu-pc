@@ -1,82 +1,72 @@
 <template>
   <el-dialog
     width="750px"
-    :title="isEdit ? '客户编辑' : '客户新增'"
+    :title="isEdit ? '产品编辑' : '产品新增'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
   >
-    <el-form ref="hqForm" size="mini" label-width="100px" :model="form" :rules="rules">
+    <el-form ref="productForm" size="mini" label-width="120px" :model="form" :rules="rules">
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="客户名称：" prop="realname">
+          <el-form-item label="品名：" prop="realname">
             <el-input v-model.trim="form.realname"></el-input>
           </el-form-item>
-          <el-form-item label="助记符：" prop="">
+          <el-form-item label="条码：" prop="">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="是否结账：" prop="status">
-            <el-radio-group v-model="form.status">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="2">否</el-radio>
-            </el-radio-group>
+          <el-form-item label="品牌：" prop="status">
+            <el-select v-model="form.status" placeholder="请选择" class="w100">
+              <el-option label="华为" :value="1" />
+              <el-option label="诺基亚" :value="2" />
+              <el-option label="联想" :value="3" />
+            </el-select>
           </el-form-item>
-          <el-form-item label="客户类型：">
+          <el-form-item label="箱单位：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="地址：">
+          <el-form-item label="采购价：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="联系人：">
+          <el-form-item label="毛利率：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="备注：">
+          <el-form-item label="进货税率：">
             <el-input v-model.trim="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-select v-model="form.status" placeholder="请选择" class="w100">
+              <el-option label="有效" :value="1" />
+              <el-option label="停用" :value="2" />
+              <el-option label="只退不售" :value="3" />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="上级客户：">
-            <el-select
-              v-model="form.upCus"
-              class="w100"
-              multiple
-              filterable
-              remote
-              reserve-keyword
-              placeholder="请输入关键词"
-              :remote-method="remoteMethod"
-              :loading="remoteLoading"
-            >
-              <el-option
-                v-for="i in options"
-                :key="i.value"
-                :label="i.label"
-                :value="i.value"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="业务员：">
+          <el-form-item label="规格：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="单价含税：">
+          <el-form-item label="所属类别：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="账期：">
+          <el-form-item label="单位：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="电话：">
+          <el-form-item label="箱装量：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="付款方式：">
+          <el-form-item label="发货价：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="状态：" prop="status">
-            <el-radio-group v-model="form.status">
-              <el-radio :label="1">有效</el-radio>
-              <el-radio :label="2">停用</el-radio>
-            </el-radio-group>
+          <el-form-item label="保质期：">
+            <el-input v-model.trim="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="发货税率：">
+            <el-input v-model.trim="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="发货价(未税)：">
+            <el-input v-model.trim="form.phone" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -97,7 +87,6 @@ export default {
   data() {
     return {
       loading: false,
-      remoteLoading: false,
       isEdit: false,
       form: {
         realname: '',
@@ -105,7 +94,6 @@ export default {
         status: 1,
         remarks: ''
       },
-      options: [],
       rules: {
         realname: [
           { required: true, message: '必填', trigger: 'blur' }
@@ -125,19 +113,8 @@ export default {
     }
   },
   methods: {
-    remoteMethod(query) {
-      if (query === '') {
-        this.options = [];
-        return;
-      }
-      this.remoteLoading = true;
-      setTimeout(() => {
-        this.remoteLoading = false;
-        this.options = [{ value: 1, label: 'asdasd' }];
-      }, 200);
-    },
     confirm() {
-      this.$refs.hqForm.validate((valid) => {
+      this.$refs.productForm.validate((valid) => {
         if (!valid) return;
         this.loading = true;
         this.saveForm().then(() => {

@@ -43,6 +43,12 @@ export default {
       component: () => import('@/views/modules/config/customerList'),
       name: 'customerList',
       meta: { title: '客户' }
+    },
+    {
+      path: 'product',
+      component: () => import('@/views/modules/config/product'),
+      name: 'product',
+      meta: { title: '产品' }
     }
   ]
 };
