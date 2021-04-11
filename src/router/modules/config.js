@@ -72,7 +72,13 @@ export default {
       path: 'discount',
       component: () => import('@/views/modules/config/discount'),
       name: 'discount',
-      meta: { title: '促销管理VIP' }
+      meta: { title: '促销管理(VIP)' }
+    },
+    {
+      path: 'specialPirce',
+      component: () => import('@/views/modules/config/specialPirce'),
+      name: 'specialPirce',
+      meta: { title: '特价预留(VIP)' }
     }
   ]
 };
