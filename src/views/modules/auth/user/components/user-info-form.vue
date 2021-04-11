@@ -1,57 +1,67 @@
 <template>
   <el-dialog
-    width="500px"
-    :title="isEdit ? '修改用户' : '新增用户'"
+    width="720px"
+    :title="isEdit ? '用户编辑' : '用户新增'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
   >
-    <el-row type="flex" justify="center">
-      <el-col :span="20">
-        <el-form ref="userInfoForm" size="mini" label-width="100px" :model="form" :rules="rules">
-          <el-form-item label="账号：" prop="username">
-            <el-input v-model.trim="form.username"></el-input>
+    <el-form ref="userInfoForm" size="mini" label-width="120px" :model="form" :rules="rules">
+      <el-row type="flex" justify="center">
+        <el-col :span="12">
+          <el-form-item label="公司名称：" prop="companyName">
+            <el-input v-model.trim="form.companyName"></el-input>
           </el-form-item>
-          <el-form-item label="密码：" prop="password" v-if="!isEdit">
-            <el-input type="password" :maxlength="16" v-model="form.password"></el-input>
-          </el-form-item>
-          <el-form-item label="名称：" prop="realname">
-            <el-input v-model.trim="form.realname"></el-input>
-          </el-form-item>
-          <el-form-item label="手机号：" prop="phone">
-            <el-input :maxlength="11" v-model.trim="form.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="部门：">
-            <el-select class="w100" v-model="form.branch">
-              <el-option v-for="i in branchs.itemList" :key="i.code" :label="i.name" :value="i.code"></el-option>
+          <el-form-item label="账号类型：" prop="accountType">
+            <el-select v-model="form.accountType" class="w100">
+              <el-option label="基础版" :value="0" />
+              <el-option label="企业版" :value="1" />
+              <el-option label="旗舰版" :value="2" />
             </el-select>
           </el-form-item>
-          <el-form-item label="MAC地址：">
-            <el-input v-model.trim="form.mac_address"></el-input>
+          <el-form-item label="PC端访问：" prop="isPc">
+            <el-select v-model="form.isPc" class="w100">
+              <el-option label="是" :value="0" />
+              <el-option label="否" :value="1" />
+            </el-select>
           </el-form-item>
-          <el-form-item label="性别：" prop="sex">
-            <el-radio-group v-model="form.sex">
-              <el-radio :label="1">男</el-radio>
-              <el-radio :label="2">女</el-radio>
-            </el-radio-group>
+          <el-form-item label="绑定微信：">
+            <el-input v-model.trim="form.wechat"></el-input>
           </el-form-item>
-          <el-form-item label="用户状态：" prop="status">
-            <el-radio-group v-model="form.status">
-              <el-radio :label="1">启用</el-radio>
-              <el-radio :label="2">禁用</el-radio>
-            </el-radio-group>
+          <el-form-item label="状态：" prop="state">
+            <el-select v-model="form.state" class="w100">
+              <el-option label="禁用" :value="0" />
+              <el-option label="有效" :value="1" />
+            </el-select>
           </el-form-item>
-          <el-form-item label="备注：">
-            <el-input type="textarea" :autosize="{ minRows: 2, maxRows:4 }" v-model.trim="form.remarks">
-            </el-input>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="手机：" prop="phone">
+            <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
+          <el-form-item label="有效期至" prop="validitDate">
+            <el-date-picker
+              v-model="form.validitDate"
+              class="w100"
+              value-format="yyyy-MM-dd"
+            />
+          </el-form-item>
+          <el-form-item label="APP访问：" prop="isApp">
+            <el-select v-model="form.isApp" class="w100">
+              <el-option label="是" :value="0" />
+              <el-option label="否" :value="1" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="服务器节点：">
+            <el-input v-model.trim="form.serverNode"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
 
     <div slot="footer">
       <el-button size="mini" @click="cancel">取消</el-button>
-      <el-button type="primary" size="mini" :loading="loading" @click="confirm">保存</el-button>
+      <el-button type="primary" size="mini" :loading="loading" @click="confirm">提交</el-button>
     </div>
   </el-dialog>
 </template>
@@ -66,46 +76,40 @@ export default {
       loading: false,
       isEdit: false,
       form: {
-        username: '',
-        password: '',
-        realname: '',
+        companyName: '',
+        accountType: 0,
+        isPc: 0,
+        wechat: '',
+        state: 1,
         phone: '',
-        branch: '',
-        mac_address: '',
-        sex: '',
-        status: 1,
-        level: 0,
-        remarks: '',
+        validitDate: '',
+        isApp: 0,
+        serverNode: ''
       },
       rules: {
-        username: [
-          { required: true, message: '账号必填', trigger: 'blur' },
-          { pattern: /^[^\u4e00-\u9fa5]{0,}$/, message: '请输字母、数字、_、@等字符，不含中文', trigger: 'blur' },
+        companyName: [
+          { required: true, message: '必填', trigger: 'blur' }
         ],
-        password: [
-          { required: true, message: '密码必填', trigger: 'blur' },
-          { min: 6, message: '不少于6位', trigger: 'blur' },
+        accountType: [
+          { required: true, message: '必选', trigger: 'blur' }
         ],
-        realname: [
-          { required: true, message: '名称必填', trigger: 'blur' },
+        isPc: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ],
+        isApp: [
+          { required: true, message: '必选', trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: '手机号必填', trigger: 'blur' },
-          { min: 6, message: '不少于6位', trigger: 'blur' },
+          { required: true, message: '必填', trigger: 'blur' }
         ],
-        sex: [
-          { required: true, message: '性别必选', trigger: 'blur' },
+        validitDate: [
+          { required: true, message: '必选', trigger: 'blur' }
         ],
-        status: [
-          { required: true, message: '用户状态必选', trigger: 'blur' },
-        ],
-      },
+        state: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ]
+      }
     };
-  },
-  computed: {
-    branchs() {
-      return this.$store.getters.getConstByGroup('branch');
-    },
   },
   created() {
     if (this.item && this.item.id) {
@@ -135,7 +139,7 @@ export default {
     },
     cancel() {
       this.$emit('cancel');
-    },
-  },
+    }
+  }
 };
 </script>

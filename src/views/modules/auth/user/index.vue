@@ -3,81 +3,91 @@
     <div class="user">
       <el-row type="flex" justify="space-between">
         <el-col>
-          <el-form ref="searchForm" size="mini" inline :model="params">
-            <el-form-item label="关键词">
-              <el-input v-model.trim="params.key" placeholder="请输入账号、名称" />
+          <el-form ref="searchForm" hide-details size="mini" inline :model="params">
+            <el-form-item label="搜索">
+              <el-input v-model.trim="params.key" placeholder="公司名称、手机" />
             </el-form-item>
-            <el-form-item label="授权等级">
-              <el-select v-model="params.level" placeholder="请选择">
+            <el-form-item label="账户类型">
+              <el-select v-model="params.accountType" placeholder="请选择">
                 <el-option label="全部" value="" />
-                <el-option label="无" :value="0" />
-                <el-option label="低" :value="1" />
-                <el-option label="中" :value="2" />
-                <el-option label="高" :value="3" />
+                <el-option label="基础版" :value="0" />
+                <el-option label="企业版" :value="1" />
+                <el-option label="旗舰版" :value="2" />
               </el-select>
             </el-form-item>
-            <el-form-item label="用户状态">
-              <el-select v-model="params.status" placeholder="请选择">
+            <el-form-item label="状态">
+              <el-select v-model="params.state" placeholder="请选择">
                 <el-option label="全部" value="" />
-                <el-option label="启用" :value="1" />
-                <el-option label="禁用" :value="2" />
+                <el-option label="有效" :value="1" />
+                <el-option label="禁用" :value="0" />
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button v-if="$hasPermission('searchUser')" type="primary" @click="search">{{ $hasPermission('searchUser') }}</el-button>
+              <el-button type="primary" @click="search">查询</el-button>
               <el-button type="info" @click="reset">重置</el-button>
+              <span style="margin: 0 20px;">
+                <el-divider direction="vertical"></el-divider>
+              </span>
+              <el-button type="success" size="mini" @click="add">新增</el-button>
             </el-form-item>
           </el-form>
-        </el-col>
-        <el-col class="tar">
-          <el-button v-if="$hasPermission('addUser')" type="success" size="mini" @click="add">{{ $hasPermission('addUser') }}</el-button>
-          <el-button v-if="$hasPermission('updateUser')" type="warning" size="mini" @click="edit">{{ $hasPermission('updateUser') }}</el-button>
-          <el-button v-if="$hasPermission('updateAuthLevel')" type="primary" size="mini" @click="updateUserLevel">{{ $hasPermission('updateAuthLevel') }}</el-button>
-          <el-button v-if="$hasPermission('updatePassword')" type="primary" size="mini" @click="updatePwd">{{ $hasPermission('updatePassword') }}</el-button>
-          <el-button v-if="$hasPermission('delUser')" type="danger" size="mini" @click="del">{{ $hasPermission('delUser') }}</el-button>
         </el-col>
       </el-row>
       <div>
         <el-table
-          v-adaptive-height="{bottomOffset: 100}"
+          v-adaptive-height="{bottomOffset: 40}"
           v-loading="loading"
           border
           size="mini"
           height="120px"
           :data="tableData"
-          @selection-change="(val) => { selectItems = val }"
         >
-          <el-table-column width="55" type="selection" align="center" />
-          <el-table-column prop="username" label="账号" align="center" />
-          <el-table-column prop="realname" label="名称" align="center" />
-          <el-table-column prop="phone" label="手机" align="center" />
-          <el-table-column label="部门" align="center">
+          <el-table-column label="操作" :width="100" type="action" align="center">
             <template slot-scope="scope">
-              <span>{{ branchs[scope.row.branch] }}</span>
+              <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="text" @click="del(scope.row)">删除</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="授权等级" align="center">
+          <el-table-column prop="companyName" label="公司名称" align="center" />
+          <el-table-column prop="phone" :width="100" label="手机" align="center" />
+          <el-table-column label="账号类型" :width="80" align="center">
             <template slot-scope="scope">
               <div>
-                {{ ['无', '低', '中', '高'][scope.row.level] }}
+                {{ ['基础班', '企业版', '旗舰版', '高'][scope.row.accountType	] }}
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="用户状态" align="center">
+          <el-table-column prop="validitDate" label="有效期至" :width="100" align="center" />
+          <el-table-column label="PC端访问" :width="80" align="center">
             <template slot-scope="scope">
-              <span :class="[scope.row.status === 1 ? 'font-green' : 'font-red']">
-                {{ ['', '启用', '禁用'][scope.row.status] }}
+              <div>
+                {{ ['是', '否'][scope.row.isPc	] }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="APP访问" :width="80" align="center">
+            <template slot-scope="scope">
+              <div>
+                {{ ['是', '否'][scope.row.isApp	] }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="wechat" :width="100" label="绑定微信号" align="center" />
+          <el-table-column prop="serverNode" label="访问服务器节点" align="center" />
+          <el-table-column label="状态" :width="60" align="center">
+            <template slot-scope="scope">
+              <span>
+                {{ ['禁用', '有效'][scope.row.state] }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="remarks" label="备注" align="center" width="300px" :show-overflow-tooltip="true" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
           layout="total, sizes, prev, pager, next, jumper"
-          class="pagination"
-          :current-page.sync="params.page"
-          :page-size="params.limit"
+          class="pagination pt-3"
+          :current-page.sync="params.curentPage"
+          :page-size="params.pageSize"
           :total="total"
           :page-sizes="[10,20,30]"
           @size-change="handleSizeChange"
@@ -92,59 +102,79 @@
       @success="actionSuccess"
       @cancel="closeDialog"
     />
-    <user-level
-      v-if="dialog.show && dialog.name === 'USER_LEVEL'"
-      :visible="dialog.show"
-      :item="selectItems[0]"
-      @success="actionSuccess"
-      @cancel="closeDialog"
-    />
-    <user-password
-      v-if="dialog.show && dialog.name === 'USER_PASSWORD'"
-      :visible="dialog.show"
-      :item="selectItems[0]"
-      @cancel="closeDialog"
-    />
   </base-wrapper>
 </template>
 
 <script>
 import { getUserList, delUser } from '@/api/auth/user';
 import userInfoForm from './components/user-info-form';
-import userLevel from './components/user-level';
-import userPassword from './components/user-password';
 
 export default {
-  name: 'User',
+  name: 'user',
   components: {
-    userInfoForm,
-    userLevel,
-    userPassword
+    userInfoForm
   },
   data() {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        searchPar: '',
+        accountType: '',
+        state: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
-      tableData: [],
-      selectItems: [],
+      tableData: [{
+        'id': 13,
+        'realName': null,
+        'account': '13392820707',
+        'salt': null,
+        'password': null,
+        'phone': '13392820707',
+        'state': 0,
+        'type': null,
+        'companyId': null,
+        'companyName': '芒果科技有限公司',
+        'roleId': null,
+        'serverNode': '',
+        'text': null,
+        'wechat': '',
+        'accountType': 2,
+        'isPc': 0,
+        'isApp': 0,
+        'validitDate': '2029-12-01',
+        'createDate': '2020-04-18T11:00:20.000+0000',
+        'createUserId': null
+      },
+      {
+        'id': 1,
+        'realName': null,
+        'account': 'admin',
+        'salt': null,
+        'password': null,
+        'phone': '18888888888',
+        'state': 0,
+        'type': 'system',
+        'companyId': null,
+        'companyName': '芒果科技有限公司',
+        'roleId': null,
+        'serverNode': null,
+        'text': null,
+        'wechat': '1868229576',
+        'accountType': 1,
+        'isPc': 1,
+        'isApp': 1,
+        'validitDate': '2019-03-29',
+        'createDate': '2019-03-29T13:18:19.000+0000',
+        'createUserId': null
+      }],
       dialog: {
         show: false,
         name: '',
         item: {}
       }
     };
-  },
-  computed: {
-    branchs() {
-      return this.$store.getters.getConstByGroup('branch');
-    }
   },
   created() {
     this.getList();
@@ -166,7 +196,7 @@ export default {
       });
     },
     search() {
-      this.params.page = 1;
+      this.params.curentPage = 1;
       this.getList();
     },
     reset() {
@@ -174,7 +204,7 @@ export default {
       this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
@@ -246,7 +276,6 @@ export default {
   }
   .pagination {
     text-align: center;
-    margin: 20px 0;
   }
 }
 </style>

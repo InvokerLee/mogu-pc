@@ -4,7 +4,7 @@ const auth = {
   path: '/auth',
   name: 'auth',
   component: Layout,
-  meta: { title: '权限系统', icon: 'el-icon-setting' },
+  meta: { title: '系统', icon: 'el-icon-setting' },
   redirect: '/auth/user',
   children: [
     {
@@ -19,13 +19,6 @@ const auth = {
       component: () => import('@/views/modules/auth/role'),
       meta: { title: '角色管理' }
     },
-    {
-      path: 'assign-permission',
-      name: 'assign-permission',
-      component: () => import('@/views/modules/auth/assign-permission'),
-      hidden: true,
-      meta: { title: '授权功能' }
-    },
     // {
     //   path: 'resource',
     //   name: 'resource',
@@ -36,7 +29,7 @@ const auth = {
       path: 'permission',
       name: 'permission',
       component: () => import('@/views/modules/auth/permission'),
-      meta: { title: '功能管理' }
+      meta: { title: '菜单管理' }
     }
   ]
 };

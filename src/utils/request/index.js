@@ -9,8 +9,10 @@ const AUTH_KEY = 'Bearer';
 const INVALID_TOKENS = [100001, 100002, 50012, 50014];
 
 const request = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  withCredentials: true, // 跨域允许携带cookie
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: '/api', // url = base url + request url
+  // baseURL: 'http://kaerp.com:9090', // url = base url + request url
+  withCredentials: true // 跨域允许携带cookie
 });
 
 // 请求拦截
@@ -45,7 +47,7 @@ request.interceptors.response.use((response) => {
     // 错误
     Message.error({
       showClose: true,
-      message: `${response.data.data} 无权限`,
+      message: `${response.data.data} 无权限`
     });
     return Promise.reject(response);
   }
@@ -53,13 +55,13 @@ request.interceptors.response.use((response) => {
   // 错误
   Message.error({
     showClose: true,
-    message: response.data.message || `Error:${response.request.url}`,
+    message: response.data.msg || `Error:${response.request.url}`
   });
   return Promise.reject(response);
 }, (error) => {
   Message.error({
     showClose: true,
-    message: error.message,
+    message: error.msg
   });
   return Promise.reject(error);
 });

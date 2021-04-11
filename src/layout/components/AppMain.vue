@@ -17,15 +17,15 @@ export default {
     },
     key() {
       return this.$route.path;
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
 .app-main {
   /*84 = navbar + tagView */
-  height: calc(100vh - 84px);;
+  height: calc(100vh - 34px);;
   width: 100%;
   position: relative;
   overflow: auto;
