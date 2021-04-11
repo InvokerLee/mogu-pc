@@ -1,58 +1,56 @@
 <template>
   <base-wrapper>
     <div class="role">
-      <el-row type="flex" justify="space-between">
-        <el-col>
-          <el-form ref="searchForm" size="mini" inline :model="params">
-            <el-form-item label="关键词">
-              <el-input v-model.trim="params.key"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" v-if="$hasPermission('searchRole')" @click="search">{{ $hasPermission('searchRole') }}</el-button>
-              <el-button type="info" @click="reset">重置</el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col class="tar">
-          <el-button type="success" size="mini" v-if="$hasPermission('addRole')" @click="add">{{ $hasPermission('addRole') }}</el-button>
-          <el-button type="warning" size="mini" v-if="$hasPermission('updateRole')" @click="edit">{{ $hasPermission('updateRole') }}</el-button>
-          <el-button type="primary" size="mini" v-if="$hasPermission('assignUser')" @click="assignUser">{{ $hasPermission('assignUser') }}</el-button>
-          <el-button type="primary" size="mini" v-if="$hasPermission('assignPermission')" @click="assignPermission">{{ $hasPermission('assignPermission') }}</el-button>
-          <el-button type="primary" size="mini" v-if="$hasPermission('permissionInfo')" @click="watchPermissionInfo">{{ $hasPermission('permissionInfo') }}</el-button>
-          <el-button type="danger" size="mini" v-if="$hasPermission('delRole')" @click="del">{{ $hasPermission('delRole') }}</el-button>
-        </el-col>
+      <el-form ref="searchForm" hide-details size="mini" inline :model="params">
+        <el-form-item label="角色名">
+          <el-input v-model.trim="params.key"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="search">查找</el-button>
+          <el-button type="info" @click="reset">重置</el-button>
+          <span style="margin: 0 20px;">
+            <el-divider direction="vertical"></el-divider>
+          </span>
+          <el-button type="success" size="mini" @click="add">新增</el-button>
+        </el-form-item>
+      </el-form>
       </el-row>
       <div>
         <el-table
+          v-adaptive-height="{bottomOffset: 40}"
+          v-loading="loading"
           border
           size="mini"
           height="120px"
-          v-adaptive-height="{bottomOffset: 100}"
-          v-loading="loading"
           :data="tableData"
-          @selection-change="(val) => { selectItems = val }"
         >
-          <el-table-column width="55" type="selection" align="center"></el-table-column>
-          <el-table-column prop="name" label="名称" align="center"></el-table-column>
-          <el-table-column prop="remark" label="描述" align="center" width="300px" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column align="center" label="已分配用户">
+          <el-table-column label="操作" :width="150" type="action" align="center">
+            <template slot-scope="scope">
+              <el-button size="mini" type="text">权限</el-button>
+              <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="roleName" label="名称" align="center"></el-table-column>
+          <el-table-column prop="remark" label="备注" align="center" width="500px" :show-overflow-tooltip="true"></el-table-column>
+          <!-- <el-table-column align="center" label="已分配用户">
             <template slot-scope="scope">
               <el-button
+                v-if="scope.row.user_name"
                 class="ellipsis"
                 type="text"
                 size="mini"
-                v-if="scope.row.user_name"
                 @click="lookUser(scope.row.user_name)"
               >{{ scope.row.user_name }}</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <el-pagination
-          layout="total, sizes, prev, pager, next, jumper"
           v-if="tableData.length"
-          class="pagination"
-          :current-page.sync="params.page"
-          :page-size="params.limit"
+          layout="total, sizes, prev, pager, next, jumper"
+          class="pagination pt-3"
+          :current-page.sync="params.curentPage"
+          :page-size="params.pageSize"
           :total="total"
           :page-sizes="[10,20,30]"
           @size-change="handleSizeChange"
@@ -98,24 +96,34 @@ export default {
   components: {
     roleForm,
     assignUser,
-    permissionInfo,
+    permissionInfo
   },
   data() {
     return {
       loading: false,
       params: {
-        key: '',
-        page: 1,
-        limit: 10,
+        roleName: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
-      tableData: [],
+      tableData: [{
+        'companyName': 'string',
+        'createTime': '2021-04-11T09:59:53.802Z',
+        'delFlag': 0,
+        'menuIdList': [
+          0
+        ],
+        'remark': 'string',
+        'roleId': 0,
+        'roleName': 'string'
+      }],
       selectItems: [],
       dialog: {
         show: false,
         name: '',
-        item: {},
-      },
+        item: {}
+      }
     };
   },
   created() {
@@ -138,7 +146,7 @@ export default {
       });
     },
     search() {
-      this.params.page = 1;
+      this.params.curentPage = 1;
       this.getList();
     },
     reset() {
@@ -146,7 +154,7 @@ export default {
       this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
@@ -156,18 +164,16 @@ export default {
       this.dialog.item = {};
       this.openDialog('ROLE_FORM');
     },
-    edit() {
-      if (!this.isSelectSingle()) return;
-      this.dialog.item = this.selectItems[0];
+    edit(row) {
+      this.dialog.item = row;
       this.openDialog('ROLE_FORM');
     },
-    del() {
-      if (!this.isSelectSingle()) return;
-      const { id } = this.selectItems[0];
+    del(row) {
+      const { id } = row;
       this.$confirm('确认要删除选择角色吗?', '删除提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
-        type: 'warning',
+        type: 'warning'
       }).then(() => delRole(id)).then(() => {
         this.$message.success('删除成功');
         this.getList();
@@ -189,7 +195,7 @@ export default {
       this.$msgbox({
         title: '查看已分配用户',
         message: userStr,
-        showConfirmButton: false,
+        showConfirmButton: false
       }).catch(() => {});
     },
     openDialog(name) {
@@ -210,8 +216,8 @@ export default {
         return false;
       }
       return true;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -232,7 +238,6 @@ export default {
   }
   .pagination {
     text-align: center;
-    margin: 20px 0;
   }
 }
 </style>
