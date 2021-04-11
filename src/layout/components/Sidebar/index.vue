@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="has-logo">
+    <logo :collapse="isCollapse"></logo>
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
@@ -20,10 +21,11 @@
 <script>
 import { mapGetters } from 'vuex';
 import SidebarItem from './SidebarItem';
+import Logo from './Logo';
 import variables from '@/assets/styles/variables.scss';
 
 export default {
-  components: { SidebarItem },
+  components: { SidebarItem, Logo },
   computed: {
     ...mapGetters([
       'sidebar',

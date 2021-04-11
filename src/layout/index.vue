@@ -3,7 +3,7 @@
     <sidebar class="sidebar-container" />
     <div class="main-container">
       <div>
-        <navbar />
+        <!-- <navbar /> -->
         <tags-view />
       </div>
       <app-main />
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, TagsView } from './components';
+import { Sidebar, AppMain, TagsView } from './components';
 
 export default {
   name: 'Layout',
   components: {
-    Navbar,
+    // Navbar,
     Sidebar,
     AppMain,
     TagsView
