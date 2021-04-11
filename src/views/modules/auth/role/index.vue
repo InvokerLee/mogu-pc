@@ -14,7 +14,6 @@
           <el-button type="success" size="mini" @click="add">新增</el-button>
         </el-form-item>
       </el-form>
-      </el-row>
       <div>
         <el-table
           v-adaptive-height="{bottomOffset: 40}"
