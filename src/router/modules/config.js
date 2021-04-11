@@ -79,6 +79,12 @@ export default {
       component: () => import('@/views/modules/config/specialPirce'),
       name: 'specialPirce',
       meta: { title: '特价预留(VIP)' }
+    },
+    {
+      path: 'member',
+      component: () => import('@/views/modules/config/member'),
+      name: 'member',
+      meta: { title: '会员(VIP)' }
     }
   ]
 };
