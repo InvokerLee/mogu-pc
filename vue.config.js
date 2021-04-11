@@ -25,7 +25,7 @@ module.exports = {
     // public: '',
     proxy: {
       '/api': {
-        target: 'http://kaerp.com:9090',
+        target: 'http://www.kaerp.com:9090',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

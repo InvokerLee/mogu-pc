@@ -9,8 +9,8 @@ const AUTH_KEY = 'Bearer';
 const INVALID_TOKENS = [100001, 100002, 50012, 50014];
 
 const request = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API,
-  withCredentials: true // 跨域允许携带cookie
+  baseURL: process.env.VUE_APP_BASE_API
+  // withCredentials: true // 跨域允许携带cookie
 });
 
 // 请求拦截
