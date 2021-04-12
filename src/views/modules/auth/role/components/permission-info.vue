@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       loading: false,
-      treeList: [],
+      treeList: []
     };
   },
   created() {
@@ -54,8 +54,8 @@ export default {
     },
     cancel() {
       this.$emit('cancel');
-    },
-  },
+    }
+  }
 };
 </script>
 

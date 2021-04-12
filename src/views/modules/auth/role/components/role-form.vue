@@ -9,11 +9,11 @@
     <el-row type="flex" justify="center">
       <el-col :span="20">
         <el-form ref="roleForm" size="mini" label-width="65px" :model="form" :rules="rules">
-          <el-form-item label="名称：" prop="name">
-            <el-input v-model.trim="form.name"></el-input>
+          <el-form-item label="名称：" prop="roleName">
+            <el-input v-model.trim="form.roleName"></el-input>
           </el-form-item>
           <el-form-item label="备注：">
-            <el-input type="textarea" :autosize="{ minRows: 2, maxRows:4 }" v-model.trim="form.remark">
+            <el-input v-model.trim="form.remark" type="textarea" :autosize="{ minRows: 2, maxRows:4 }">
             </el-input>
           </el-form-item>
         </el-form>
@@ -36,18 +36,18 @@ export default {
       loading: false,
       isEdit: false,
       form: {
-        name: '',
-        remark: '',
+        roleName: '',
+        remark: ''
       },
       rules: {
-        name: [
-          { required: true, message: '名称必填', trigger: 'blur' },
-        ],
-      },
+        roleName: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ]
+      }
     };
   },
   created() {
-    if (this.item && this.item.id) {
+    if (this.item && this.item.roleId) {
       this.isEdit = true;
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
@@ -69,12 +69,15 @@ export default {
     },
     saveForm() {
       return this.isEdit
-        ? editRole(this.item.id, this.form)
+        ? editRole({
+          ...this.form,
+          roleId: this.item.roleId
+        })
         : addRole(this.form);
     },
     cancel() {
       this.$emit('cancel');
-    },
-  },
+    }
+  }
 };
 </script>

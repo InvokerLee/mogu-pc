@@ -13,24 +13,35 @@ export function getRoleList(data) {
 
 export function addRole(data) {
   return request({
-    url: '/permission/addRole',
+    url: '/sys/role/save',
     method: 'post',
     data
   });
 }
 
-export function editRole(id, data) {
+export function editRole(data) {
   return request({
-    url: `/permission/updateRole/${id}`,
-    method: 'patch',
+    url: '/sys/role/update',
+    method: 'post',
     data
   });
 }
 
-export function delRole(id) {
+export function getRoleInfo(roleId) {
   return request({
-    url: `/permission/delRoles/${id}`,
-    method: 'delete'
+    url: `/sys/role/info/${roleId}`,
+    method: 'get'
+  });
+}
+
+export function delRole(data) {
+  return request({
+    url: '/sys/role/delete',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
 

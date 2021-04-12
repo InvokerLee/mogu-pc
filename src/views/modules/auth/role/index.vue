@@ -74,13 +74,6 @@
       @cancel="closeDialog"
     >
     </assign-user>
-    <permission-info
-      v-if="dialog.show && dialog.name === 'PERMISSION_INFO'"
-      :visible="dialog.show"
-      :item="selectItems[0]"
-      @cancel="closeDialog"
-    >
-    </permission-info>
   </base-wrapper>
 </template>
 
@@ -88,14 +81,12 @@
 import { getRoleList, delRole } from '@/api/auth/role';
 import roleForm from './components/role-form';
 import assignUser from './components/assign-user';
-import permissionInfo from './components/permission-info';
 
 export default {
   name: 'role',
   components: {
     roleForm,
-    assignUser,
-    permissionInfo
+    assignUser
   },
   data() {
     return {
@@ -106,17 +97,7 @@ export default {
         pageSize: 10
       },
       total: 0,
-      tableData: [{
-        'companyName': 'string',
-        'createTime': '2021-04-11T09:59:53.802Z',
-        'delFlag': 0,
-        'menuIdList': [
-          0
-        ],
-        'remark': 'string',
-        'roleId': 0,
-        'roleName': 'string'
-      }],
+      tableData: [],
       selectItems: [],
       dialog: {
         show: false,
@@ -137,9 +118,9 @@ export default {
         }
       });
       this.loading = true;
-      getRoleList(params).then(({ data }) => {
-        this.tableData = data.data;
-        this.total = data.total;
+      getRoleList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
       }).catch(() => {}).finally(() => {
         this.loading = false;
       });
@@ -168,12 +149,12 @@ export default {
       this.openDialog('ROLE_FORM');
     },
     del(row) {
-      const { id } = row;
+      const { roleId } = row;
       this.$confirm('确认要删除选择角色吗?', '删除提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delRole(id)).then(() => {
+      }).then(() => delRole({ roleIds: roleId })).then(() => {
         this.$message.success('删除成功');
         this.getList();
       }).catch(() => {});
@@ -185,10 +166,6 @@ export default {
     assignPermission() {
       if (!this.isSelectSingle()) return;
       this.$router.push(`/auth/assign-permission?roleId=${this.selectItems[0].id}`);
-    },
-    watchPermissionInfo() {
-      if (!this.isSelectSingle()) return;
-      this.openDialog('PERMISSION_INFO');
     },
     lookUser(userStr) {
       this.$msgbox({
