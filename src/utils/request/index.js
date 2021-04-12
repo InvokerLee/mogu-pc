@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
-import { getToken, setToken } from '@/utils/cookie';
+// import { getToken, setToken } from '@/utils/cookie';
 // eslint-disable-next-line
 import qs from 'qs';
 import store from '@/store';
 
-const AUTH_KEY = 'Bearer';
+// const AUTH_KEY = 'Bearer';
 const INVALID_TOKENS = [100001, 100002, 50012, 50014];
 
 const request = axios.create({
@@ -15,18 +15,21 @@ const request = axios.create({
 
 // 请求拦截
 request.interceptors.request.use((config) => {
-  if (getToken()) {
-    config.headers['Authorization'] = AUTH_KEY + getToken();
+  // if (getToken()) {
+  //   config.headers['Authorization'] = AUTH_KEY + getToken();
+  // }
+  if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+    config.data = qs.stringify(config.data);
   }
   return config;
 }, err => Promise.reject(err));
 
 // 响应拦截
 request.interceptors.response.use((response) => {
-  if (response.headers.authorization) {
-    const token = response.headers.authorization.split(' ')[1];
-    setToken(token);
-  }
+  // if (response.headers.authorization) {
+  //   const token = response.headers.authorization.split(' ')[1];
+  //   setToken(token);
+  // }
   // blob
   if (response.config.responseType === 'blob') {
     return response;
@@ -41,14 +44,14 @@ request.interceptors.response.use((response) => {
     return;
   }
 
-  if (response.data.code === 100400) {
-    // 错误
-    Message.error({
-      showClose: true,
-      message: `${response.data.data} 无权限`
-    });
-    return Promise.reject(response);
-  }
+  // if (response.data.code === 100400) {
+  //   // 错误
+  //   Message.error({
+  //     showClose: true,
+  //     message: `${response.data.data} 无权限`
+  //   });
+  //   return Promise.reject(response);
+  // }
 
   // 错误
   Message.error({

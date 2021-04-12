@@ -4,7 +4,10 @@ export function getRoleList(data) {
   return request({
     url: '/sys/role/list',
     method: 'post',
-    data
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
 
