@@ -1,9 +1,16 @@
 import request from '@/utils/request/index';
 
-export function getPermissionMenus() {
+export function getMenus() {
   return request({
-    url: '/permission/menus',
+    url: '/sys/menu/queryAll',
+    method: 'post'
+  });
+}
+export function delMenus(params) {
+  return request({
+    url: '/sys/menu/delete',
     method: 'get',
+    params
   });
 }
 
@@ -11,7 +18,7 @@ export function permissionSearch(params) {
   return request({
     url: '/permission/searchMenus',
     method: 'get',
-    params,
+    params
   });
 }
 
@@ -19,7 +26,7 @@ export function addPermission(data) {
   return request({
     url: '/permission/menus',
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -27,7 +34,7 @@ export function editPermission(id, data) {
   return request({
     url: `/permission/menus/${id}`,
     method: 'patch',
-    data,
+    data
   });
 }
 
@@ -35,7 +42,7 @@ export function delPermission(data) {
   return request({
     url: '/permission/menus',
     method: 'delete',
-    data,
+    data
   });
 }
 
@@ -43,7 +50,7 @@ export function getBoundRescs(id, params) {
   return request({
     url: `/permission/boundMenuResc/${id}`,
     method: 'get',
-    params,
+    params
   });
 }
 
@@ -51,7 +58,7 @@ export function getUnboundRescs(id, params) {
   return request({
     url: `/permission/unboundMenuResc/${id}`,
     method: 'get',
-    params,
+    params
   });
 }
 
@@ -59,7 +66,7 @@ export function bindResc(id, data) {
   return request({
     url: `/permission/sevemenuResc/${id}`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -67,13 +74,13 @@ export function unBindResc(id, data) {
   return request({
     url: `/permission/delMenuResc/${id}`,
     method: 'delete',
-    data,
+    data
   });
 }
 
 export function clearPermissionRole(id) {
   return request({
     url: `/permission/delAUthMenu/${id}`,
-    method: 'delete',
+    method: 'delete'
   });
 }
