@@ -8,10 +8,10 @@
         <el-form-item>
           <el-button type="primary" @click="search">查找</el-button>
           <el-button type="info" @click="reset">重置</el-button>
-          <!-- <span style="margin: 0 20px;">
+          <span style="margin: 0 20px;">
             <el-divider direction="vertical"></el-divider>
-          </span> -->
-          <!-- <el-button type="success" size="mini" @click="add">新增</el-button> -->
+          </span>
+          <el-button type="success" size="mini" @click="add">新增</el-button>
         </el-form-item>
       </el-form>
       <el-table
