@@ -98,7 +98,8 @@ export default {
 
 <style lang="scss" scoped>
 .panel-group {
-  margin: 16px 16px 0;
+  margin: 20px 0px 0 !important;
+  padding: 0;
   .card-panel {
     font-size: 12px;
     display: flex;
