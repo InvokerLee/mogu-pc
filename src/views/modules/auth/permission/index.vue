@@ -36,10 +36,12 @@
             <el-button
               size="mini"
               type="text"
+              @click="add(scope.row)"
             >新增</el-button>
             <el-button
               size="mini"
               type="text"
+              @click="edit(scope.row)"
             >修改</el-button>
             <el-button
               class="font-red"
@@ -54,9 +56,7 @@
     <permission-form
       v-if="dialog.show && dialog.name === 'PERMISSION_FORM'"
       :visible="dialog.show"
-      :parentListText="permissionForm.parentListText"
-      :pid="permissionForm.pid"
-      :item="permissionForm.item"
+      :item="dialog.item"
       @success="submitFormSuccess"
       @cancel="closeDialog"
     >
@@ -84,7 +84,8 @@ export default {
       tableData: [],
       dialog: {
         show: false,
-        name: ''
+        name: '',
+        item: {}
       },
       permissionForm: {
         parentListText: '',
@@ -118,15 +119,22 @@ export default {
       return tree.sort((a, b) => a.sort - b.sort);
     },
     search() {
+      this.getMenus();
     },
     reset() {
       Object.assign(this.params, this.$options.data.call(this).params);
+      this.search();
     },
-    add() {
+    add(row) {
       this.openDialog('PERMISSION_FORM');
+      this.dialog.item = {
+        parentId: row.menuId,
+        parentName: row.name
+      };
     },
-    edit() {
+    edit(row) {
       this.openDialog('PERMISSION_FORM');
+      this.dialog.item = row;
     },
     del(item) {
       const params = {
@@ -149,8 +157,9 @@ export default {
       this.dialog.name = '';
       this.dialog.show = false;
     },
-    submitFormSuccess({ node, isEdit }) {
+    submitFormSuccess() {
       this.closeDialog();
+      this.getMenus();
     }
   }
 };

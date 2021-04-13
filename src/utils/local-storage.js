@@ -1,4 +1,4 @@
-const prefix = '__LCSC__';
+const prefix = '__MOGU__';
 
 export default {
   /**
@@ -36,5 +36,5 @@ export default {
   remove(key) {
     window.localStorage.removeItem(prefix + key);
     return true;
-  },
+  }
 };

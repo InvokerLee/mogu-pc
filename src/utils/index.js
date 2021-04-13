@@ -155,6 +155,10 @@ export function toThousandFilter(num) {
   return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','));
 }
 
+export function isDef(v) {
+  return v !== undefined && v !== null;
+}
+
 /**
  * Upper case first char
  * @param {String} string

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     width="480px"
-    :title="isEdit ? '修改功能' : '新增功能'"
+    :title="isEdit ? '菜单修改' : '菜单编辑'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
@@ -9,27 +9,27 @@
     <el-row type="flex" justify="center">
       <el-col :span="20">
         <el-form ref="roleForm" size="mini" label-width="95px" :model="form" :rules="rules">
-          <el-form-item label="目录层级：">
-            {{ parentListText }}
+          <el-form-item v-if="hasParent" label="父级菜单：">
+            {{ item.parentName }}
           </el-form-item>
-          <el-form-item label="功能名称：" prop="name">
+          <el-form-item label="菜单名称：" prop="name">
             <el-input v-model.trim="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="功能KEY：" prop="route">
-            <el-input v-model.trim="form.route"></el-input>
-          </el-form-item>
-          <el-form-item label="功能排序：" prop="sort">
-            <el-input v-model.trim="form.sort"></el-input>
-          </el-form-item>
-          <el-form-item label="功能等级：" prop="auth_level">
-            <el-radio-group v-model="form.auth_level">
-              <el-radio :label="1">低</el-radio>
-              <el-radio :label="2">中</el-radio>
-              <el-radio :label="3">高</el-radio>
+          <el-form-item label="菜单分类：" prop="type">
+            <el-radio-group v-model="form.type">
+              <el-radio :label="0">目录</el-radio>
+              <el-radio :label="1">菜单</el-radio>
+              <el-radio :label="2">按钮</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="功能描述：">
-            <el-input v-model.trim="form.remarks"></el-input>
+          <el-form-item label="功能KEY：" prop="url">
+            <el-input v-model.trim="form.url"></el-input>
+          </el-form-item>
+          <el-form-item label="权限标识：" prop="perms">
+            <el-input v-model.trim="form.perms"></el-input>
+          </el-form-item>
+          <el-form-item label="功能排序：" prop="orderNum">
+            <el-input v-model.trim="form.orderNum"></el-input>
           </el-form-item>
         </el-form>
       </el-col>
@@ -42,41 +42,50 @@
 </template>
 
 <script>
-import { addPermission, editPermission } from '@/api/auth/permission';
-
+import { addMenu, editMenu } from '@/api/auth/permission';
+import { isDef } from '@/utils';
 export default {
-  props: ['visible', 'parentListText', 'pid', 'item'],
+  props: ['visible', 'item'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
         name: '',
-        route: '',
-        sort: '',
-        auth_level: '',
-        remarks: '',
+        type: '',
+        url: '',
+        orderNum: '',
+        perms: ''
       },
       rules: {
         name: [
-          { required: true, message: '功能名称必填', trigger: 'blur' },
+          { required: true, message: '必填', trigger: 'blur' }
         ],
-        route: [
-          { required: true, message: '功能KEY必填', trigger: 'blur' },
-          { pattern: /^[A-Za-z\_\-]*$/, message: '请输入字母、_、-', trigger: 'blur' },
+        type: [
+          { required: true, message: '必选', trigger: 'blur' }
         ],
-        sort: [
+        url: [
+          { required: true, message: '必填', trigger: 'blur' },
+          { pattern: /^[A-Za-z]*$/, message: '请输入字母', trigger: 'blur' }
+        ],
+        orderNum: [
           { required: true, message: '功能排序必填', trigger: 'blur' },
-          { pattern: /^\d*$/, message: '请输入数字', trigger: 'blur' },
+          { pattern: /^\d*$/, message: '请输入数字', trigger: 'blur' }
         ],
-        auth_level: [
-          { required: true, message: '功能等级必选', trigger: 'blur' },
-        ],
-      },
+        perms: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ]
+      }
     };
   },
+  computed: {
+    hasParent() {
+      return isDef(this.item.parentId);
+    }
+  },
   created() {
-    if (this.item && this.item.id) {
+    console.log(this.item);
+    if (this.item && this.item.menuId) {
       this.isEdit = true;
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
@@ -90,10 +99,7 @@ export default {
         this.loading = true;
         this.saveForm().then((res) => {
           this.$message.success('保存成功');
-          this.$emit('success', {
-            node: res.data,
-            isEdit: this.isEdit,
-          });
+          this.$emit('success');
         }).catch(() => {
           this.loading = false;
         });
@@ -101,16 +107,17 @@ export default {
     },
     saveForm() {
       const params = {
-        pid: this.pid,
         ...this.form,
+        parentId: this.item.parentId || 0
       };
+      console.log(params);
       return this.isEdit
-        ? editPermission(this.item.id, params)
-        : addPermission(params);
+        ? editMenu({ ...params, menuId: this.item.menuId })
+        : addMenu(params);
     },
     cancel() {
       this.$emit('cancel');
-    },
-  },
+    }
+  }
 };
 </script>

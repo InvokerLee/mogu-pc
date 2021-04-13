@@ -14,27 +14,27 @@ export function delMenus(params) {
   });
 }
 
-export function permissionSearch(params) {
+export function addMenu(data) {
   return request({
-    url: '/permission/searchMenus',
-    method: 'get',
-    params
-  });
-}
-
-export function addPermission(data) {
-  return request({
-    url: '/permission/menus',
+    url: '/sys/menu/save',
     method: 'post',
     data
   });
 }
 
-export function editPermission(id, data) {
+export function editMenu(data) {
   return request({
-    url: `/permission/menus/${id}`,
-    method: 'patch',
+    url: '/sys/menu/update',
+    method: 'post',
     data
+  });
+}
+
+export function permissionSearch(params) {
+  return request({
+    url: '/permission/searchMenus',
+    method: 'get',
+    params
   });
 }
 
