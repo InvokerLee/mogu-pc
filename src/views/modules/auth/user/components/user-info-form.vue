@@ -134,7 +134,7 @@ export default {
     },
     saveForm() {
       return this.isEdit
-        ? editUser(this.item.id, this.form)
+        ? editUser({ id: this.item.id, ...this.form })
         : addUser(this.form);
     },
     cancel() {

@@ -5,7 +5,7 @@
         <el-col>
           <el-form ref="searchForm" hide-details size="mini" inline :model="params">
             <el-form-item label="搜索">
-              <el-input v-model.trim="params.key" placeholder="公司名称、手机" />
+              <el-input v-model.trim="params.searchPar" placeholder="公司名称、手机" />
             </el-form-item>
             <el-form-item label="账户类型">
               <el-select v-model="params.accountType" placeholder="请选择">
@@ -45,7 +45,7 @@
           <el-table-column label="操作" :width="100" type="action" align="center">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="text" @click="del(scope.row)">删除</el-button>
+              <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
             </template>
           </el-table-column>
           <el-table-column prop="companyName" label="公司名称" align="center" />
@@ -125,50 +125,7 @@ export default {
         pageSize: 10
       },
       total: 0,
-      tableData: [{
-        'id': 13,
-        'realName': null,
-        'account': '13392820707',
-        'salt': null,
-        'password': null,
-        'phone': '13392820707',
-        'state': 0,
-        'type': null,
-        'companyId': null,
-        'companyName': '芒果科技有限公司',
-        'roleId': null,
-        'serverNode': '',
-        'text': null,
-        'wechat': '',
-        'accountType': 2,
-        'isPc': 0,
-        'isApp': 0,
-        'validitDate': '2029-12-01',
-        'createDate': '2020-04-18T11:00:20.000+0000',
-        'createUserId': null
-      },
-      {
-        'id': 1,
-        'realName': null,
-        'account': 'admin',
-        'salt': null,
-        'password': null,
-        'phone': '18888888888',
-        'state': 0,
-        'type': 'system',
-        'companyId': null,
-        'companyName': '芒果科技有限公司',
-        'roleId': null,
-        'serverNode': null,
-        'text': null,
-        'wechat': '1868229576',
-        'accountType': 1,
-        'isPc': 1,
-        'isApp': 1,
-        'validitDate': '2019-03-29',
-        'createDate': '2019-03-29T13:18:19.000+0000',
-        'createUserId': null
-      }],
+      tableData: [],
       dialog: {
         show: false,
         name: '',
@@ -188,9 +145,9 @@ export default {
         }
       });
       this.loading = true;
-      getUserList(params).then(({ data }) => {
-        this.tableData = data.data;
-        this.total = data.total;
+      getUserList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
       }).catch(() => {}).finally(() => {
         this.loading = false;
       });
@@ -214,20 +171,15 @@ export default {
       this.dialog.item = {};
       this.openDialog('USER_INFO_FORM');
     },
-    edit() {
-      if (!this.isSelectSingle()) return;
-      this.dialog.item = this.selectItems[0];
+    edit(item) {
+      this.dialog.item = item;
       this.openDialog('USER_INFO_FORM');
     },
-    del() {
-      if (!this.selectItems.length) {
-        this.$message.warning('请选择');
-        return;
-      }
+    del(item) {
       const params = {
-        user_id: this.selectItems.map(v => v.id).join(',')
+        userIds: item.id
       };
-      this.$confirm('确认要删除所选用户吗?', '删除提示', {
+      this.$confirm('确认要该用户吗?', '删除提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
@@ -236,13 +188,8 @@ export default {
         this.getList();
       }).catch(() => {});
     },
-    updateUserLevel() {
-      if (!this.isSelectSingle()) return;
-      this.openDialog('USER_LEVEL');
-    },
     updatePwd() {
-      if (!this.isSelectSingle()) return;
-      this.openDialog('USER_PASSWORD');
+      // this.openDialog('USER_PASSWORD');
     },
     openDialog(name) {
       this.dialog.name = name;
@@ -255,13 +202,6 @@ export default {
     actionSuccess() {
       this.getList();
       this.closeDialog();
-    },
-    isSelectSingle() {
-      if (this.selectItems.length !== 1) {
-        this.$message.warning('请单选一项进行操作');
-        return false;
-      }
-      return true;
     }
   }
 };

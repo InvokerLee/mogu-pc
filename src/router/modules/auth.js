@@ -19,12 +19,6 @@ const auth = {
       component: () => import('@/views/modules/auth/role'),
       meta: { title: '角色管理' }
     },
-    // {
-    //   path: 'resource',
-    //   name: 'resource',
-    //   component: () => import('@/views/modules/auth/resource'),
-    //   meta: { title: '资源管理' }
-    // },
     {
       path: 'permission',
       name: 'permission',

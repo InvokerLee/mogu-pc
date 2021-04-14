@@ -5,29 +5,24 @@ export function getUserList(data) {
   return request({
     url: '/sys/user/list',
     method: 'post',
-    data
-  });
-}
-
-export function updateLevel(id, data) {
-  return request({
-    url: `/user/updateUserLevel/${id}`,
-    method: 'patch',
-    data
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
 
 export function addUser(data) {
   return request({
-    url: '/user/add',
+    url: '/sys/user/save',
     method: 'post',
     data
   });
 }
 
-export function editUser(id, data) {
+export function editUser(data) {
   return request({
-    url: `/user/editUser/${id}`,
+    url: '/sys/user/update',
     method: 'patch',
     data
   });
@@ -35,8 +30,8 @@ export function editUser(id, data) {
 
 export function delUser(data) {
   return request({
-    url: '/user/deleteUser',
-    method: 'patch',
+    url: '/sys/user/delete',
+    method: 'post',
     data
   });
 }
