@@ -42,9 +42,10 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column label="操作" :width="100" type="action" align="center">
+          <el-table-column label="操作" :width="150" type="action" align="center">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="text" @click="updatePwd(scope.row)">修改密码</el-button>
               <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -102,17 +103,26 @@
       @success="actionSuccess"
       @cancel="closeDialog"
     />
+    <user-password
+      v-if="dialog.show && dialog.name === 'USER_PASSWORD'"
+      :visible="dialog.show"
+      :item="dialog.item"
+      @cancel="closeDialog"
+    >
+    </user-password>
   </base-wrapper>
 </template>
 
 <script>
 import { getUserList, delUser } from '@/api/auth/user';
 import userInfoForm from './components/user-info-form';
+import userPassword from './components/user-password';
 
 export default {
   name: 'user',
   components: {
-    userInfoForm
+    userInfoForm,
+    userPassword
   },
   data() {
     return {
@@ -188,8 +198,9 @@ export default {
         this.getList();
       }).catch(() => {});
     },
-    updatePwd() {
-      // this.openDialog('USER_PASSWORD');
+    updatePwd(item) {
+      this.dialog.item = item;
+      this.openDialog('USER_PASSWORD');
     },
     openDialog(name) {
       this.dialog.name = name;

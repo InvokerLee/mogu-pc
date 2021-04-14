@@ -36,10 +36,10 @@ export function delUser(data) {
   });
 }
 
-export function resetPassword(id, data) {
+export function editPwd(data) {
   return request({
-    url: `/user/passwordReset/${id}`,
-    method: 'patch',
+    url: '/sys/user/password',
+    method: 'post',
     data
   });
 }
