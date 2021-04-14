@@ -3,7 +3,7 @@
     <div class="role">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="角色名">
-          <el-input v-model.trim="params.key"></el-input>
+          <el-input v-model.trim="params.roleName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查找</el-button>
@@ -25,7 +25,7 @@
         >
           <el-table-column label="操作" :width="150" type="action" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="text">权限</el-button>
+              <el-button size="mini" type="text" @click="assignPermission(scope.row)">权限</el-button>
               <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
               <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
             </template>
@@ -66,6 +66,13 @@
       @cancel="closeDialog"
     >
     </role-form>
+    <permission-info
+      v-if="dialog.show && dialog.name === 'PERMISSION_INFO'"
+      :visible="dialog.show"
+      :item="dialog.item"
+      @cancel="closeDialog"
+    >
+    </permission-info>
     <assign-user
       v-if="dialog.show && dialog.name === 'ASSIGN_USER'"
       :visible="dialog.show"
@@ -80,12 +87,14 @@
 <script>
 import { getRoleList, delRole } from '@/api/auth/role';
 import roleForm from './components/role-form';
+import permissionInfo from './components/permission-info';
 import assignUser from './components/assign-user';
 
 export default {
   name: 'role',
   components: {
     roleForm,
+    permissionInfo,
     assignUser
   },
   data() {
@@ -159,13 +168,13 @@ export default {
         this.getList();
       }).catch(() => {});
     },
+    assignPermission(item) {
+      this.dialog.item = item;
+      this.openDialog('PERMISSION_INFO');
+    },
     assignUser() {
       if (!this.isSelectSingle()) return;
       this.openDialog('ASSIGN_USER');
-    },
-    assignPermission() {
-      if (!this.isSelectSingle()) return;
-      this.$router.push(`/auth/assign-permission?roleId=${this.selectItems[0].id}`);
     },
     lookUser(userStr) {
       this.$msgbox({

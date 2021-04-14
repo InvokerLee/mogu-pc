@@ -2,37 +2,59 @@
   <el-drawer
     class="permission-info"
     direction="rtl"
-    size="300px"
-    title="已授权功能"
+    size="360px"
+    title="分配权限"
     :visible="visible"
     @close="cancel"
   >
     <el-tree
+      ref="menu"
       v-loading="loading"
-      node-key="uuid"
-      :data="treeList"
-      :props="{label:'name'}"
-      :expand-on-click-node="false"
-    >
-    </el-tree>
+      :data="menuOptions"
+      show-checkbox
+      node-key="id"
+      empty-text="加载中，请稍后"
+      :props="{
+        children: 'children',
+        label:'title'
+      }"
+    ></el-tree>
   </el-drawer>
 </template>
 
 <script>
 import { searchRoleAuth } from '@/api/auth/role';
+import { handleTree } from '@/utils';
 
 export default {
   props: ['visible', 'item'],
   data() {
     return {
       loading: false,
+      menuOptions: [],
+
       treeList: []
     };
   },
   created() {
-    this.getFuncTree();
+    this.getData();
   },
   methods: {
+    getData() {
+      this.loading = true;
+      setTimeout(() => {
+        // const data = require('./per.json');
+        const data = require('./per2.json');
+        this.menuOptions = handleTree(data, 'id', 'pId');
+        const checkedKeys = data.filter(v => v.checked).map(_v => _v.id);
+        checkedKeys.forEach((v) => {
+          this.$nextTick(() => {
+            this.$refs.menu.setChecked(v, true, false);
+          });
+        });
+        this.loading = false;
+      }, 2000);
+    },
     getFuncTree(uuid) {
       if (!this.item || !this.item.id) return;
       this.loading = true;

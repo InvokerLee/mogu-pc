@@ -1,8 +1,8 @@
 <template>
   <base-wrapper v-loading="loading">
-    <el-row type="flex" justify="space-between" slot="head">
+    <el-row slot="head" type="flex" justify="space-between">
       <el-button type="info" size="mini" icon="el-icon-back" @click="back">返回</el-button>
-      <el-input class="func-search" size="mini" placeholder="请输入功能名称" v-model.trim="searchText" @keyup.enter.native="search"></el-input>
+      <el-input v-model.trim="searchText" class="func-search" size="mini" placeholder="请输入功能名称" @keyup.enter.native="search"></el-input>
       <el-button type="primary" size="mini" @click="search">查找</el-button>
       <el-button style="margin-left: auto;" type="primary" size="mini" @click="beforeSave">保存</el-button>
     </el-row>
@@ -41,7 +41,7 @@ import beforeAssign from './components/before-assign';
 
 export default {
   components: {
-    beforeAssign,
+    beforeAssign
   },
   data() {
     return {
@@ -55,8 +55,8 @@ export default {
       beforeAssign: {
         show: false,
         addItems: [],
-        delItems: [],
-      },
+        delItems: []
+      }
     };
   },
   created() {
@@ -127,13 +127,13 @@ export default {
       this.close();
       const checkPermissions = this.$refs.tree.getCheckedNodes(false, true);
       const params = {
-        menu_id: checkPermissions.map(v => v.id).join(','),
+        menu_id: checkPermissions.map(v => v.id).join(',')
       };
       this.loading = true;
       setRoleAuth(this.$route.query.roleId, params).then(() => {
         this.$message.success({
           showClose: true,
-          message: '分配成功',
+          message: '分配成功'
         });
         this.back();
       }).catch(() => {}).finally(() => {
@@ -142,8 +142,8 @@ export default {
     },
     close() {
       this.beforeAssign.show = false;
-    },
-  },
+    }
+  }
 };
 </script>
 
