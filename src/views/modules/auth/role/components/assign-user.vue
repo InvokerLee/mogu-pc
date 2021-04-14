@@ -38,7 +38,7 @@ export default {
       loading: false,
       originUserKeys: [],
       selectUserKeys: [],
-      users: [],
+      users: []
     };
   },
   created() {
@@ -66,19 +66,19 @@ export default {
       }
       const params = {
         user_id: in_user.join(','),
-        out_user: out_user.join(','),
+        out_user: out_user.join(',')
       };
       this.loading = true;
       saveUsersByRoleId(this.item.id, params).then(() => {
         this.$message.success('分配成功');
-        this.$emit('success');
+        this.cancel();
       }).catch(() => {}).finally(() => {
         this.loading = false;
       });
     },
     cancel() {
       this.$emit('cancel');
-    },
-  },
+    }
+  }
 };
 </script>

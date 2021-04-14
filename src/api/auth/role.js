@@ -45,6 +45,23 @@ export function delRole(data) {
   });
 }
 
+export function getRoleMenus(id) {
+  return request({
+    url: `${id}`,
+    method: 'get'
+  });
+}
+
+export function saveRoleMenus(data) {
+  return request({
+    url: '',
+    method: 'post',
+    data
+  });
+}
+
+// 分割线
+
 export function getUsersByRoleId(id) {
   return request({
     url: `/permission/assignUser/${id}`,

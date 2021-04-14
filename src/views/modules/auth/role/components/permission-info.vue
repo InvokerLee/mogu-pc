@@ -7,23 +7,30 @@
     :visible="visible"
     @close="cancel"
   >
-    <el-tree
-      ref="menu"
-      v-loading="loading"
-      :data="menuOptions"
-      show-checkbox
-      node-key="id"
-      empty-text="加载中，请稍后"
-      :props="{
-        children: 'children',
-        label:'title'
-      }"
-    ></el-tree>
+    <el-row type="flex" style="flex-direction: column;height: 100%;">
+      <el-tree
+        ref="menu"
+        v-loading="loading"
+        class="tree"
+        :data="menuOptions"
+        show-checkbox
+        node-key="id"
+        empty-text="加载中，请稍后"
+        :props="{
+          children: 'children',
+          label:'title'
+        }"
+      ></el-tree>
+      <div class="demo-drawer__footer">
+        <el-button size="mini" @click="cancel">取 消</el-button>
+        <el-button size="mini" type="primary" :loading="saveLoading" @click="save">保存</el-button>
+      </div>
+    </el-row>
   </el-drawer>
 </template>
 
 <script>
-import { searchRoleAuth } from '@/api/auth/role';
+import { getRoleMenus, saveRoleMenus } from '@/api/auth/role';
 import { handleTree } from '@/utils';
 
 export default {
@@ -31,6 +38,7 @@ export default {
   data() {
     return {
       loading: false,
+      saveLoading: false,
       menuOptions: [],
 
       treeList: []
@@ -41,41 +49,40 @@ export default {
   },
   methods: {
     getData() {
+      if (!this.item && this.item.id) return;
       this.loading = true;
-      setTimeout(() => {
-        // const data = require('./per.json');
-        const data = require('./per2.json');
-        this.menuOptions = handleTree(data, 'id', 'pId');
-        const checkedKeys = data.filter(v => v.checked).map(_v => _v.id);
-        checkedKeys.forEach((v) => {
-          this.$nextTick(() => {
+      getRoleMenus(this.item.id).then((res) => {
+        const arr = res.data;
+
+        this.menuOptions = handleTree(arr, 'id', 'pId');
+
+        // 设置勾选节点
+        const checkedKeys = arr.filter(v => v.checked).map(_v => _v.id);
+        this.$nextTick(() => {
+          checkedKeys.forEach((v) => {
             this.$refs.menu.setChecked(v, true, false);
           });
         });
-        this.loading = false;
-      }, 2000);
-    },
-    getFuncTree(uuid) {
-      if (!this.item || !this.item.id) return;
-      this.loading = true;
-      searchRoleAuth(this.item.id).then(({ data }) => {
-        this.treeList = this.formatList(data.data, 0);
       }).catch(() => {}).finally(() => {
         this.loading = false;
       });
     },
-    formatList(list, pid) {
-      const tree = [];
-      list.forEach((item) => {
-        if (item.pid === pid && item.status === 1) {
-          item.children = this.formatList(list, item.id);
-          tree.push(item);
-        }
-      });
-      return tree.sort((a, b) => a.sort - b.sort);
-    },
     cancel() {
       this.$emit('cancel');
+    },
+    save() {
+      this.saveLoading = true;
+      const checkedIds = this.getMenuAllCheckedKeys();
+      console.log(checkedIds);
+    },
+    // 所有菜单节点数据
+    getMenuAllCheckedKeys() {
+      // 目前被选中的菜单节点
+      const checkedKeys = this.$refs.menu.getCheckedKeys();
+      // 半选中的菜单节点
+      const halfCheckedKeys = this.$refs.menu.getHalfCheckedKeys();
+      checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
+      return checkedKeys;
     }
   }
 };
@@ -83,6 +90,11 @@ export default {
 
 <style lang="scss">
 .permission-info {
+  .tree {
+    flex: 1;
+    margin-bottom: 20px;
+    overflow: auto;
+  }
   .el-drawer__body {
     padding: 0 15px 15px;
     overflow: auto;

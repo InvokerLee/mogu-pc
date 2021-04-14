@@ -23,10 +23,11 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column label="操作" :width="150" type="action" align="center">
+          <el-table-column label="操作" :width="200" type="action" align="center">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="assignPermission(scope.row)">权限</el-button>
               <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="text" @click="assignUser(scope.row)">分配用户</el-button>
               <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -76,8 +77,7 @@
     <assign-user
       v-if="dialog.show && dialog.name === 'ASSIGN_USER'"
       :visible="dialog.show"
-      :item="selectItems[0]"
-      @success="actionSuccess"
+      :item="dialog.item"
       @cancel="closeDialog"
     >
     </assign-user>
@@ -172,8 +172,8 @@ export default {
       this.dialog.item = item;
       this.openDialog('PERMISSION_INFO');
     },
-    assignUser() {
-      if (!this.isSelectSingle()) return;
+    assignUser(item) {
+      this.dialog.item = item;
       this.openDialog('ASSIGN_USER');
     },
     lookUser(userStr) {
