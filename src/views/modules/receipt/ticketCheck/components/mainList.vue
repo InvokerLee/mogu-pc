@@ -18,6 +18,7 @@
         <el-form-item label="日期" prop="paid_time">
           <el-date-picker
             v-model="params.paid_time"
+            style="width: 250px;"
             type="daterange"
             unlink-panels
             range-separator="至"

@@ -29,16 +29,19 @@ const doResize = (el, binding, vnode) => {
 
 export default {
   bind(el, binding, vnode) {
-    el.resizeListener = () => {
+    const ctx = vnode.context;
+
+    ctx.resizeTableListener = () => {
       doResize(el, binding, vnode);
     };
     // parameter 1 is must be "Element" type
-    addResizeListener(window.document.body, el.resizeListener);
+    addResizeListener(window.document.body, ctx.resizeTableListener);
   },
   inserted(el, binding, vnode) {
     doResize(el, binding, vnode);
   },
-  unbind(el) {
-    removeResizeListener(window.document.body, el.resizeListener);
-  },
+  unbind(el, binding, vnode) {
+    const ctx = vnode.context;
+    removeResizeListener(window.document.body, ctx.resizeTableListener);
+  }
 };
