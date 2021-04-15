@@ -4,7 +4,7 @@ export default {
   path: '/config',
   name: 'config',
   component: Layout,
-  meta: { title: '配置', icon: 'el-icon-document' },
+  meta: { title: '配置', icon: 'el-icon-setting' },
   redirect: '/config/employeeList',
   children: [
     // 订单列表

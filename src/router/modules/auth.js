@@ -4,7 +4,7 @@ const auth = {
   path: '/auth',
   name: 'auth',
   component: Layout,
-  meta: { title: '系统', icon: 'el-icon-setting' },
+  meta: { title: '系统', icon: 'el-icon-user' },
   redirect: '/auth/user',
   children: [
     {
