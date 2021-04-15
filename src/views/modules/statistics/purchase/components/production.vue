@@ -8,10 +8,10 @@
               <el-input v-model.trim="params.searchPar" placeholder="" />
             </el-form-item>
             <el-form-item label="类别">
-              <el-input v-model.trim="params.searchPar" placeholder="" />
+              <category-search paramsKey="leibie" :params="params"></category-search>
             </el-form-item>
             <el-form-item label="品牌">
-              <el-input v-model.trim="params.searchPar" placeholder="" />
+              <brand-search paramsKey="pinpai" :params="params"></brand-search>
             </el-form-item>
             <el-form-item label="日期">
               <el-date-picker
@@ -79,10 +79,14 @@
 </template>
 
 <script>
+import CategorySearch from '@/components/CategorySearch';
+import BrandSearch from '@/components/BrandSearch';
 import { getUserList } from '@/api/auth/user';
 
 export default {
   components: {
+    CategorySearch,
+    BrandSearch
   },
   data() {
     return {
@@ -90,6 +94,7 @@ export default {
       params: {
         searchPar: '',
         date: '',
+        leibie: '',
         curentPage: 1,
         pageSize: 10
       },
