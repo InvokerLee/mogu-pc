@@ -1,10 +1,10 @@
 
 <template>
   <base-wrapper>
-    <div class="goodsGrossProfit">
+    <div class="customerGrossProfit">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
-        <el-form-item label="产品">
-          <el-input v-model.trim="params.key" placeholder="名称/规格/条码" />
+        <el-form-item label="客户">
+          <el-input v-model.trim="params.key" placeholder="客户名称" />
         </el-form-item>
         <el-form-item label="毛利率低于">
           <el-input v-model.trim="params.key" placeholder="金额" />
@@ -35,11 +35,9 @@
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
           <el-table-column prop="username" label="月份" align="center" />
-          <el-table-column prop="username" label="产品" align="center" />
-          <el-table-column prop="remarks" label="条码" align="center" />
-          <el-table-column prop="remarks" label="单位" align="center" />
-          <el-table-column prop="remarks" label="销售金额" align="center" />
+          <el-table-column prop="username" label="客户" align="center" />
           <el-table-column prop="remarks" label="成本金额" align="center" />
+          <el-table-column prop="remarks" label="销售金额" align="center" />
           <el-table-column prop="remarks" label="毛利额" align="center" />
           <el-table-column prop="remarks" label="毛利率" align="center" />
         </el-table>
@@ -63,7 +61,7 @@
 // import { getUserList } from '@/api/auth/user';
 
 export default {
-  name: 'goodsGrossProfit',
+  name: 'customerGrossProfit',
   components: {
   },
   data() {
@@ -120,7 +118,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.goodsGrossProfit {
+.customerGrossProfit {
   width: 100%;
   .tar {
     width: auto;

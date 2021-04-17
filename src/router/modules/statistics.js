@@ -69,6 +69,18 @@ export default {
       component: () => import('@/views/modules/statistics/goodsGrossProfit'),
       name: 'goodsGrossProfit',
       meta: { title: '产品毛利异常' }
+    },
+    {
+      path: 'orderGrossProfit',
+      component: () => import('@/views/modules/statistics/orderGrossProfit'),
+      name: 'orderGrossProfit',
+      meta: { title: '订单毛利异常' }
+    },
+    {
+      path: 'customerGrossProfit',
+      component: () => import('@/views/modules/statistics/customerGrossProfit'),
+      name: 'customerGrossProfit',
+      meta: { title: '客户毛利异常' }
     }
   ]
 };

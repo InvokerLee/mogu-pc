@@ -1,23 +1,30 @@
 
 <template>
   <base-wrapper>
-    <div class="goodsGrossProfit">
+    <div class="orderGrossProfit">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
+        <el-form-item label="客户">
+          <el-input v-model.trim="params.key" placeholder="客户名称" />
+        </el-form-item>
         <el-form-item label="产品">
           <el-input v-model.trim="params.key" placeholder="名称/规格/条码" />
         </el-form-item>
         <el-form-item label="毛利率低于">
           <el-input v-model.trim="params.key" placeholder="金额" />
         </el-form-item>
-        <el-form-item label="月份">
+        <el-form-item label="日期">
           <el-date-picker
-            v-model="params.month"
-            style="width: 120px;"
-            type="month"
-            value-format="yyyy-MM"
-            placeholder="选择月"
-          >
-          </el-date-picker>
+            v-model="params.created_at"
+            style="width: 250px;"
+            type="daterange"
+            unlink-panels
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :editable="false"
+            :default-time="['00:00:00', '23:59:59']"
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -32,12 +39,19 @@
           size="mini"
           height="120px"
           :data="tableData"
+          @selection-change="(val) => { selectItems = val }"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="username" label="月份" align="center" />
+          <el-table-column prop="username" label="订单日期" align="center" />
+          <el-table-column prop="username" label="订单号" align="center" />
+          <el-table-column prop="username" label="客户" align="center" />
           <el-table-column prop="username" label="产品" align="center" />
-          <el-table-column prop="remarks" label="条码" align="center" />
-          <el-table-column prop="remarks" label="单位" align="center" />
+          <el-table-column prop="remarks" label="订购数量" align="center" />
+          <el-table-column prop="remarks" label="订购单价" align="center" />
+          <el-table-column prop="remarks" label="订购金额" align="center" />
+          <el-table-column :min-width="100" prop="remarks" label="发货出库数量" align="center" />
+          <el-table-column :min-width="100" prop="remarks" label="发货出库金额" align="center" />
+          <el-table-column prop="remarks" label="损耗数量" align="center" />
           <el-table-column prop="remarks" label="销售金额" align="center" />
           <el-table-column prop="remarks" label="成本金额" align="center" />
           <el-table-column prop="remarks" label="毛利额" align="center" />
@@ -63,7 +77,7 @@
 // import { getUserList } from '@/api/auth/user';
 
 export default {
-  name: 'goodsGrossProfit',
+  name: 'orderGrossProfit',
   components: {
   },
   data() {
@@ -101,7 +115,6 @@ export default {
     },
     search() {
       this.params.page = 1;
-      console.log(this.params);
       // this.getList();
     },
     reset() {
@@ -120,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.goodsGrossProfit {
+.orderGrossProfit {
   width: 100%;
   .tar {
     width: auto;
