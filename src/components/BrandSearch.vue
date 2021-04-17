@@ -34,7 +34,7 @@ export default {
 
       setTimeout(() => {
         cb([{ value: '123123' }, { value: 'fas' }]);
-      }, 1200);
+      }, 800);
     }
   }
 };
