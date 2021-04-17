@@ -42,7 +42,6 @@
           size="mini"
           height="120px"
           :data="tableData"
-          @selection-change="(val) => { selectItems = val }"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
           <el-table-column prop="username" label="业务员" align="center" />
@@ -89,7 +88,7 @@ import BrandSearch from '@/components/BrandSearch';
 // import { getUserList } from '@/api/auth/user';
 
 export default {
-  name: 'batchList',
+  name: 'saleman',
   components: {
     CategorySearch,
     BrandSearch

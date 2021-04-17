@@ -1,10 +1,28 @@
 
 <template>
   <base-wrapper>
-    <div class="cus">
+    <div class="salesRank">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
-        <el-form-item label="客户">
-          <el-input v-model.trim="params.key" placeholder="请输入客户名" />
+        <el-form-item label="销售计算方式">
+          <el-select v-model="params.state" placeholder="请选择">
+            <el-option label="全部" value="" />
+            <el-option label="有效" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="排序方式">
+          <el-select v-model="params.state" placeholder="请选择">
+            <el-option label="全部" value="" />
+            <el-option label="有效" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="统计标准">
+          <el-select v-model="params.state" placeholder="请选择">
+            <el-option label="全部" value="" />
+            <el-option label="有效" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
@@ -23,10 +41,6 @@
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
           <el-button type="info" @click="reset">重置</el-button>
-          <span style="margin: 0 20px;">
-            <el-divider direction="vertical"></el-divider>
-          </span>
-          <el-button type="primary" size="mini">导出</el-button>
         </el-form-item>
       </el-form>
       <div>
@@ -37,34 +51,15 @@
           size="mini"
           height="120px"
           :data="tableData"
+          @selection-change="(val) => { selectItems = val }"
         >
-          <el-table-column :width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="username" label="客户" align="center" />
-          <el-table-column prop="remarks" label="订购金额" align="center" />
-          <el-table-column prop="remarks" label="出库金额" align="center" />
-          <el-table-column prop="remarks" label="出库成本" align="center" />
-          <el-table-column prop="remarks" label="回单金额" align="center" />
-          <el-table-column prop="remarks" label="回单成本" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="验收退货金额" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="验收退货成本" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="验收损耗金额" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="验收损耗成本" align="center" />
-          <el-table-column :min-width="120" prop="remarks" label="验收退货入库金额" align="center" />
-          <el-table-column :min-width="120" prop="remarks" label="验收退货入库成本" align="center" />
-          <el-table-column :min-width="150" prop="remarks" label="验收退货入库报损金额" align="center" />
-          <el-table-column :min-width="150" prop="remarks" label="验收退货入库报损成本" align="center" />
-          <el-table-column prop="remarks" label="退货金额" align="center" />
-          <el-table-column prop="remarks" label="退货成本" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="退货入库金额" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="退货入库成本" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="退货报损金额" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="退货报损成本" align="center" />
+          <el-table-column width="55" type="index" label="序号" align="center" />
+          <el-table-column prop="username" label="产品" align="center" />
+          <el-table-column prop="remarks" label="条码" align="center" />
+          <el-table-column prop="remarks" label="单位" align="center" />
           <el-table-column prop="remarks" label="销售数量" align="center" />
-          <el-table-column prop="remarks" label="销售箱数" align="center" />
           <el-table-column prop="remarks" label="销售金额" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="产品成本金额" align="center" />
-          <el-table-column prop="remarks" label="毛利额" align="center" />
-          <el-table-column prop="remarks" label="毛利率" align="center" />
+          <el-table-column prop="remarks" :min-width="100" label="当前库存数量" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -86,7 +81,7 @@
 // import { getUserList } from '@/api/auth/user';
 
 export default {
-  name: 'cus',
+  name: 'salesRank',
   components: {
   },
   data() {
@@ -142,7 +137,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cus {
+.salesRank {
   width: 100%;
   .tar {
     width: auto;

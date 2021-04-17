@@ -57,6 +57,12 @@ export default {
       component: () => import('@/views/modules/statistics/stockChangeHistory'),
       name: 'stockChangeHistory',
       meta: { title: '出入库记录' }
+    },
+    {
+      path: 'salesRank',
+      component: () => import('@/views/modules/statistics/salesRank'),
+      name: 'salesRank',
+      meta: { title: '畅销/滞销排行' }
     }
   ]
 };

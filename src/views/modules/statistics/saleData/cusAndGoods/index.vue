@@ -121,7 +121,7 @@ import BrandSearch from '@/components/BrandSearch';
 // import { getUserList } from '@/api/auth/user';
 
 export default {
-  name: 'batchList',
+  name: 'cusAndGoods',
   components: {
     CategorySearch,
     BrandSearch
