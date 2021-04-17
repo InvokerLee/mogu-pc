@@ -66,23 +66,25 @@ export function getAllUsers() {
     method: 'post'
   });
 }
-
-// 分割线
-
-export function getUsersByRoleId(id) {
+export function bindUsersForRole(data) {
   return request({
-    url: `/permission/assignUser/${id}`,
-    method: 'get'
-  });
-}
-
-export function saveUsersByRoleId(id, data) {
-  return request({
-    url: `/permission/assignUser/${id}`,
+    url: '/sys/role/auth/user',
     method: 'post',
     data
   });
 }
+export function getRoleBindUsers(data) {
+  return request({
+    url: '/sys/role/select/auth/user',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+
+// 分割线
 
 export function searchRoleAuth(id) {
   return request({

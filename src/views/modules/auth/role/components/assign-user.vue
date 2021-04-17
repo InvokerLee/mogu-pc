@@ -15,8 +15,8 @@
         hasChecked: '${checked}/${total}'
       }"
       :props="{
-        label: 'realname',
-        key: 'id',
+        label: 'userAccount',
+        key: 'userId',
       }"
       :data="users"
     >
@@ -29,47 +29,44 @@
 </template>
 
 <script>
-import { getUsersByRoleId, saveUsersByRoleId } from '@/api/auth/role';
+import { getAllUsers, getRoleBindUsers, bindUsersForRole } from '@/api/auth/role';
 
 export default {
   props: ['visible', 'item'],
   data() {
     return {
       loading: false,
+      users: [],
       originUserKeys: [],
-      selectUserKeys: [],
-      users: []
+      selectUserKeys: []
     };
   },
   created() {
+    this.getUserList();
     this.getRoleUsers();
   },
   methods: {
+    getUserList() {
+      getAllUsers().then((res) => {
+        this.users = res.result;
+      }).catch(() => {});
+    },
     getRoleUsers() {
-      if (!this.item || !this.item.id) return;
+      if (!this.item || !this.item.roleId) return;
       this.loading = true;
-      getUsersByRoleId(this.item.id).then((res) => {
-        const { join_user, list } = res.data;
-        this.users = join_user.concat(list);
-        this.selectUserKeys = join_user.map(v => v.id);
-        this.originUserKeys = [...this.selectUserKeys];
+      getRoleBindUsers({ roleId: this.item.roleId }).then((res) => {
+        this.selectUserKeys = res.result;
       }).catch(() => {}).finally(() => {
         this.loading = false;
       });
     },
     confirm() {
-      const out_user = this.originUserKeys.filter(user_id => !this.selectUserKeys.includes(user_id));
-      const in_user = this.selectUserKeys.filter(user_id => !this.originUserKeys.includes(user_id));
-      if (!out_user.length && !in_user.length) {
-        this.cancel();
-        return;
-      }
       const params = {
-        user_id: in_user.join(','),
-        out_user: out_user.join(',')
+        roleId: this.item.roleId,
+        userIdList: this.selectUserKeys
       };
       this.loading = true;
-      saveUsersByRoleId(this.item.id, params).then(() => {
+      bindUsersForRole(params).then(() => {
         this.$message.success('分配成功');
         this.cancel();
       }).catch(() => {}).finally(() => {
