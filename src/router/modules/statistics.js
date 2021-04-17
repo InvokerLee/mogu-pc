@@ -51,6 +51,12 @@ export default {
           meta: { title: '业务员报表' }
         }
       ]
+    },
+    {
+      path: 'stockChangeHistory',
+      component: () => import('@/views/modules/statistics/stockChangeHistory'),
+      name: 'stockChangeHistory',
+      meta: { title: '出入库记录' }
     }
   ]
 };
