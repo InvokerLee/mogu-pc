@@ -86,17 +86,11 @@ export default {
         show: false,
         name: '',
         item: {}
-      },
-      permissionForm: {
-        parentListText: '',
-        pid: '',
-        item: {}
       }
     };
   },
   created() {
     this.getMenus();
-    // this.getList();
   },
   methods: {
     getMenus() {

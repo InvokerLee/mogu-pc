@@ -60,6 +60,13 @@ export function saveRoleMenus(data) {
   });
 }
 
+export function getAllUsers() {
+  return request({
+    url: '/sys/user/select',
+    method: 'post'
+  });
+}
+
 // 分割线
 
 export function getUsersByRoleId(id) {

@@ -25,7 +25,7 @@
           <el-form-item label="功能KEY：" prop="url">
             <el-input v-model.trim="form.url"></el-input>
           </el-form-item>
-          <el-form-item label="权限标识：" prop="perms">
+          <el-form-item label="权限标识：">
             <el-input v-model.trim="form.perms"></el-input>
           </el-form-item>
           <el-form-item label="功能排序：" prop="orderNum">
@@ -71,20 +71,16 @@ export default {
         orderNum: [
           { required: true, message: '功能排序必填', trigger: 'blur' },
           { pattern: /^\d*$/, message: '请输入数字', trigger: 'blur' }
-        ],
-        perms: [
-          { required: true, message: '必填', trigger: 'blur' }
         ]
       }
     };
   },
   computed: {
     hasParent() {
-      return isDef(this.item.parentId);
+      return isDef(this.item.parentId) && this.item.parentName;
     }
   },
   created() {
-    console.log(this.item);
     if (this.item && this.item.menuId) {
       this.isEdit = true;
       Object.keys(this.form).forEach((k) => {
@@ -110,7 +106,6 @@ export default {
         ...this.form,
         parentId: this.item.parentId || 0
       };
-      console.log(params);
       return this.isEdit
         ? editMenu({ ...params, menuId: this.item.menuId })
         : addMenu(params);
