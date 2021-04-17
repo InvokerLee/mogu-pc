@@ -81,6 +81,12 @@ export default {
       component: () => import('@/views/modules/statistics/customerGrossProfit'),
       name: 'customerGrossProfit',
       meta: { title: '客户毛利异常' }
+    },
+    {
+      path: 'safetyStock',
+      component: () => import('@/views/modules/statistics/safetyStock'),
+      name: 'safetyStock',
+      meta: { title: '安全库存异常' }
     }
   ]
 };

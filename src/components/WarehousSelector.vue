@@ -8,7 +8,7 @@
     :multiple="multiple"
     :collapse-tags="multiple"
     reserve-keyword
-    placeholder="仓库"
+    placeholder="仓库关键字"
     :remote-method="remoteMethod"
     :loading="loading"
     @change="change"

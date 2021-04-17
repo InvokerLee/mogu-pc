@@ -1,19 +1,13 @@
 
 <template>
   <base-wrapper>
-    <div class="purchase-detail">
+    <div class="safetyStock">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="产品">
           <el-input v-model.trim="params.key" placeholder="产品名称/规格/条码" />
         </el-form-item>
-        <el-form-item label="供应商">
-          <el-input v-model.trim="params.key" placeholder="请输入公司名" />
-        </el-form-item>
-        <el-form-item label="类别">
-          <category-search :param="params" paramsKey="key"></category-search>
-        </el-form-item>
-        <el-form-item label="品牌">
-          <brand-search :param="params" paramsKey="brand">></brand-search>
+        <el-form-item label="仓库">
+          <warehous-selector :params="params" paramsKey="stock"></warehous-selector>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -32,25 +26,15 @@
           size="mini"
           height="120px"
           :data="tableData"
-          @selection-change="(val) => { selectItems = val }"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="username" label="供应商名称" :min-width="100" align="center" />
-          <el-table-column prop="remarks" label="类别" align="center" />
-          <el-table-column prop="remarks" label="品牌" align="center" />
+          <el-table-column prop="remarks" label="仓库" align="center" />
           <el-table-column prop="remarks" label="产品" align="center" />
           <el-table-column prop="remarks" label="条码" align="center" />
-          <el-table-column prop="remarks" label="订购数量" align="center" />
-          <el-table-column prop="remarks" label="订购金额" align="center" />
-          <el-table-column prop="remarks" label="入库数量" align="center" />
-          <el-table-column prop="remarks" label="入库金额" align="center" />
-          <el-table-column prop="remarks" label="退货数量" align="center" />
-          <el-table-column prop="remarks" label="退货金额" align="center" />
-          <el-table-column prop="remarks" :min-width="100" label="退货出库数量" align="center" />
-          <el-table-column prop="remarks" :min-width="100" label="退货出库金额" align="center" />
-          <el-table-column prop="remarks" label="单价" align="center" />
-          <el-table-column prop="remarks" label="采购数量" align="center" />
-          <el-table-column prop="remarks" label="采购金额" align="center" />
+          <el-table-column prop="remarks" label="单位" align="center" />
+          <el-table-column prop="remarks" label="库存量" align="center" />
+          <el-table-column prop="remarks" label="库存上限" align="center" />
+          <el-table-column prop="remarks" label="库存下限" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -69,15 +53,13 @@
 </template>
 
 <script>
-import CategorySearch from '@/components/CategorySearch';
-import BrandSearch from '@/components/BrandSearch';
+import WarehousSelector from '@/components/WarehousSelector';
 // import { getUserList } from '@/api/auth/user';
 
 export default {
-  name: 'purchaseDetail',
+  name: 'safetyStock',
   components: {
-    CategorySearch,
-    BrandSearch
+    WarehousSelector
   },
   data() {
     return {
@@ -132,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.purchase-detail {
+.safetyStock {
   width: 100%;
   .tar {
     width: auto;
