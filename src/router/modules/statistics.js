@@ -65,9 +65,9 @@ export default {
       meta: { title: '畅销/滞销排行' }
     },
     {
-      path: 'goodGrossProfit',
-      component: () => import('@/views/modules/statistics/goodGrossProfit'),
-      name: 'goodGrossProfit',
+      path: 'goodsGrossProfit',
+      component: () => import('@/views/modules/statistics/goodsGrossProfit'),
+      name: 'goodsGrossProfit',
       meta: { title: '产品毛利异常' }
     }
   ]

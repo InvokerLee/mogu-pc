@@ -1,7 +1,7 @@
 
 <template>
   <base-wrapper>
-    <div class="goodGrossProfit">
+    <div class="goodsGrossProfit">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="产品">
           <el-input v-model.trim="params.key" placeholder="名称/规格/条码" />
@@ -64,7 +64,7 @@
 // import { getUserList } from '@/api/auth/user';
 
 export default {
-  name: 'goodGrossProfit',
+  name: 'goodsGrossProfit',
   components: {
   },
   data() {
@@ -121,7 +121,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.goodGrossProfit {
+.goodsGrossProfit {
   width: 100%;
   .tar {
     width: auto;
