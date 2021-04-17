@@ -45,16 +45,27 @@ export function delRole(data) {
   });
 }
 
-export function getRoleMenus(id) {
+export function getAllMenus() {
   return request({
-    url: `${id}`,
-    method: 'get'
+    url: '/sys/menu/select',
+    method: 'post'
   });
 }
 
-export function saveRoleMenus(data) {
+export function getRoleMenus(data) {
   return request({
-    url: '',
+    url: '/sys/role/select/auth/menu',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+
+export function bindMenusForRole(data) {
+  return request({
+    url: '/sys/role/auth/menu',
     method: 'post',
     data
   });
@@ -66,6 +77,7 @@ export function getAllUsers() {
     method: 'post'
   });
 }
+
 export function bindUsersForRole(data) {
   return request({
     url: '/sys/role/auth/user',

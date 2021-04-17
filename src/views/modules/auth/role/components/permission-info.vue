@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getRoleMenus, saveRoleMenus } from '@/api/auth/role';
+import { getAllMenus, getRoleMenus, bindMenusForRole } from '@/api/auth/role';
 import { handleTree } from '@/utils';
 
 export default {
@@ -45,26 +45,38 @@ export default {
     };
   },
   created() {
-    this.getData();
+    this.loading = true;
+    Promise.all([this.getMenuList(), this.getBindIds()]).then((resList) => {
+      // 处理check值
+      const [meuns, bindIds] = resList;
+      const list = meuns.map(v => ({
+        ...v,
+        checked: bindIds.includes(v.id)
+      }));
+
+      // 格式化树形结构
+      this.menuOptions = handleTree(list, 'id', 'pid');
+      // 设置勾选节点
+      const checkedKeys = list.filter(v => v.checked).map(_v => _v.id);
+      this.$nextTick(() => {
+        checkedKeys.forEach((v) => {
+          this.$refs.menu.setChecked(v, true, false);
+        });
+      });
+    }).catch(() => {}).finally(() => {
+      this.loading = false;
+    });
   },
   methods: {
-    getData() {
-      if (!this.item && this.item.id) return;
-      this.loading = true;
-      getRoleMenus(this.item.id).then((res) => {
-        const arr = res.data;
-
-        this.menuOptions = handleTree(arr, 'id', 'pId');
-
-        // 设置勾选节点
-        const checkedKeys = arr.filter(v => v.checked).map(_v => _v.id);
-        this.$nextTick(() => {
-          checkedKeys.forEach((v) => {
-            this.$refs.menu.setChecked(v, true, false);
-          });
-        });
-      }).catch(() => {}).finally(() => {
-        this.loading = false;
+    getMenuList() {
+      return getAllMenus().then((res) => {
+        return res.result;
+      });
+    },
+    getBindIds() {
+      if (!this.item && this.item.roleId) return Promise.resolve([]);
+      return getRoleMenus({ roleId: this.item.roleId }).then((res) => {
+        return res.result;
       });
     },
     cancel() {
@@ -73,7 +85,16 @@ export default {
     save() {
       this.saveLoading = true;
       const checkedIds = this.getMenuAllCheckedKeys();
-      console.log(checkedIds);
+      const params = {
+        roleId: this.item.roleId,
+        menuIdList: checkedIds
+      };
+      bindMenusForRole(params).then(() => {
+        this.$message.success('保存成功');
+        this.cancel();
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     // 所有菜单节点数据
     getMenuAllCheckedKeys() {
