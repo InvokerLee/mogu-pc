@@ -8,7 +8,7 @@
       </app-link>
     </template>
 
-    <el-submenu ref="subMenu" v-else :index="resolvePath(item.path)" popper-append-to-body>
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
@@ -36,12 +36,12 @@ export default {
     // route object
     item: {
       type: Object,
-      required: true,
+      required: true
     },
     basePath: {
       type: String,
-      default: '',
-    },
+      default: ''
+    }
   },
   methods: {
     resolvePath(routePath) {
@@ -52,7 +52,7 @@ export default {
         return this.basePath;
       }
       return path.resolve(this.basePath, routePath);
-    },
-  },
+    }
+  }
 };
 </script>
