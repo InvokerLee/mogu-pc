@@ -63,6 +63,12 @@ export default {
       component: () => import('@/views/modules/statistics/salesRank'),
       name: 'salesRank',
       meta: { title: '畅销/滞销排行' }
+    },
+    {
+      path: 'goodGrossProfit',
+      component: () => import('@/views/modules/statistics/goodGrossProfit'),
+      name: 'goodGrossProfit',
+      meta: { title: '产品毛利异常' }
     }
   ]
 };
