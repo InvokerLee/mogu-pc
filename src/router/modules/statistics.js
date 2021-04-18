@@ -111,6 +111,12 @@ export default {
       component: () => import('@/views/modules/statistics/unAcceptance'),
       name: 'unAcceptance',
       meta: { title: '未验收异常' }
+    },
+    {
+      path: 'rejectedProduct',
+      component: () => import('@/views/modules/statistics/rejectedProduct'),
+      name: 'rejectedProduct',
+      meta: { title: '拒收产品未回' }
     }
   ]
 };
