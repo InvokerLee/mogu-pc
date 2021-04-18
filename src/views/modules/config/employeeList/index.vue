@@ -170,7 +170,7 @@ export default {
       }).catch(() => {});
     },
     download() {
-      this.$download('/staffinfo/export', { ...this.params }, '职员信息.xlsx');
+      this.$download('/staffinfo/export', { ...this.params });
     }
   }
 };
