@@ -44,7 +44,7 @@
           <el-table-column prop="phone" label="手机" align="center" />
           <el-table-column label="是否业务员" align="center">
             <template slot-scope="scope">
-              <span>{{ ['是', '否'][scope.row.isBizMan] }}</span>
+              <span>{{ ['否', '是'][scope.row.isBizMan] }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="text" label="备注" align="center" />

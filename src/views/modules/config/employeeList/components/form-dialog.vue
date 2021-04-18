@@ -15,6 +15,12 @@
           <el-form-item label="手机：" prop="phone">
             <el-input v-model.trim="form.phone" :maxlength="11"></el-input>
           </el-form-item>
+          <el-form-item label="是否业务员" prop="isBizMan">
+            <el-radio-group v-model="form.isBizMan">
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="0">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
           <el-form-item label="状态：" prop="state">
             <el-radio-group v-model="form.state">
               <el-radio :label="1">有效</el-radio>
@@ -50,7 +56,7 @@ export default {
         phone: '',
         state: 1,
         text: '',
-        isBizMan: 0 // 默认为是
+        isBizMan: 1 // 默认为是
       },
       rules: {
         name: [
