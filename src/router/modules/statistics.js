@@ -87,6 +87,12 @@ export default {
       component: () => import('@/views/modules/statistics/safetyStock'),
       name: 'safetyStock',
       meta: { title: '安全库存异常' }
+    },
+    {
+      path: 'storageAge',
+      component: () => import('@/views/modules/statistics/storageAge'),
+      name: 'storageAge',
+      meta: { title: '库龄异常' }
     }
   ]
 };
