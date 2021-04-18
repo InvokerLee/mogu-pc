@@ -9,8 +9,10 @@
     <el-form ref="userInfoForm" size="mini" label-width="120px" :model="form" :rules="rules">
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="公司名称：" prop="companyName">
-            <el-input v-model.trim="form.companyName"></el-input>
+          <el-form-item label="公司名称：" prop="companyId">
+            <el-select v-model="form.companyId" class="w100" @change="companyChange">
+              <el-option v-for="i in companyList" :key="i.id" :label="i.name" :value="i.id"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="账号类型：" prop="accountType">
             <el-select v-model="form.accountType" class="w100">
@@ -68,6 +70,7 @@
 
 <script>
 import { addUser, editUser } from '@/api/auth/user';
+import { commonCompanyList } from '@/api/common';
 
 export default {
   props: ['visible', 'item'],
@@ -75,8 +78,9 @@ export default {
     return {
       loading: false,
       isEdit: false,
+      companyList: [],
       form: {
-        companyName: '',
+        companyId: '',
         accountType: 0,
         isPc: 0,
         wechat: '',
@@ -87,7 +91,7 @@ export default {
         serverNode: ''
       },
       rules: {
-        companyName: [
+        companyId: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
         accountType: [
@@ -112,6 +116,7 @@ export default {
     };
   },
   created() {
+    this.getCommpanyList();
     if (this.item && this.item.id) {
       this.isEdit = true;
       Object.keys(this.form).forEach((k) => {
@@ -120,6 +125,11 @@ export default {
     }
   },
   methods: {
+    getCommpanyList() {
+      commonCompanyList().then((res) => {
+        this.companyList = res.list;
+      }).catch(() => {});
+    },
     confirm() {
       this.$refs.userInfoForm.validate((valid) => {
         if (!valid) return;
@@ -136,6 +146,10 @@ export default {
       return this.isEdit
         ? editUser({ id: this.item.id, ...this.form })
         : addUser(this.form);
+    },
+    companyChange(val) {
+      const c = this.companyList.find(v => v.id === val);
+      this.form.companyName = c.name;
     },
     cancel() {
       this.$emit('cancel');

@@ -95,20 +95,3 @@ export function getRoleBindUsers(data) {
     }
   });
 }
-
-// 分割线
-
-export function searchRoleAuth(id) {
-  return request({
-    url: `/permission/searchAuthRole/${id}`,
-    method: 'get'
-  });
-}
-
-export function setRoleAuth(id, data) {
-  return request({
-    url: `permission/authRole/${id}`,
-    method: 'post',
-    data
-  });
-}
