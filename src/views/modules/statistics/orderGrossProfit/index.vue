@@ -10,7 +10,7 @@
           <el-input v-model.trim="params.key" placeholder="名称/规格/条码" />
         </el-form-item>
         <el-form-item label="毛利率低于">
-          <el-input v-model.trim="params.key" placeholder="金额" />
+          <el-input v-model.trim="params.key" placeholder="" class="w60px" />
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker

@@ -7,10 +7,10 @@
           <el-input v-model.trim="params.key" placeholder="客户名称" />
         </el-form-item>
         <el-form-item label="订单缺货率大于">
-          <el-input v-model.trim="params.key" placeholder="" class="w60" />
+          <el-input v-model.trim="params.key" placeholder="" class="w60px" />
         </el-form-item>
         <el-form-item label="出库缺货率大于">
-          <el-input v-model.trim="params.key" placeholder="" class="w60" />
+          <el-input v-model.trim="params.key" placeholder="" class="w60px" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
