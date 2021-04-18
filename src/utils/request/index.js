@@ -67,4 +67,43 @@ request.interceptors.response.use((response) => {
   return Promise.reject(error);
 });
 
+// function tansParams(params) {
+//   let result = '';
+//   Object.keys(params).forEach((key) => {
+//     if (!Object.is(params[key], undefined) && !Object.is(params[key], null) && !Object.is(JSON.stringify(params[key]), '{}')) {
+//       result += encodeURIComponent(key) + '=' + encodeURIComponent(params[key]) + '&';
+//     }
+//   });
+//   return result;
+// }
+// 通用下载方法
+export function downloadFile(url, params, filename) {
+  return request.post(url, params, {
+    // transformRequest: [(params) => {
+    //   return tansParams(params);
+    // }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    responseType: 'blob'
+  }).then((data) => {
+    const content = data;
+    const blob = new Blob([content]);
+    if ('download' in document.createElement('a')) {
+      const elink = document.createElement('a');
+      elink.download = filename;
+      elink.style.display = 'none';
+      elink.href = URL.createObjectURL(blob);
+      document.body.appendChild(elink);
+      elink.click();
+      URL.revokeObjectURL(elink.href);
+      document.body.removeChild(elink);
+    } else {
+      navigator.msSaveBlob(blob, filename);
+    }
+  }).catch((r) => {
+    console.error(r);
+  });
+}
+
 export default request;

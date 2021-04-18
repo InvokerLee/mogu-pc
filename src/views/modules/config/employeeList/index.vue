@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { staffInfoList, delStaff, exportStaff } from '@/api/config';
+import { staffInfoList, delStaff } from '@/api/config';
 import formDialog from './components/form-dialog';
 
 export default {
@@ -170,13 +170,7 @@ export default {
       }).catch(() => {});
     },
     download() {
-      const params = {
-        staffName: this.params.staffName,
-        state: this.params.state
-      };
-      exportStaff(params).then((res) => {
-        console.log(res);
-      }).catch(() => {});
+      this.$download('/staffinfo/export', { ...this.params }, '职员信息.xlsx');
     }
   }
 };

@@ -32,10 +32,3 @@ export function delStaff(data) {
     data
   });
 }
-export function exportStaff(data) {
-  return request({
-    url: '/staffinfo/export',
-    method: 'post',
-    data
-  });
-}

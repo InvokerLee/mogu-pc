@@ -15,6 +15,8 @@ import baseWrapper from '@/components/base-wrapper';
 import adaptive from '@/utils/directive/adaptive';
 import checkPermission from '@/utils/plugins/checkPermission';
 
+import { downloadFile } from '@/utils/request';
+
 import '@/permission';
 
 Vue.use(ElementUI);
@@ -26,9 +28,11 @@ Vue.component('base-wrapper', baseWrapper);
 
 Vue.config.productionTip = false;
 
+Vue.prototype.$download = downloadFile;
+
 new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App),
+  render: h => h(App)
 });
