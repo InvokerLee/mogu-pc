@@ -105,6 +105,12 @@ export default {
       component: () => import('@/views/modules/statistics/outOfStockRate'),
       name: 'outOfStockRate',
       meta: { title: '订单缺货率异常' }
+    },
+    {
+      path: 'unAcceptance',
+      component: () => import('@/views/modules/statistics/unAcceptance'),
+      name: 'unAcceptance',
+      meta: { title: '未验收异常' }
     }
   ]
 };
