@@ -95,6 +95,12 @@ export default {
       meta: { title: '库龄异常' }
     },
     {
+      path: 'returnTracking',
+      component: () => import('@/views/modules/statistics/returnTracking'),
+      name: 'returnTracking',
+      meta: { title: '退货未回跟踪' }
+    },
+    {
       path: 'outOfStockRate',
       component: () => import('@/views/modules/statistics/outOfStockRate'),
       name: 'outOfStockRate',
