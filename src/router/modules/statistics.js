@@ -93,6 +93,12 @@ export default {
       component: () => import('@/views/modules/statistics/storageAge'),
       name: 'storageAge',
       meta: { title: '库龄异常' }
+    },
+    {
+      path: 'outOfStockRate',
+      component: () => import('@/views/modules/statistics/outOfStockRate'),
+      name: 'outOfStockRate',
+      meta: { title: '订单缺货率异常' }
     }
   ]
 };

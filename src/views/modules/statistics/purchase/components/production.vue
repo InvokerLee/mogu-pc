@@ -57,8 +57,8 @@
           <el-table-column prop="phone" label="入库金额" align="center" />
           <el-table-column prop="phone" label="退货单数量" align="center" />
           <el-table-column prop="phone" label="退货单金额" align="center" />
-          <el-table-column prop="phone" label="退货出库数量" align="center" />
-          <el-table-column prop="phone" label="退货出库金额" align="center" />
+          <el-table-column :min-width="100" prop="phone" label="退货出库数量" align="center" />
+          <el-table-column :min-width="100" prop="phone" label="退货出库金额" align="center" />
           <el-table-column prop="phone" label="采购数量" align="center" />
           <el-table-column prop="phone" label="采购箱数" align="center" />
         </el-table>

@@ -46,11 +46,11 @@
           <el-table-column prop="phone" label="订单金额" align="center" />
           <el-table-column prop="phone" label="入库金额" align="center" />
           <el-table-column prop="phone" label="退货金额" align="center" />
-          <el-table-column prop="phone" label="退货出库金额" align="center" />
+          <el-table-column :min-width="100" prop="phone" label="退货出库金额" align="center" />
           <el-table-column prop="phone" label="采购金额" align="center" />
-          <el-table-column prop="phone" label="采购调整单金额" align="center" />
-          <el-table-column prop="phone" label="采购开票金额" align="center" />
-          <el-table-column prop="phone" label="采购付款金额" align="center" />
+          <el-table-column :min-width="100" prop="phone" label="采购调整单金额" align="center" />
+          <el-table-column :min-width="100" prop="phone" label="采购开票金额" align="center" />
+          <el-table-column :min-width="100" prop="phone" label="采购付款金额" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
