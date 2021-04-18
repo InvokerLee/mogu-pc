@@ -8,7 +8,7 @@
               <el-input v-model.trim="params.searchPar" placeholder="公司名称、手机" />
             </el-form-item>
             <el-form-item label="账户类型">
-              <el-select v-model="params.accountType" placeholder="请选择">
+              <el-select v-model="params.accountType" placeholder="请选择" class="w90px">
                 <el-option label="全部" value="" />
                 <el-option label="基础版" :value="0" />
                 <el-option label="企业版" :value="1" />
@@ -16,7 +16,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="状态">
-              <el-select v-model="params.state" placeholder="请选择">
+              <el-select v-model="params.state" placeholder="请选择" class="w90px">
                 <el-option label="全部" value="" />
                 <el-option label="有效" :value="1" />
                 <el-option label="禁用" :value="0" />

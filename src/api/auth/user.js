@@ -23,7 +23,7 @@ export function addUser(data) {
 export function editUser(data) {
   return request({
     url: '/sys/user/update',
-    method: 'patch',
+    method: 'post',
     data
   });
 }

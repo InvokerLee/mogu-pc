@@ -10,7 +10,7 @@
       <el-col :span="20">
         <el-form ref="userPwdForm" size="mini" label-width="80px" :model="form" :rules="rules">
           <el-form-item label="旧密码" prop="password">
-            <el-input v-model="form.password" type="password" :maxlength="16"></el-input>
+            <el-input v-model="form.password" type="password"></el-input>
           </el-form-item>
           <el-form-item label="新密码" prop="newPassword">
             <el-input v-model="form.newPassword" type="password"></el-input>
@@ -39,7 +39,8 @@ export default {
       },
       rules: {
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 32, message: '6-32位密码', trigger: 'blur' }
         ],
         newPassword: [
           { required: true, message: '请输入密码', trigger: 'blur' },

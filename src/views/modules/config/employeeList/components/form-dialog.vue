@@ -9,20 +9,20 @@
     <el-row type="flex" justify="center">
       <el-col :span="20">
         <el-form ref="employeeForm" size="mini" label-width="100px" :model="form" :rules="rules">
-          <el-form-item label="姓名：" prop="realname">
-            <el-input v-model.trim="form.realname"></el-input>
+          <el-form-item label="姓名：" prop="name">
+            <el-input v-model.trim="form.name"></el-input>
           </el-form-item>
           <el-form-item label="手机：" prop="phone">
             <el-input v-model.trim="form.phone" :maxlength="11"></el-input>
           </el-form-item>
-          <el-form-item label="状态：" prop="status">
-            <el-radio-group v-model="form.status">
+          <el-form-item label="状态：" prop="state">
+            <el-radio-group v-model="form.state">
               <el-radio :label="1">有效</el-radio>
-              <el-radio :label="2">停用</el-radio>
+              <el-radio :label="0">停用</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="备注：">
-            <el-input v-model.trim="form.remarks" type="textarea" :autosize="{ minRows: 2, maxRows:4 }">
+            <el-input v-model.trim="form.text" type="textarea" :autosize="{ minRows: 2, maxRows:4 }">
             </el-input>
           </el-form-item>
         </el-form>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-// import { addUser, editUser } from '@/api/auth/user';
+import { addStaff, editStaff } from '@/api/config';
 
 export default {
   props: ['visible', 'item'],
@@ -46,16 +46,17 @@ export default {
       loading: false,
       isEdit: false,
       form: {
-        realname: '',
+        name: '',
         phone: '',
-        status: 1,
-        remarks: ''
+        state: 1,
+        text: '',
+        isBizMan: 0 // 默认为是
       },
       rules: {
-        realname: [
+        name: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
-        status: [
+        state: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
       }
@@ -83,9 +84,12 @@ export default {
       });
     },
     saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+      return this.isEdit
+        ? editStaff({
+          ...this.form,
+          id: this.item.id
+        })
+        : addStaff(this.form);
     },
     cancel() {
       this.$emit('cancel');

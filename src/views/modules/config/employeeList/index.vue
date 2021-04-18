@@ -5,13 +5,13 @@
         <el-col>
           <el-form ref="searchForm" hide-details size="mini" inline :model="params">
             <el-form-item label="姓名">
-              <el-input v-model.trim="params.key" placeholder="请输入姓名" />
+              <el-input v-model.trim="params.staffName" placeholder="请输入姓名" />
             </el-form-item>
             <el-form-item label="状态">
-              <el-select v-model="params.status" placeholder="请选择">
+              <el-select v-model="params.state" placeholder="请选择" class="w90px">
                 <el-option label="全部" value="" />
                 <el-option label="有效" :value="1" />
-                <el-option label="停用" :value="2" />
+                <el-option label="停用" :value="0" />
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -22,7 +22,7 @@
         </el-col>
         <el-col class="tar">
           <el-button type="success" size="mini" @click="add">新增</el-button>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="primary" size="mini" @click="download">导出</el-button>
         </el-col>
       </el-row>
       <div>
@@ -34,22 +34,24 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column label="操作" type="action" align="center">
+          <el-table-column :width="100" label="操作" type="action" align="center">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="username" label="姓名" align="center" />
-          <el-table-column prop="realname" label="手机" align="center" />
+          <el-table-column prop="name" label="姓名" align="center" />
+          <el-table-column prop="phone" label="手机" align="center" />
           <el-table-column label="是否业务员" align="center">
-            <template>
+            <template slot-scope="scope">
+              <span>{{ ['是', '否'][scope.row.isBizMan] }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="remarks" label="备注" align="center" />
+          <el-table-column prop="text" label="备注" align="center" />
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
               <span>
-                {{ ['', '启用', '禁用'][scope.row.status] }}
+                {{ ['停用', '有效'][scope.row.state] }}
               </span>
             </template>
           </el-table-column>
@@ -58,8 +60,8 @@
           v-if="tableData.length"
           layout="total, sizes, prev, pager, next, jumper"
           class="pagination py-3"
-          :current-page.sync="params.page"
-          :page-size="params.limit"
+          :current-page.sync="params.curentPage"
+          :page-size="params.pageSize"
           :total="total"
           :page-sizes="[10,20,30]"
           @size-change="handleSizeChange"
@@ -78,7 +80,7 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/auth/user';
+import { staffInfoList, delStaff, exportStaff } from '@/api/config';
 import formDialog from './components/form-dialog';
 
 export default {
@@ -90,11 +92,10 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        staffName: '',
+        state: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
       tableData: [{}],
@@ -106,7 +107,7 @@ export default {
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
@@ -117,23 +118,23 @@ export default {
         }
       });
       this.loading = true;
-      getUserList(params).then(({ data }) => {
-        this.tableData = data.data;
-        this.total = data.total;
+      staffInfoList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
       }).catch(() => {}).finally(() => {
         this.loading = false;
       });
     },
     search() {
-      this.params.page = 1;
-      // this.getList();
+      this.params.curentPage = 1;
+      this.getList();
     },
     reset() {
       Object.assign(this.params, this.$options.data.call(this).params);
-      // this.getList();
+      this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
@@ -154,6 +155,28 @@ export default {
     actionSuccess() {
       this.getList();
       this.closeDialog();
+    },
+    del(item) {
+      const params = {
+        ids: item.id
+      };
+      this.$confirm('确认要删除吗?', '删除提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => delStaff(params)).then(() => {
+        this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
+    },
+    download() {
+      const params = {
+        staffName: this.params.staffName,
+        state: this.params.state
+      };
+      exportStaff(params).then((res) => {
+        console.log(res);
+      }).catch(() => {});
     }
   }
 };

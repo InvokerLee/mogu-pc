@@ -127,7 +127,8 @@ export default {
   methods: {
     getCommpanyList() {
       commonCompanyList().then((res) => {
-        this.companyList = res.list;
+        this.companyList = res.result;
+        console.log(this.companyList);
       }).catch(() => {});
     },
     confirm() {
