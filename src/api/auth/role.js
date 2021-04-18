@@ -34,14 +34,10 @@ export function getRoleInfo(roleId) {
   });
 }
 
-export function delRole(data) {
+export function delRole(id) {
   return request({
-    url: '/sys/role/delete',
-    method: 'post',
-    data,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    url: `/sys/role/delete/${id}`,
+    method: 'get'
   });
 }
 

@@ -131,14 +131,11 @@ export default {
       this.dialog.item = row;
     },
     del(item) {
-      const params = {
-        userIds: item.menuId
-      };
       this.$confirm('确认要删除吗?', '删除提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delMenus(params)).then(() => {
+      }).then(() => delMenus(item.menuId)).then(() => {
         this.getMenus();
         this.$message.success('删除成功');
       }).catch(() => {});

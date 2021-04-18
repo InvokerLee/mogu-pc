@@ -6,11 +6,10 @@ export function getMenus() {
     method: 'post'
   });
 }
-export function delMenus(params) {
+export function delMenus(id) {
   return request({
-    url: '/sys/menu/delete',
-    method: 'get',
-    params
+    url: `/sys/menu/delete/${id}`,
+    method: 'get'
   });
 }
 

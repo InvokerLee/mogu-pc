@@ -158,12 +158,11 @@ export default {
       this.openDialog('ROLE_FORM');
     },
     del(row) {
-      const { roleId } = row;
       this.$confirm('确认要删除选择角色吗?', '删除提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delRole({ roleIds: roleId })).then(() => {
+      }).then(() => delRole(row.roleId)).then(() => {
         this.$message.success('删除成功');
         this.getList();
       }).catch(() => {});

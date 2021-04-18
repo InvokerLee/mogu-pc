@@ -157,14 +157,11 @@ export default {
       this.closeDialog();
     },
     del(item) {
-      const params = {
-        ids: item.id
-      };
       this.$confirm('确认要删除吗?', '删除提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delStaff(params)).then(() => {
+      }).then(() => delStaff(item.id)).then(() => {
         this.$message.success('删除成功');
         this.getList();
       }).catch(() => {});

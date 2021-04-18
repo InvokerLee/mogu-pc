@@ -28,11 +28,10 @@ export function editUser(data) {
   });
 }
 
-export function delUser(data) {
+export function delUser(id) {
   return request({
-    url: '/sys/user/delete',
-    method: 'post',
-    data
+    url: `/sys/user/delete/${id}`,
+    method: 'get'
   });
 }
 

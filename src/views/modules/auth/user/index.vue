@@ -186,14 +186,11 @@ export default {
       this.openDialog('USER_INFO_FORM');
     },
     del(item) {
-      const params = {
-        userIds: item.id
-      };
-      this.$confirm('确认要该用户吗?', '删除提示', {
+      this.$confirm('确认要删除该用户吗?', '删除提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delUser(params)).then(() => {
+      }).then(() => delUser(item.id)).then(() => {
         this.$message.success('删除成功');
         this.getList();
       }).catch(() => {});

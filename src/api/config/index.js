@@ -25,10 +25,9 @@ export function editStaff(data) {
     data
   });
 }
-export function delStaff(data) {
+export function delStaff(id) {
   return request({
-    url: '/staffinfo/delete',
-    method: 'post',
-    data
+    url: `/staffinfo/delete/${id}`,
+    method: 'get'
   });
 }
