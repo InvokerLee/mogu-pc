@@ -1,9 +1,9 @@
 import request from '@/utils/request';
 
-// 职员
-export function staffInfoList(data) {
+// 类别
+export function typeInfoList(data) {
   return request({
-    url: '/staffinfo/list',
+    url: '/typeinfo/list',
     method: 'post',
     data,
     headers: {
@@ -11,23 +11,23 @@ export function staffInfoList(data) {
     }
   });
 }
-export function addStaff(data) {
+export function addType(data) {
   return request({
-    url: '/staffinfo/save',
+    url: '/typeinfo/save',
     method: 'post',
     data
   });
 }
-export function editStaff(data) {
+export function editType(data) {
   return request({
-    url: '/staffinfo/update',
+    url: '/typeinfo/update',
     method: 'post',
     data
   });
 }
-export function delStaff(id) {
+export function delType(id) {
   return request({
-    url: `/staffinfo/delete/${id}`,
+    url: `/typeinfo/delete/${id}`,
     method: 'get'
   });
 }
@@ -60,6 +60,38 @@ export function editBrand(data) {
 export function delBrand(id) {
   return request({
     url: `/brandinfo/delete/${id}`,
+    method: 'get'
+  });
+}
+
+// 职员
+export function staffInfoList(data) {
+  return request({
+    url: '/staffinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addStaff(data) {
+  return request({
+    url: '/staffinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function editStaff(data) {
+  return request({
+    url: '/staffinfo/update',
+    method: 'post',
+    data
+  });
+}
+export function delStaff(id) {
+  return request({
+    url: `/staffinfo/delete/${id}`,
     method: 'get'
   });
 }
