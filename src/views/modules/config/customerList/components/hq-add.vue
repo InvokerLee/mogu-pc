@@ -36,9 +36,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="上级客户：">
+          <!-- <el-form-item label="上级客户：">
             <customer-selector :params="form" paramsKey="customerId"></customer-selector>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="业务员：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
@@ -72,12 +72,12 @@
 </template>
 
 <script>
-import CustomerSelector from '@/components/CustomerSelector';
+// import CustomerSelector from '@/components/CustomerSelector';
 // import { addUser, editUser } from '@/api/auth/user';
 
 export default {
   components: {
-    CustomerSelector
+    // CustomerSelector
   },
   props: ['visible', 'item'],
   data() {

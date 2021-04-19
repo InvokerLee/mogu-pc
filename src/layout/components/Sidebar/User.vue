@@ -43,7 +43,7 @@
               <span class="font-red">10</span>
             </el-row>
           </el-row>
-          <i slot="reference" class="el-icon-bell"></i>
+          <i slot="reference" style="color: #fff" class="el-icon-bell"></i>
         </el-popover>
       </el-badge>
 
@@ -79,7 +79,7 @@ export default {
 <style lang="scss" scoped>
 .name {
   display: inline-block;
-  color: #000;
+  color: #fff;
   font-weight: 600;
   cursor: pointer;
   line-height: 50px;

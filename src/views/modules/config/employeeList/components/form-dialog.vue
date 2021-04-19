@@ -62,6 +62,9 @@ export default {
         name: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
+        phone: [
+          { pattern: /^[0-9]{11}$/, message: '格式为11位数字', trigger: 'blur' }
+        ],
         state: [
           { required: true, message: '必选', trigger: 'blur' }
         ]

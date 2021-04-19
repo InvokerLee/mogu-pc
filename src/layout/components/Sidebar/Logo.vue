@@ -60,7 +60,7 @@ export default {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background: #eee;
+  // background: #eee;
   text-align: center;
   overflow: hidden;
   & .sidebar-logo-area {
@@ -69,6 +69,7 @@ export default {
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid #666;
     & .hamburger-container {
       cursor: pointer;
     }

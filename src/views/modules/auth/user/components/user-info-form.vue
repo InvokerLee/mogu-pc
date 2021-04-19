@@ -104,7 +104,8 @@ export default {
           { required: true, message: '必选', trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: '必填', trigger: 'blur' }
+          { required: true, message: '必填', trigger: 'blur' },
+          { pattern: /^[0-9]{11}$/, message: '格式为11位数字', trigger: 'blur' }
         ],
         validitDate: [
           { required: true, message: '必选', trigger: 'blur' }
