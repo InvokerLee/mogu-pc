@@ -23,12 +23,14 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column label="操作" :width="200" type="action" align="center">
+          <el-table-column label="操作" :width="160" type="action" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="assignPermission(scope.row)">权限</el-button>
-              <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="text" @click="assignUser(scope.row)">分配用户</el-button>
-              <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
+              <el-row type="flex" justify="space-around" align="middle">
+                <a class="font-blue el-icon-edit font-16" @click="edit(scope.row)"></a>
+                <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
+                <a class="font-blue" @click="assignUser(scope.row)">分配用户</a>
+                <a class="font-blue" @click="assignPermission(scope.row)">权限</a>
+              </el-row>
             </template>
           </el-table-column>
           <el-table-column prop="roleName" label="名称" align="center"></el-table-column>

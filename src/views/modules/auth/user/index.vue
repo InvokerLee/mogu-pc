@@ -42,11 +42,13 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column label="操作" :width="150" type="action" align="center">
+          <el-table-column label="操作" :width="120" type="action" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="text" @click="updatePwd(scope.row)">修改密码</el-button>
-              <el-button size="mini" type="text" class="font-red" @click="del(scope.row)">删除</el-button>
+              <el-row type="flex" justify="space-around" align="middle">
+                <a class="font-blue el-icon-edit font-16" @click="edit(scope.row)"></a>
+                <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
+                <a class="font-blue" @click="updatePwd(scope.row)">修改密码</a>
+              </el-row>
             </template>
           </el-table-column>
           <el-table-column prop="companyName" label="公司名称" align="center" />

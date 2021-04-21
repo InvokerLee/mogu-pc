@@ -22,6 +22,15 @@
         :data="tableData"
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
+        <el-table-column :width="90" label="操作" type="action" align="center">
+          <template slot-scope="scope">
+            <el-row type="flex" justify="space-around" class="font-16">
+              <a class="font-blue el-icon-circle-plus" @click="add(scope.row)"></a>
+              <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
+              <a class="font-red el-icon-delete" @click="del(scope.row)"></a>
+            </el-row>
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="菜单名"></el-table-column>
         <el-table-column align="center" label="菜单类型" :width="80">
           <template slot-scope="scope">
@@ -31,26 +40,6 @@
         <el-table-column align="center" prop="orderNum" label="排序" :width="55"></el-table-column>
         <el-table-column align="center" prop="url" label="功能KEY"></el-table-column>
         <el-table-column align="center" prop="perms" label="权限标识"></el-table-column>
-        <el-table-column label="操作" align="center" :width="150">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="text"
-              @click="add(scope.row)"
-            >新增</el-button>
-            <el-button
-              size="mini"
-              type="text"
-              @click="edit(scope.row)"
-            >修改</el-button>
-            <el-button
-              class="font-red"
-              size="mini"
-              type="text"
-              @click="del(scope.row)"
-            >删除</el-button>
-          </template>
-        </el-table-column>
       </el-table>
     </div>
     <permission-form

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     width="480px"
-    :title="isEdit ? '菜单修改' : '菜单编辑'"
+    :title="isEdit ? '菜单修改' : '菜单新增'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
