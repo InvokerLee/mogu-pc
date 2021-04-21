@@ -1,13 +1,29 @@
 <template>
-  <el-autocomplete
+  <el-select
     v-model="params[paramsKey]"
     style="width: 100%;"
-    :fetch-suggestions="querySearchAsync"
-    placeholder="类别关键字"
-  ></el-autocomplete>
+    :clearable="!multiple"
+    :multiple="multiple"
+    :collapse-tags="multiple"
+    readonly
+    reserve-keyword
+    placeholder="类别关键词"
+    :loading="loading"
+    @change="change"
+    @focus="remoteMethod"
+  >
+    <el-option
+      v-for="i in options"
+      :key="i.id"
+      :label="i.name"
+      :value="i.id"
+    >
+    </el-option>
+  </el-select>
 </template>
 
 <script>
+import { commonSelectType } from '@/api/common';
 export default {
   props: {
     params: {
@@ -19,22 +35,51 @@ export default {
     paramsKey: {
       type: String,
       default: ''
+    },
+    defaultOpions: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      loading: false,
+      options: []
+    };
+  },
+  created() {
+    if (this.defaultOpions) {
+      this.options = this.defaultOpions;
     }
   },
   methods: {
-    querySearchAsync(queryString, cb) {
-      if (!queryString) {
-        cb([]);
-        return;
+    remoteMethod() {
+      this.loading = true;
+      commonSelectType().then((res) => {
+        this.options = res.result;
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    change(val) {
+      let arr = [];
+      if (this.multiple) {
+        arr = val.map(id => this.options.find(v => v.id === id));
+      } else {
+        const item = this.options.find(v => v.id === val);
+        if (item) {
+          arr.push(item);
+        }
       }
-      const params = {
-        searchKey: queryString
-      };
-      console.log(params);
 
-      setTimeout(() => {
-        cb([{ value: '123123' }, { value: 'fas' }]);
-      }, 800);
+      this.$emit('selectChange', arr);
     }
   }
 };

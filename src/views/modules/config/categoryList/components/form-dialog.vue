@@ -10,7 +10,7 @@
       <el-col :span="20">
         <el-form ref="categoryForm" size="mini" label-width="100px" :model="form" :rules="rules">
           <el-form-item label="上级类别：">
-            <el-input v-model.trim="form.parentName"></el-input>
+            <category-search :params="form" paramsKey="parentId" :defaultOpions="defaultOpions"></category-search>
           </el-form-item>
           <el-form-item label="类别名称：" prop="name">
             <el-input v-model.trim="form.name"></el-input>
@@ -37,16 +37,20 @@
 </template>
 
 <script>
+import CategorySearch from '@/components/CategorySearch';
 import { addType, editType } from '@/api/config';
 
 export default {
+  components: {
+    CategorySearch
+  },
   props: ['visible', 'item'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
-        parentName: '',
+        parentId: '',
         name: '',
         state: 1,
         text: ''
@@ -58,7 +62,8 @@ export default {
         state: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
-      }
+      },
+      defaultOpions: []
     };
   },
   created() {
@@ -67,6 +72,10 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
+      this.defaultOpions = [{
+        name: this.item.parentName,
+        id: this.item.parentId
+      }];
     }
   },
   methods: {
