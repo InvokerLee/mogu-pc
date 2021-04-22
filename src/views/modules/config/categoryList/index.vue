@@ -45,7 +45,7 @@
           <el-table-column prop="parentName" label="上级类别" align="center" />
           <el-table-column prop="name" label="类别名称" align="center" />
           <el-table-column prop="text" label="备注" align="center" />
-          <el-table-column label="状态" align="center">
+          <el-table-column :width="60" label="状态" align="center">
             <template slot-scope="scope">
               <span>
                 {{ ['停用', '有效'][scope.row.state] }}

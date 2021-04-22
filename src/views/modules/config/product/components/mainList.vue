@@ -69,10 +69,10 @@
       <el-table-column prop="remarks" label="发货税率" align="center" />
       <el-table-column prop="remarks" label="发货价(未税)" align="center" />
       <el-table-column prop="remarks" label="保质期" align="center" />
-      <el-table-column label="状态" align="center">
+      <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
-            {{ ['', '有效', '停用'][scope.row.status] }}
+            {{ ['停用', '有效'][scope.row.state] }}
           </span>
         </template>
       </el-table-column>

@@ -1,5 +1,37 @@
 import request from '@/utils/request';
 
+// 仓库
+export function storeInfoList(data) {
+  return request({
+    url: '/storeinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addStore(data) {
+  return request({
+    url: '/storeinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function editStore(data) {
+  return request({
+    url: '/storeinfo/update',
+    method: 'post',
+    data
+  });
+}
+export function delStore(id) {
+  return request({
+    url: `/storeinfo/delete/${id}`,
+    method: 'get'
+  });
+}
+
 // 类别
 export function typeInfoList(data) {
   return request({

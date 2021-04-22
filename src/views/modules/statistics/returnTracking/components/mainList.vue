@@ -37,10 +37,10 @@
       <el-table-column :min-width="110" prop="remarks" label="入库金额(未税)" align="center" />
       <el-table-column prop="remarks" label="仓库" align="center" />
       <el-table-column prop="remarks" label="备注" align="center" />
-      <el-table-column label="状态" align="center">
+      <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
-            {{ ['', '有效', '停用'][scope.row.status] }}
+            {{ ['停用', '有效'][scope.row.state] }}
           </span>
         </template>
       </el-table-column>
