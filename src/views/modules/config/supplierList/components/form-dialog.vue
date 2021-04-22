@@ -10,39 +10,46 @@
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="名称：" prop="realname">
-            <el-input v-model.trim="form.realname"></el-input>
+          <el-form-item label="名称：" prop="name">
+            <el-input v-model.trim="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="单价含税：" prop="">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="单价含税：" prop="isTax">
+            <el-select v-model="form.isTax" class="w100">
+              <el-option :value="0" label="是"></el-option>
+              <el-option :value="1" label="否"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="地址：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.address"></el-input>
           </el-form-item>
           <el-form-item label="联系人：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.contactMan"></el-input>
           </el-form-item>
           <el-form-item label="备注：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.text"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="助记符：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.shortKey"></el-input>
           </el-form-item>
-          <el-form-item label="账期：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="账期：" prop="paymentDays">
+            <el-input v-model.trim="form.paymentDays"></el-input>
           </el-form-item>
-          <el-form-item label="电话：">
+          <el-form-item label="电话：" prop="phone">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
           <el-form-item label="付款方式：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-select v-model="form.payType" class="w100">
+              <el-option :value="0" label="到付"></el-option>
+              <el-option :value="1" label="预付"></el-option>
+              <el-option :value="2" label="月结"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="状态：" prop="status">
-            <el-radio-group v-model="form.status">
+          <el-form-item label="状态：" prop="state">
+            <el-radio-group v-model="form.state">
               <el-radio :label="1">有效</el-radio>
-              <el-radio :label="2">停用</el-radio>
+              <el-radio :label="0">停用</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -57,7 +64,7 @@
 </template>
 
 <script>
-// import { addUser, editUser } from '@/api/auth/user';
+import { addProvider, editProvider } from '@/api/config';
 
 export default {
   props: ['visible', 'item'],
@@ -66,16 +73,29 @@ export default {
       loading: false,
       isEdit: false,
       form: {
-        realname: '',
+        name: '',
+        isTax: 0,
+        address: '',
+        contactMan: '',
+        text: '',
+        shortKey: '',
+        paymentDays: '',
         phone: '',
-        status: 1,
-        remarks: ''
+        payType: '',
+        state: 1
       },
       rules: {
-        realname: [
+        name: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
-        status: [
+        phone: [
+          { required: true, message: '必填', trigger: 'blur' },
+          { pattern: /^[0-9]*$/, message: '格式为数字', trigger: 'blur' }
+        ],
+        paymentDays: [
+          { pattern: /^[0-9]*$/, message: '格式为数字', trigger: 'blur' }
+        ],
+        state: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
       }
@@ -103,9 +123,12 @@ export default {
       });
     },
     saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+      return this.isEdit
+        ? editProvider({
+          ...this.form,
+          id: this.item.id
+        })
+        : addProvider(this.form);
     },
     cancel() {
       this.$emit('cancel');

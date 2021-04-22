@@ -8,10 +8,10 @@
               <el-input v-model.trim="params.key" placeholder="输入供应商名称/助记符查询" />
             </el-form-item>
             <el-form-item label="状态">
-              <el-select v-model="params.status" placeholder="请选择">
+              <el-select v-model="params.state" placeholder="请选择" class="w90px">
                 <el-option label="全部" value="" />
                 <el-option label="有效" :value="1" />
-                <el-option label="停用" :value="2" />
+                <el-option label="停用" :value="0" />
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -22,7 +22,7 @@
         </el-col>
         <el-col class="tar">
           <el-button type="success" size="mini" @click="add">新增</el-button>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="primary" size="mini" @click="download">导出</el-button>
         </el-col>
       </el-row>
       <div>
@@ -34,20 +34,31 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column label="操作" type="action" align="center">
+          <el-table-column :width="60" label="操作" type="action" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-row type="flex" justify="space-around" class="font-16">
+                <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
+                <a class="font-red el-icon-delete" @click="del(scope.row)"></a>
+              </el-row>
             </template>
           </el-table-column>
-          <el-table-column prop="username" label="名称" align="center" />
-          <el-table-column prop="realname" label="助记符" align="center" />
-          <el-table-column prop="realname" label="单价含税" align="center" />
-          <el-table-column prop="realname" label="账期" align="center" />
-          <el-table-column prop="realname" label="地址" align="center" />
-          <el-table-column prop="realname" label="电话" align="center" />
-          <el-table-column prop="remarks" label="联系人" align="center" />
-          <el-table-column prop="remarks" label="付款方式" align="center" />
-          <el-table-column prop="remarks" label="备注" align="center" />
+          <el-table-column prop="name" label="名称" align="center" />
+          <el-table-column :width="80" prop="shortKey" label="助记符" align="center" />
+          <el-table-column :width="70" label="单价含税" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.isTax ? '否' : '是' }}
+            </template>
+          </el-table-column>
+          <el-table-column :width="60" prop="paymentDays" label="账期" align="center" />
+          <el-table-column prop="address" label="地址" align="center" />
+          <el-table-column :width="110" prop="phone" label="电话" align="center" />
+          <el-table-column :width="65" prop="contactMan" label="联系人" align="center" />
+          <el-table-column :width="70" prop="payType" label="付款方式" align="center">
+            <template slot-scope="scope">
+              {{ ['到付', '预付', '月结'][scope.row.payType] }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="text" label="备注" align="center" />
           <el-table-column :width="60" label="状态" align="center">
             <template slot-scope="scope">
               <span>
@@ -60,8 +71,8 @@
           v-if="tableData.length"
           layout="total, sizes, prev, pager, next, jumper"
           class="pagination py-3"
-          :current-page.sync="params.page"
-          :page-size="params.limit"
+          :current-page.sync="params.curentPage"
+          :page-size="params.pageSize"
           :total="total"
           :page-sizes="[10,20,30]"
           @size-change="handleSizeChange"
@@ -80,7 +91,7 @@
 </template>
 
 <script>
-// import { getUserList } from '@/api/auth/user';
+import { providerInfoList, delProvider } from '@/api/config';
 import formDialog from './components/form-dialog';
 
 export default {
@@ -92,11 +103,8 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
       tableData: [],
@@ -108,7 +116,7 @@ export default {
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
@@ -119,23 +127,23 @@ export default {
         }
       });
       this.loading = true;
-      // getUserList(params).then(({ data }) => {
-      //   this.tableData = data.data;
-      //   this.total = data.total;
-      // }).catch(() => {}).finally(() => {
-      //   this.loading = false;
-      // });
+      providerInfoList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-      this.params.page = 1;
-      // this.getList();
+      this.params.curentPage = 1;
+      this.getList();
     },
     reset() {
       Object.assign(this.params, this.$options.data.call(this).params);
-      // this.getList();
+      this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
@@ -156,6 +164,19 @@ export default {
     actionSuccess() {
       this.getList();
       this.closeDialog();
+    },
+    del(item) {
+      this.$confirm('确认要删除吗?', '删除提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => delProvider(item.id)).then(() => {
+        this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
+    },
+    download() {
+      this.$download('/providerinfo/export', { ...this.params });
     }
   }
 };

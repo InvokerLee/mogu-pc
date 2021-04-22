@@ -8,10 +8,10 @@
               <el-input v-model.trim="params.storeName" placeholder="请输入仓库名" />
             </el-form-item>
             <el-form-item label="状态">
-              <el-select v-model="params.state" placeholder="请选择">
+              <el-select v-model="params.state" placeholder="请选择" class="w90px">
                 <el-option label="全部" value="" />
                 <el-option label="有效" :value="1" />
-                <el-option label="停用" :value="2" />
+                <el-option label="停用" :value="0" />
               </el-select>
             </el-form-item>
             <el-form-item>

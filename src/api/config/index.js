@@ -1,5 +1,37 @@
 import request from '@/utils/request';
 
+// 供应商
+export function providerInfoList(data) {
+  return request({
+    url: '/providerinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addProvider(data) {
+  return request({
+    url: '/providerinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function editProvider(data) {
+  return request({
+    url: '/providerinfo/update',
+    method: 'post',
+    data
+  });
+}
+export function delProvider(id) {
+  return request({
+    url: `/providerinfo/delete/${id}`,
+    method: 'get'
+  });
+}
+
 // 仓库
 export function storeInfoList(data) {
   return request({
