@@ -44,7 +44,7 @@
           </el-table-column>
           <el-table-column prop="name" label="仓库名称" align="center" />
           <el-table-column prop="address" label="地址" align="center" />
-          <el-table-column prop="phone" label="电话" align="center" />
+          <el-table-column :width="110" prop="phone" label="电话" align="center" />
           <el-table-column prop="text" label="备注" align="center" />
           <el-table-column :width="60" label="状态" align="center">
             <template slot-scope="scope">
