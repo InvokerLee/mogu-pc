@@ -229,3 +229,18 @@ export function handleTree(data, id, parentId, children, rootId) {
   });
   return treeData !== '' ? treeData : data;
 }
+
+// 添加日期范围
+export function formatDate(dateRange, propName) {
+  var params = {};
+  if (Array.isArray(dateRange)) {
+    if (typeof (propName) === 'undefined') {
+      params['startDate'] = dateRange[0];
+      params['endDate'] = dateRange[1];
+    } else {
+      params['start' + propName] = dateRange[0];
+      params['end' + propName] = dateRange[1];
+    }
+  }
+  return params;
+}

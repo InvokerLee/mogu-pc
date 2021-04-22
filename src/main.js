@@ -16,6 +16,7 @@ import adaptive from '@/utils/directive/adaptive';
 import checkPermission from '@/utils/plugins/checkPermission';
 
 import { downloadFile } from '@/utils/request';
+import { formatDate } from '@/utils';
 
 import '@/permission';
 
@@ -29,6 +30,7 @@ Vue.component('base-wrapper', baseWrapper);
 Vue.config.productionTip = false;
 
 Vue.prototype.$download = downloadFile;
+Vue.prototype.formatDate = formatDate;
 
 new Vue({
   el: '#app',

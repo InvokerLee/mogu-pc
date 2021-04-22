@@ -1,5 +1,37 @@
 import request from '@/utils/request';
 
+// 批号
+export function batchInfoList(data) {
+  return request({
+    url: '/batchinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addBatch(data) {
+  return request({
+    url: '/batchinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function editBatch(data) {
+  return request({
+    url: '/batchinfo/update',
+    method: 'post',
+    data
+  });
+}
+export function delBatch(id) {
+  return request({
+    url: `/batchinfo/delete/${id}`,
+    method: 'get'
+  });
+}
+
 // 供应商
 export function providerInfoList(data) {
   return request({
