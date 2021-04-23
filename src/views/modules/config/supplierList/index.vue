@@ -5,7 +5,7 @@
         <el-col>
           <el-form ref="searchForm" hide-details size="mini" inline :model="params">
             <el-form-item label="供应商名称">
-              <el-input v-model.trim="params.key" placeholder="输入供应商名称/助记符查询" />
+              <el-input v-model.trim="params.providerName" placeholder="输入供应商名称/助记符查询" />
             </el-form-item>
             <el-form-item label="状态">
               <el-select v-model="params.state" placeholder="请选择" class="w90px">
@@ -103,6 +103,8 @@ export default {
     return {
       loading: false,
       params: {
+        providerName: '',
+        state: '',
         curentPage: 1,
         pageSize: 10
       },
