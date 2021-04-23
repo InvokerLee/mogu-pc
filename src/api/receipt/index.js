@@ -21,3 +21,14 @@ export function receiptOrderCheck(data) {
     }
   });
 }
+
+export function receiptOrderAll(data) {
+  return request({
+    url: '/receiptconfirmorder/allReject',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

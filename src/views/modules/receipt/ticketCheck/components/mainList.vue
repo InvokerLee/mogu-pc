@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { receiptOrderList, receiptOrderCheck } from '@/api/receipt';
+import { receiptOrderList, receiptOrderCheck, receiptOrderAll } from '@/api/receipt';
 export default {
   data() {
     return {
@@ -158,14 +158,20 @@ export default {
     },
     uddateState(item) {
       const params = {
-        id: item.item
+        id: item.id
       };
       receiptOrderCheck(params).then((res) => {
         this.getList();
       }).catch(() => {});
     },
     rejectAll() {
-      console.log(this.selectedRow);
+      if (!this.selectedRow.id) return;
+      const params = {
+        id: this.selectedRow.id
+      };
+      receiptOrderAll(params).then((res) => {
+        console.log(res);
+      }).catch(() => {});
     },
     rowChange(row) {
       this.selectedRow = row;
