@@ -11,11 +11,19 @@ $--color-danger:#F56C6C;
 $--color-info: #909399;
 
 $--button-font-weight: 400;
-
+$--color-white: #fff;
 $--color-text-regular: #000;
 $--border-color-light: #dfe4ed;
 $--border-color-lighter: #e6ebf5;
-
+$--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default; /* 53a8ff */
+$--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default; /* 66b1ff */
+$--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default; /* 79bbff */
+$--color-primary-light-4: mix($--color-white, $--color-primary, 40%) !default; /* 8cc5ff */
+$--color-primary-light-5: mix($--color-white, $--color-primary, 50%) !default; /* a0cfff */
+$--color-primary-light-6: mix($--color-white, $--color-primary, 60%) !default; /* b3d8ff */
+$--color-primary-light-7: mix($--color-white, $--color-primary, 70%) !default; /* c6e2ff */
+$--color-primary-light-8: mix($--color-white, $--color-primary, 80%) !default; /* d9ecff */
+$--color-primary-light-9: mix($--color-white, $--color-primary, 90%) !default; /* ecf5ff */
 // Dialog
 $--dialog-padding-primary: 12px !default;
 
@@ -24,6 +32,8 @@ $--dialog-padding-primary: 12px !default;
 $--table-font-color: $--color-text-regular !default;
 $--table-header-font-color: $--color-text-regular !default;
 $--table-header-background-color: $--border-color-lighter !default;
+$--table-row-hover-background-color: $--color-primary-light-9 !default;
+$--table-current-row-background-color: $--color-primary-light-7 !default;
 
 /* icon font path, required */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';

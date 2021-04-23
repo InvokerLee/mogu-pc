@@ -129,7 +129,6 @@ export default {
     getCommpanyList() {
       commonCompanyList().then((res) => {
         this.companyList = res.result;
-        console.log(this.companyList);
       }).catch(() => {});
     },
     confirm() {
