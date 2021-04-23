@@ -53,14 +53,14 @@
           @selection-change="(val) => { selectItems = val }"
         >
           <el-table-column :width="55" type="selection" align="center" />
-          <el-table-column :width="60" label="操作" type="action" align="center">
+          <!-- <el-table-column :width="60" label="操作" type="action" align="center">
             <template slot-scope="scope">
               <el-row type="flex" justify="space-around" class="font-16">
                 <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
                 <a class="font-red el-icon-delete" @click="del(scope.row)"></a>
               </el-row>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="providerName" label="供应商名称" align="center" />
           <el-table-column prop="productName" label="产品" align="center" />
           <el-table-column :width="80" prop="batchNum" label="批号" align="center" />
