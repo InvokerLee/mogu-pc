@@ -50,7 +50,7 @@
     </div>
     <div class="icon">
       <el-tooltip effect="dark" content="退出登录" placement="bottom">
-        <i class="el-icon-switch-button font-red"></i>
+        <i class="el-icon-switch-button font-red" @click="logout"></i>
       </el-tooltip>
     </div>
   </el-row>
@@ -67,10 +67,10 @@ export default {
   },
   methods: {
     async logout() {
-      const loading = this.$loading({ lock: true });
-      await this.$store.dispatch('user/logout');
-      loading.close();
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+      // const loading = this.$loading({ lock: true });
+      // await this.$store.dispatch('user/logout');
+      // loading.close();
+      this.$router.push('/login');
     }
   }
 };

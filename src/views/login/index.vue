@@ -30,6 +30,10 @@
         <el-button type="primary" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
       </el-form>
     </section>
+    <div class="icp">
+      ©深圳芒果科技有限公司 版权所有粤ICP备
+      <a href="https://beian.miit.gov.cn/" target="__blank">18085317号-1</a>
+    </div>
   </div>
 </template>
 
@@ -134,6 +138,16 @@ export default {
     text-align: center;
     .w280 {
       width: 280px;
+    }
+  }
+  .icp {
+    text-align: center;
+    margin-top: 50px;
+    a {
+      color: #409eff;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
