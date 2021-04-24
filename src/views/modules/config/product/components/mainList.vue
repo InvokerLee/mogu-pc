@@ -43,7 +43,7 @@
     >
       <el-table-column label="操作" type="action" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+          <el-button size="mini" type="text" @click.stop="edit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="品名" align="center" />
@@ -57,9 +57,9 @@
       <el-table-column prop="stockPrice" label="采购价" align="center" />
       <el-table-column prop="salsePrice" label="发货价" align="center" />
       <el-table-column :width="60" prop="grossProfitRate" label="毛利率" align="center" />
-      <el-table-column :width="60" prop="stockTaxRate" label="进货税率" align="center" />
-      <el-table-column :width="60" prop="salesTaxRate" label="发货税率" align="center" />
-      <el-table-column prop="salseNoTaxPrice" label="发货价(未税)" align="center" />
+      <el-table-column :width="80" prop="stockTaxRate" label="进货税率" align="center" />
+      <el-table-column :width="80" prop="salesTaxRate" label="发货税率" align="center" />
+      <el-table-column :width="90" prop="salseNoTaxPrice" label="发货价(未税)" align="center" />
       <el-table-column :width="60" prop="shelfDays" label="保质期" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">

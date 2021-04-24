@@ -1,12 +1,12 @@
 <template>
   <el-dialog
-    width="750px"
+    width="640px"
     :title="isEdit ? '产品编辑' : '产品新增'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
   >
-    <el-form ref="productForm" size="mini" label-width="120px" :model="form" :rules="rules">
+    <el-form ref="productForm" size="mini" label-width="110px" :model="form" :rules="rules">
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
