@@ -9,7 +9,7 @@
           <el-input v-model.trim="params.guestName" placeholder="请输入客户名称/助记符" />
         </el-form-item>
         <el-form-item label="业务员">
-          <el-input v-model.trim="params.bizManId" placeholder="请输入" />
+          <staff-selector :params="params" paramsKey="bizManId"></staff-selector>
         </el-form-item>
         <el-form-item label="客户类型">
           <el-select v-model="params.clientType" placeholder="请选择" class="w120px">
@@ -116,9 +116,12 @@
 <script>
 import { guestInfoList } from '@/api/config';
 import hqAdd from './hq-add';
+import StaffSelector from '@/components/StaffSelector';
+
 export default {
   components: {
-    hqAdd
+    hqAdd,
+    StaffSelector
   },
   data() {
     return {

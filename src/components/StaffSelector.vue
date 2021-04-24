@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { commonSelectType } from '@/api/common';
+import { commonStaff } from '@/api/common';
 export default {
   props: {
     params: {
@@ -45,6 +45,10 @@ export default {
     multiple: {
       type: Boolean,
       default: false
+    },
+    staffType: {
+      type: Number,
+      default: 0 // 业务员
     }
   },
   data() {
@@ -61,7 +65,9 @@ export default {
   methods: {
     remoteMethod() {
       this.loading = true;
-      commonSelectType().then((res) => {
+      commonStaff({
+        staffType: this.staffType
+      }).then((res) => {
         this.options = res.result;
       }).catch(() => {
       }).finally(() => {

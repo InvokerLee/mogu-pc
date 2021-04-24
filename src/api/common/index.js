@@ -13,3 +13,13 @@ export function commonSelectType() {
     method: 'post'
   });
 }
+export function commonStaff(data) {
+  return request({
+    url: '/common/staff',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

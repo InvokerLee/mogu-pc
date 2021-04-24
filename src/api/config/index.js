@@ -11,6 +11,16 @@ export function guestInfoList(data) {
     }
   });
 }
+export function guestInfoDetailList(data) {
+  return request({
+    url: '/guestinfo/detail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
 export function addGuest(data) {
   return request({
     url: '/guestinfo/save',

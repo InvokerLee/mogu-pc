@@ -45,7 +45,7 @@
             <customer-selector :params="form" paramsKey="customerId"></customer-selector>
           </el-form-item> -->
           <el-form-item label="业务员：">
-            <!-- <el-input v-model.trim="form.phone"></el-input> -->
+            <staff-selector :params="form" paramsKey="bizManId" :defaultOpions="defaultOpions"></staff-selector>
           </el-form-item>
           <el-form-item label="单价含税：" prop="isTax">
             <el-radio-group v-model="form.isTax">
@@ -85,11 +85,14 @@
 </template>
 
 <script>
+import StaffSelector from '@/components/StaffSelector';
 // import CustomerSelector from '@/components/CustomerSelector';
+
 import { addGuest, editGuest } from '@/api/config';
 
 export default {
   components: {
+    StaffSelector
     // CustomerSelector
   },
   props: ['visible', 'item'],
@@ -109,8 +112,8 @@ export default {
         paymentDays: '',
         phone: '',
         payType: 0,
-        state: 1
-        // 业务员缺少
+        state: 1,
+        bizManId: ''
       },
       rules: {
         name: [
@@ -138,7 +141,8 @@ export default {
         state: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
-      }
+      },
+      defaultOpions: []
     };
   },
   created() {
@@ -147,6 +151,10 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
+      this.defaultOpions = [{
+        name: this.item.bizManName,
+        id: this.item.bizManId
+      }];
     }
   },
   methods: {
