@@ -1,5 +1,37 @@
 import request from '@/utils/request';
 
+// 公司
+export function companyInfoList(data) {
+  return request({
+    url: '/companyinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addCompany(data) {
+  return request({
+    url: '/companyinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function editCompany(data) {
+  return request({
+    url: '/companyinfo/update',
+    method: 'post',
+    data
+  });
+}
+export function delCompany(id) {
+  return request({
+    url: `/companyinfo/delete/${id}`,
+    method: 'get'
+  });
+}
+
 // 产品
 export function productList(data) {
   return request({
