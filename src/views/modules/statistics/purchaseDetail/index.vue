@@ -10,10 +10,10 @@
           <el-input v-model.trim="params.key" placeholder="请输入公司名" />
         </el-form-item>
         <el-form-item label="类别">
-          <category-search :param="params" paramsKey="key"></category-search>
+          <category-search :params="params" paramsKey="productTypeId"></category-search>
         </el-form-item>
         <el-form-item label="品牌">
-          <brand-search :param="params" paramsKey="brand">></brand-search>
+          <brand-search :params="params" paramsKey="productBrandId"></brand-search>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
