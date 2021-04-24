@@ -7,7 +7,7 @@
           <el-input v-model.trim="params.key" placeholder="产品名称/规格/条码" />
         </el-form-item>
         <el-form-item label="仓库">
-          <warehous-selector :params="params" paramsKey="stock"></warehous-selector>
+          <warehous-selector :params="params" paramsKey="storeId"></warehous-selector>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>

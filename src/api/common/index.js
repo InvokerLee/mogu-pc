@@ -19,6 +19,12 @@ export function commonSelectBrand() {
     method: 'post'
   });
 }
+export function commonSelectStore() {
+  return request({
+    url: '/common/selectStoreInfo',
+    method: 'post'
+  });
+}
 export function commonStaff(data) {
   return request({
     url: '/common/staff',
@@ -32,6 +38,16 @@ export function commonStaff(data) {
 export function commonSelectGuest(data) {
   return request({
     url: '/common/selectGuest',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function commonSelectProduct(data) {
+  return request({
+    url: '/common/selectProduct',
     method: 'post',
     data,
     headers: {

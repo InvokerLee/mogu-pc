@@ -2,21 +2,20 @@
   <el-select
     v-model="params[paramsKey]"
     style="width: 100%;"
-    filterable
-    remote
     :clearable="!multiple"
     :multiple="multiple"
     :collapse-tags="multiple"
+    readonly
     reserve-keyword
-    placeholder="仓库关键字"
-    :remote-method="remoteMethod"
+    placeholder=""
     :loading="loading"
     @change="change"
+    @focus="remoteMethod"
   >
     <el-option
       v-for="i in options"
       :key="i.id"
-      :label="i.label"
+      :label="i.name"
       :value="i.id"
     >
     </el-option>
@@ -24,6 +23,7 @@
 </template>
 
 <script>
+import { commonSelectStore } from '@/api/common';
 export default {
   props: {
     params: {
@@ -59,16 +59,14 @@ export default {
     }
   },
   methods: {
-    remoteMethod(query) {
-      if (query === '') {
-        this.options = [];
-        return;
-      }
+    remoteMethod() {
       this.loading = true;
-      setTimeout(() => {
+      commonSelectStore().then((res) => {
+        this.options = res.result;
+      }).catch(() => {
+      }).finally(() => {
         this.loading = false;
-        this.options = [{ id: 1, label: '仓库1' }, { id: 2, label: '仓库2' }];
-      }, 200);
+      });
     },
     change(val) {
       let arr = [];

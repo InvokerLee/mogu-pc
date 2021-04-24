@@ -8,7 +8,7 @@
     :multiple="multiple"
     :collapse-tags="multiple"
     reserve-keyword
-    placeholder="通过品名、规格、条码搜索"
+    placeholder="品名/条码/规格"
     :remote-method="remoteMethod"
     :loading="loading"
     @change="change"
@@ -16,7 +16,7 @@
     <el-option
       v-for="i in options"
       :key="i.id"
-      :label="i.label"
+      :label="i.name"
       :value="i.id"
     >
     </el-option>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { commonSelectProduct } from '@/api/common';
+
 export default {
   props: {
     params: {
@@ -65,10 +67,14 @@ export default {
         return;
       }
       this.loading = true;
-      setTimeout(() => {
+      commonSelectProduct({
+        name: query
+      }).then((res) => {
+        this.options = res.result;
+      }).catch(() => {
+      }).finally(() => {
         this.loading = false;
-        this.options = [{ id: 1, label: '产品1' }, { id: 2, label: '产品2' }];
-      }, 200);
+      });
     },
     change(val) {
       let arr = [];
