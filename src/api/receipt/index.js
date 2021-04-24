@@ -32,3 +32,26 @@ export function receiptOrderAll(data) {
     }
   });
 }
+export function receiptOrderDetailList(data) {
+  return request({
+    url: '/receiptconfirmorderdetail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function rejectReceiptOrderDetail(id) {
+  return request({
+    url: `/receiptconfirmorderdetail/reject/${id}`,
+    method: 'get'
+  });
+}
+export function editReceiptOrderDetail(data) {
+  return request({
+    url: '/receiptconfirmorderdetail/update',
+    method: 'post',
+    data
+  });
+}

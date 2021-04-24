@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     rowClickChange(row) {
-      this.selectRowId = row.id;
+      this.selectRowId = row ? row.id : '';
     }
   }
 };
