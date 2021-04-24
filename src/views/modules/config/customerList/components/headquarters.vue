@@ -51,19 +51,39 @@
           <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="客户名称" align="center" />
-      <el-table-column prop="remarks" label="助记符" align="center" />
-      <el-table-column prop="remarks" label="业务员" align="center" />
-      <el-table-column prop="remarks" label="是否结账" align="center" />
-      <el-table-column prop="remarks" label="单价含税" align="center" />
-      <el-table-column prop="remarks" label="客户类型" align="center" />
-      <el-table-column prop="remarks" label="账期" align="center" />
-      <el-table-column prop="remarks" label="地址" align="center" />
-      <el-table-column prop="remarks" label="电话" align="center" />
-      <el-table-column prop="remarks" label="联系人" align="center" />
-      <el-table-column prop="remarks" label="付款方式" align="center" />
-      <el-table-column prop="remarks" label="打印模板" align="center" />
-      <el-table-column prop="remarks" label="备注" align="center" />
+      <el-table-column prop="name" label="客户名称" align="center" />
+      <el-table-column :width="80" prop="shortKey" label="助记符" align="center" />
+      <el-table-column :width="70" prop="bizManName" label="业务员" align="center" />
+      <el-table-column :width="70" prop="isCheck" label="是否结账" align="center">
+        <template slot-scope="scope">
+          {{ ['否', '是'][scope.row.isCheck] }}
+        </template>
+      </el-table-column>
+      <el-table-column :width="70" prop="isTax" label="单价含税" align="center">
+        <template slot-scope="scope">
+          {{ ['否', '是'][scope.row.isTax] }}
+        </template>
+      </el-table-column>
+      <el-table-column :width="90" prop="clientType" label="客户类型" align="center">
+        <template slot-scope="scope">
+          {{ ['正常客户', '专柜客户', '代配送客户'][scope.row.clientType] }}
+        </template>
+      </el-table-column>
+      <el-table-column :width="60" prop="paymentDays" label="账期" align="center" />
+      <el-table-column prop="address" label="地址" align="center" />
+      <el-table-column :width="100" prop="phone" label="电话" align="center" />
+      <el-table-column :width="70" prop="contactMan" label="联系人" align="center" />
+      <el-table-column :width="70" prop="payType" label="付款方式" align="center">
+        <template slot-scope="scope">
+          {{ ['到付', '预付', '月结'][scope.row.payType] }}
+        </template>
+      </el-table-column>
+      <el-table-column :width="70" prop="printMould" label="打印模板" align="center">
+        <template slot-scope="scope">
+          {{ ['默认'][scope.row.printMould] }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="text" label="备注" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>

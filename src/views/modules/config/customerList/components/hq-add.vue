@@ -164,7 +164,7 @@ export default {
     },
     saveForm() {
       return this.isEdit
-        ? editGuest(this.item.id, {
+        ? editGuest({
           id: this.item.id,
           ...this.form
         })
