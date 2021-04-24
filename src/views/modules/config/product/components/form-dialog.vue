@@ -1,12 +1,12 @@
 <template>
   <el-dialog
-    width="640px"
+    width="720px"
     :title="isEdit ? '产品编辑' : '产品新增'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
   >
-    <el-form ref="productForm" size="mini" label-width="110px" :model="form" :rules="rules">
+    <el-form ref="productForm" size="mini" label-width="120px" :model="form" :rules="rules">
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
@@ -34,8 +34,14 @@
           <el-form-item label="毛利率：">
             <el-input v-model.trim="form.grossProfitRate" placeholder="自动计算" disabled></el-input>
           </el-form-item>
-          <el-form-item label="进货税率：">
-            <el-input v-model.trim="form.stockTaxRate"></el-input>
+          <el-form-item label="进货税率(%)：">
+            <el-input-number
+              v-model="form.stockTaxRate"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
           </el-form-item>
           <el-form-item label="状态" prop="state">
             <el-select v-model="form.state" placeholder="请选择" class="w100">
@@ -82,8 +88,14 @@
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="发货税率：">
-            <el-input v-model.trim="form.salesTaxRate"></el-input>
+          <el-form-item label="发货税率(%)：">
+            <el-input-number
+              v-model="form.salesTaxRate"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
           </el-form-item>
           <el-form-item label="发货价(未税)：">
             <el-input v-model.trim="form.salseNoTaxPrice" disabled placeholder="自动计算"></el-input>
@@ -122,7 +134,7 @@ export default {
         boxUnit: '',
         stockPrice: undefined,
         grossProfitRate: '',
-        stockTaxRate: '',
+        stockTaxRate: undefined,
         state: 1,
         spec: '',
         productTypeId: '',
@@ -130,7 +142,7 @@ export default {
         boxCount: undefined,
         salsePrice: undefined,
         shelfDays: undefined,
-        salesTaxRate: '',
+        salesTaxRate: undefined,
         salseNoTaxPrice: ''
       },
       rules: {
