@@ -23,3 +23,13 @@ export function commonStaff(data) {
     }
   });
 }
+export function commonSelectGuest(data) {
+  return request({
+    url: '/common/selectGuest',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

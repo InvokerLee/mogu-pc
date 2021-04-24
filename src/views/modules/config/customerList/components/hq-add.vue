@@ -41,9 +41,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <!-- <el-form-item label="上级客户：">
+          <el-form-item v-if="isDetail" label="上级客户：">
             <customer-selector :params="form" paramsKey="customerId"></customer-selector>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item label="业务员：">
             <staff-selector :params="form" paramsKey="bizManId" :defaultOpions="defaultOpions"></staff-selector>
           </el-form-item>
@@ -86,16 +86,15 @@
 
 <script>
 import StaffSelector from '@/components/StaffSelector';
-// import CustomerSelector from '@/components/CustomerSelector';
-
-import { addGuest, editGuest } from '@/api/config';
+import CustomerSelector from '@/components/CustomerSelector';
+import { addGuest, editGuest, addGuestDetail, editGuestDetail } from '@/api/config';
 
 export default {
   components: {
-    StaffSelector
-    // CustomerSelector
+    StaffSelector,
+    CustomerSelector
   },
-  props: ['visible', 'item'],
+  props: ['visible', 'item', 'isDetail'],
   data() {
     return {
       loading: false,
@@ -171,12 +170,15 @@ export default {
       });
     },
     saveForm() {
-      return this.isEdit
-        ? editGuest({
+      if (this.isEdit) {
+        const params = {
           id: this.item.id,
           ...this.form
-        })
-        : addGuest(this.form);
+        };
+        return this.isDetail ? editGuestDetail(params) : editGuest(params);
+      } else {
+        return this.isDetail ? addGuestDetail(this.form) : addGuest(this.form);
+      }
     },
     cancel() {
       this.$emit('cancel');

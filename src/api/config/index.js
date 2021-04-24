@@ -28,6 +28,20 @@ export function addGuest(data) {
     data
   });
 }
+export function addGuestDetail(data) {
+  return request({
+    url: '/guestinfo/detail/save',
+    method: 'post',
+    data
+  });
+}
+export function editGuestDetail(data) {
+  return request({
+    url: '/guestinfo/detail/update',
+    method: 'post',
+    data
+  });
+}
 export function editGuest(data) {
   return request({
     url: '/guestinfo/update',

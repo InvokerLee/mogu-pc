@@ -34,7 +34,7 @@
               <el-divider direction="vertical"></el-divider>
             </span>
             <el-button type="success" size="mini" @click="add">新增</el-button>
-            <el-button type="primary" size="mini">导出</el-button>
+            <el-button type="primary" size="mini" @click="download">导出</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -98,16 +98,27 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
+      <hq-add
+        v-if="dialog.show"
+        :visible="dialog.show"
+        :item="dialog.item"
+        :isDetail="true"
+        @success="actionSuccess"
+        @cancel="closeDialog"
+      />
     </el-card>
   </div>
 </template>
 
 <script>
 import StaffSelector from '@/components/StaffSelector';
+import hqAdd from './hq-add';
+
 import { guestInfoDetailList } from '@/api/config';
 export default {
   components: {
-    StaffSelector
+    StaffSelector,
+    hqAdd
   },
   props: ['rowId'],
   data() {
@@ -122,7 +133,11 @@ export default {
         pageSize: 10
       },
       total: 0,
-      tableData: []
+      tableData: [],
+      dialog: {
+        show: false,
+        item: {}
+      }
     };
   },
   watch: {
@@ -160,12 +175,21 @@ export default {
       Object.assign(this.params, this.$options.data.call(this).params);
       this.getList();
     },
-    edit(item) {
-      // this.dialog.item = item;
-      // this.dialog.show = true;
-    },
     add() {
-
+      this.dialog.item = {};
+      this.dialog.show = true;
+    },
+    edit(item) {
+      this.dialog.item = item;
+      this.dialog.show = true;
+    },
+    closeDialog() {
+      this.dialog.name = '';
+      this.dialog.show = false;
+    },
+    actionSuccess() {
+      this.getList();
+      this.closeDialog();
     },
     handleSizeChange(val) {
       this.params.limit = val;
@@ -173,6 +197,9 @@ export default {
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/guestinfo/export', { parentId: this.rowId, ...this.params });
     }
   }
 };

@@ -16,7 +16,7 @@
     <el-option
       v-for="i in options"
       :key="i.id"
-      :label="i.label"
+      :label="i.name"
       :value="i.id"
     >
     </el-option>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { commonSelectGuest } from '@/api/common';
+
 export default {
   props: {
     params: {
@@ -65,10 +67,14 @@ export default {
         return;
       }
       this.loading = true;
-      setTimeout(() => {
+      commonSelectGuest({
+        name: query
+      }).then((res) => {
+        this.options = res.result;
+      }).catch(() => {
+      }).finally(() => {
         this.loading = false;
-        this.options = [{ id: 1, label: 'aaa' }, { id: 2, label: 'bbb' }];
-      }, 200);
+      });
     },
     change(val) {
       let arr = [];
