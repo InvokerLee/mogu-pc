@@ -10,63 +10,83 @@
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="品名：" prop="realname">
-            <el-input v-model.trim="form.realname"></el-input>
+          <el-form-item label="品名：" prop="name">
+            <el-input v-model.trim="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="条码：" prop="">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="条码：" prop="barCode">
+            <el-input v-model.trim="form.barCode"></el-input>
           </el-form-item>
-          <el-form-item label="品牌：" prop="status">
-            <el-select v-model="form.status" placeholder="请选择" class="w100">
-              <el-option label="华为" :value="1" />
-              <el-option label="诺基亚" :value="2" />
-              <el-option label="联想" :value="3" />
-            </el-select>
+          <el-form-item label="品牌：">
+            <brand-search :params="form" paramsKey="productBrandId"></brand-search>
           </el-form-item>
-          <el-form-item label="箱单位：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="箱单位：" prop="boxUnit">
+            <el-input v-model.trim="form.boxUnit"></el-input>
           </el-form-item>
           <el-form-item label="采购价：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input-number
+              v-model="form.stockPrice"
+              class="w100"
+              :controls="false"
+              :precision="2"
+            >
+            </el-input-number>
           </el-form-item>
           <el-form-item label="毛利率：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.grossProfitRate" placeholder="自动计算" disabled></el-input>
           </el-form-item>
           <el-form-item label="进货税率：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.stockTaxRate"></el-input>
           </el-form-item>
-          <el-form-item label="状态">
-            <el-select v-model="form.status" placeholder="请选择" class="w100">
+          <el-form-item label="状态" prop="state">
+            <el-select v-model="form.state" placeholder="请选择" class="w100">
               <el-option label="有效" :value="1" />
-              <el-option label="停用" :value="2" />
-              <el-option label="只退不售" :value="3" />
+              <el-option label="停用" :value="0" />
+              <el-option label="只退不售" :value="2" />
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="规格：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.spec"></el-input>
           </el-form-item>
-          <el-form-item label="所属类别：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="所属类别：" prop="productTypeId">
+            <category-search :params="form" paramsKey="productTypeId"></category-search>
           </el-form-item>
-          <el-form-item label="单位：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="单位：" prop="unit">
+            <el-input v-model.trim="form.unit"></el-input>
           </el-form-item>
-          <el-form-item label="箱装量：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="箱装量：" prop="boxCount">
+            <el-input-number
+              v-model="form.boxCount"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
           </el-form-item>
           <el-form-item label="发货价：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input-number
+              v-model="form.salsePrice"
+              class="w100"
+              :controls="false"
+              :precision="2"
+            >
+            </el-input-number>
           </el-form-item>
           <el-form-item label="保质期：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input-number
+              v-model="form.shelfDays"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
           </el-form-item>
           <el-form-item label="发货税率：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.salesTaxRate"></el-input>
           </el-form-item>
           <el-form-item label="发货价(未税)：">
-            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.salseNoTaxPrice" disabled placeholder="自动计算"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -80,25 +100,59 @@
 </template>
 
 <script>
-// import { addUser, editUser } from '@/api/auth/user';
+
+import CategorySearch from '@/components/CategorySearch';
+import BrandSearch from '@/components/BrandSearch';
+import { addProduct, editProduct } from '@/api/config';
 
 export default {
+  components: {
+    CategorySearch,
+    BrandSearch
+  },
   props: ['visible', 'item'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
-        realname: '',
-        phone: '',
-        status: 1,
-        remarks: ''
+        name: '',
+        barCode: '',
+        productBrandId: '',
+        boxUnit: '',
+        stockPrice: undefined,
+        grossProfitRate: '',
+        stockTaxRate: '',
+        state: 1,
+        spec: '',
+        productTypeId: '',
+        unit: '',
+        boxCount: undefined,
+        salsePrice: undefined,
+        shelfDays: undefined,
+        salesTaxRate: '',
+        salseNoTaxPrice: ''
       },
       rules: {
-        realname: [
+        name: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
-        status: [
+        barCode: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        boxUnit: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        productTypeId: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ],
+        unit: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        boxCount: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ],
+        state: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
       }
@@ -126,9 +180,9 @@ export default {
       });
     },
     saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+      return this.isEdit
+        ? editProduct({ id: this.item.id, ...this.form })
+        : addProduct(this.form);
     },
     cancel() {
       this.$emit('cancel');
