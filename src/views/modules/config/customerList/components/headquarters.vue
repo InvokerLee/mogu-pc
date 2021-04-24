@@ -46,9 +46,12 @@
       highlight-current-row
       @current-change="rowChange"
     >
-      <el-table-column label="操作" type="action" align="center">
+      <el-table-column :width="60" label="操作" type="action" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click.stop="edit(scope.row)">编辑</el-button>
+          <el-row type="flex" justify="space-around" class="font-16">
+            <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
+            <!-- <a class="font-red el-icon-delete" @click="del(scope.row)"></a> -->
+          </el-row>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="客户名称" align="center" />
