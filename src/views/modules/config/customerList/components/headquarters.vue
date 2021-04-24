@@ -48,7 +48,7 @@
     >
       <el-table-column label="操作" type="action" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+          <el-button size="mini" type="text" @click.stop="edit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="客户名称" align="center" />

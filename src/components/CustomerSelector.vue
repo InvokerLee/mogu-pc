@@ -15,9 +15,9 @@
   >
     <el-option
       v-for="i in options"
-      :key="i.id"
-      :label="i.name"
-      :value="i.id"
+      :key="i.guestId"
+      :label="i.guestName"
+      :value="i.guestId"
     >
     </el-option>
   </el-select>
@@ -68,7 +68,8 @@ export default {
       }
       this.loading = true;
       commonSelectGuest({
-        name: query
+        name: query,
+        orderType: 'other'
       }).then((res) => {
         this.options = res.result;
       }).catch(() => {

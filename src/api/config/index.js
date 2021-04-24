@@ -1,5 +1,37 @@
 import request from '@/utils/request';
 
+// 产品
+export function productList(data) {
+  return request({
+    url: '/productinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addProduct(data) {
+  return request({
+    url: '/productinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function editProduct(data) {
+  return request({
+    url: '/productinfo/update',
+    method: 'post',
+    data
+  });
+}
+export function delProduct(id) {
+  return request({
+    url: `/productinfo/delete/${id}`,
+    method: 'get'
+  });
+}
+
 // 客户
 export function guestInfoList(data) {
   return request({

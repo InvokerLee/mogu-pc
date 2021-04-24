@@ -102,7 +102,7 @@
         v-if="dialog.show"
         :visible="dialog.show"
         :item="dialog.item"
-        :isDetail="true"
+        :parentId="rowId"
         @success="actionSuccess"
         @cancel="closeDialog"
       />

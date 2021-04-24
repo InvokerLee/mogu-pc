@@ -13,6 +13,12 @@ export function commonSelectType() {
     method: 'post'
   });
 }
+export function commonSelectBrand() {
+  return request({
+    url: '/common/selectBrand',
+    method: 'post'
+  });
+}
 export function commonStaff(data) {
   return request({
     url: '/common/staff',

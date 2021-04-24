@@ -6,27 +6,19 @@
           <el-tag type="info">产品信息</el-tag>
         </el-form-item>
         <el-form-item label="输入搜索">
-          <el-input v-model.trim="params.key" placeholder="品名/规格/条码" />
+          <el-input v-model.trim="params.serachPar" placeholder="品名/规格/条码" />
         </el-form-item>
         <el-form-item label="类别">
-          <el-select v-model="params.status" placeholder="请选择">
-            <el-option label="全部" value="" />
-            <el-option label="有效" :value="1" />
-            <el-option label="停用" :value="2" />
-          </el-select>
+          <category-search :params="params" paramsKey="productTypeId"></category-search>
         </el-form-item>
         <el-form-item label="品牌">
-          <el-select v-model="params.status" placeholder="请选择">
-            <el-option label="全部" value="" />
-            <el-option label="有效" :value="1" />
-            <el-option label="停用" :value="2" />
-          </el-select>
+          <brand-search :params="params" paramsKey="productBrandId"></brand-search>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="params.status" placeholder="请选择">
+          <el-select v-model="params.status" placeholder="请选择" class="w90px">
             <el-option label="全部" value="" />
             <el-option label="有效" :value="1" />
-            <el-option label="停用" :value="2" />
+            <el-option label="停用" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -36,7 +28,7 @@
             <el-divider direction="vertical"></el-divider>
           </span>
           <el-button type="success" size="mini" @click="add">新增</el-button>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="primary" size="mini" @click="download">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -54,21 +46,21 @@
           <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="品名" align="center" />
-      <el-table-column prop="remarks" label="规格" align="center" />
-      <el-table-column prop="remarks" label="条码" align="center" />
-      <el-table-column prop="remarks" label="类别" align="center" />
-      <el-table-column prop="remarks" label="品牌" align="center" />
-      <el-table-column prop="remarks" label="单位" align="center" />
-      <el-table-column prop="remarks" label="箱单位" align="center" />
-      <el-table-column prop="remarks" label="箱装量" align="center" />
-      <el-table-column prop="remarks" label="采购价" align="center" />
-      <el-table-column prop="remarks" label="发货价" align="center" />
-      <el-table-column prop="remarks" label="毛利率" align="center" />
-      <el-table-column prop="remarks" label="进货税率" align="center" />
-      <el-table-column prop="remarks" label="发货税率" align="center" />
-      <el-table-column prop="remarks" label="发货价(未税)" align="center" />
-      <el-table-column prop="remarks" label="保质期" align="center" />
+      <el-table-column prop="name" label="品名" align="center" />
+      <el-table-column :width="100" prop="spec" label="规格" align="center" />
+      <el-table-column :width="100" prop="barCode" label="条码" align="center" />
+      <el-table-column prop="productTypeName" label="类别" align="center" />
+      <el-table-column prop="productBrandName" label="品牌" align="center" />
+      <el-table-column :width="60" prop="unit" label="单位" align="center" />
+      <el-table-column :width="60" prop="boxUnit" label="箱单位" align="center" />
+      <el-table-column :width="60" prop="boxCount" label="箱装量" align="center" />
+      <el-table-column prop="stockPrice" label="采购价" align="center" />
+      <el-table-column prop="salsePrice" label="发货价" align="center" />
+      <el-table-column :width="60" prop="grossProfitRate" label="毛利率" align="center" />
+      <el-table-column :width="60" prop="stockTaxRate" label="进货税率" align="center" />
+      <el-table-column :width="60" prop="salesTaxRate" label="发货税率" align="center" />
+      <el-table-column prop="salseNoTaxPrice" label="发货价(未税)" align="center" />
+      <el-table-column :width="60" prop="shelfDays" label="保质期" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
@@ -99,23 +91,30 @@
 </template>
 
 <script>
+import { productList } from '@/api/config';
+
+import CategorySearch from '@/components/CategorySearch';
+import BrandSearch from '@/components/BrandSearch';
 import formDialog from './form-dialog';
 export default {
   components: {
-    formDialog
+    formDialog,
+    CategorySearch,
+    BrandSearch
   },
   data() {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        serachPar: '',
+        productTypeId: '',
+        productBrandId: '',
+        state: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
-      tableData: [{ id: 1 }],
+      tableData: [],
       dialog: {
         show: false,
         item: {}
@@ -123,16 +122,32 @@ export default {
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
-
+      const params = {};
+      Object.keys(this.params).forEach((key) => {
+        if (this.params[key] !== '') {
+          params[key] = this.params[key];
+        }
+      });
+      this.loading = true;
+      productList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-
+      this.params.curentPage = 1;
+      this.getList();
     },
-    reset() {},
+    reset() {
+      Object.assign(this.params, this.$options.data.call(this).params);
+      this.getList();
+    },
     add() {
       this.dialog.item = {};
       this.dialog.show = true;
@@ -153,11 +168,14 @@ export default {
       this.$emit('rowClickChange', row);
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/productinfo/export', { ...this.params });
     }
   }
 };
