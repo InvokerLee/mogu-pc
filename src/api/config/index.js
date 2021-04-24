@@ -1,5 +1,31 @@
 import request from '@/utils/request';
 
+// 客户
+export function guestInfoList(data) {
+  return request({
+    url: '/guestinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addGuest(data) {
+  return request({
+    url: '/guestinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function editGuest(data) {
+  return request({
+    url: '/guestinfo/update',
+    method: 'post',
+    data
+  });
+}
+
 // 批号
 export function batchInfoList(data) {
   return request({

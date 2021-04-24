@@ -6,23 +6,24 @@
           <el-tag type="info">总部信息</el-tag>
         </el-form-item>
         <el-form-item label="客户名称">
-          <el-input v-model.trim="params.key" placeholder="请输入客户名称/助记符" />
+          <el-input v-model.trim="params.guestName" placeholder="请输入客户名称/助记符" />
         </el-form-item>
         <el-form-item label="业务员">
-          <el-input v-model.trim="params.key" placeholder="请输入" />
+          <el-input v-model.trim="params.bizManId" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="客户类型">
-          <el-select v-model="params.status" placeholder="请选择">
+          <el-select v-model="params.clientType" placeholder="请选择" class="w120px">
             <el-option label="全部" value="" />
-            <el-option label="有效" :value="1" />
-            <el-option label="停用" :value="2" />
+            <el-option label="正常客户" :value="0" />
+            <el-option label="专柜客户" :value="1" />
+            <el-option label="代配送客户" :value="2" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="params.status" placeholder="请选择">
+          <el-select v-model="params.state" placeholder="请选择" class="w120px">
             <el-option label="全部" value="" />
             <el-option label="有效" :value="1" />
-            <el-option label="停用" :value="2" />
+            <el-option label="停用" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -32,7 +33,7 @@
             <el-divider direction="vertical"></el-divider>
           </span>
           <el-button type="success" size="mini" @click="add">新增</el-button>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="primary" size="mini" @click="download">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -75,8 +76,8 @@
       v-if="tableData.length"
       layout="total, sizes, prev, pager, next, jumper"
       class="pagination pt-3"
-      :current-page.sync="params.page"
-      :page-size="params.limit"
+      :current-page.sync="params.curentPage"
+      :page-size="params.pageSize"
       :total="total"
       :page-sizes="[10,20,30]"
       @size-change="handleSizeChange"
@@ -93,6 +94,7 @@
 </template>
 
 <script>
+import { guestInfoList } from '@/api/config';
 import hqAdd from './hq-add';
 export default {
   components: {
@@ -102,14 +104,15 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        guestName: '',
+        bizManId: '',
+        clientType: '',
+        state: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
-      tableData: [{ id: 1 }],
+      tableData: [],
       dialog: {
         show: false,
         item: {}
@@ -117,16 +120,32 @@ export default {
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
-
+      const params = {};
+      Object.keys(this.params).forEach((key) => {
+        if (this.params[key] !== '') {
+          params[key] = this.params[key];
+        }
+      });
+      this.loading = true;
+      guestInfoList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-
+      this.params.curentPage = 1;
+      this.getList();
     },
-    reset() {},
+    reset() {
+      Object.assign(this.params, this.$options.data.call(this).params);
+      this.getList();
+    },
     add() {
       this.dialog.item = {};
       this.dialog.show = true;
@@ -147,11 +166,14 @@ export default {
       this.$emit('rowClickChange', row);
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/guestinfo/export', { ...this.params });
     }
   }
 };
