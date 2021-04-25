@@ -41,9 +41,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item v-if="parentId" label="上级客户：">
-            <customer-selector :params="form" paramsKey="parentId" :defaultOpions="defaultOpts"></customer-selector>
-          </el-form-item>
           <el-form-item label="业务员：">
             <staff-selector :params="form" paramsKey="bizManId" :defaultOpions="defaultOpions"></staff-selector>
           </el-form-item>
@@ -86,13 +83,11 @@
 
 <script>
 import StaffSelector from '@/components/StaffSelector';
-import CustomerSelector from '@/components/CustomerSelector';
 import { addGuest, editGuest, addGuestDetail, editGuestDetail } from '@/api/config';
 
 export default {
   components: {
-    StaffSelector,
-    CustomerSelector
+    StaffSelector
   },
   props: ['visible', 'item', 'parentId'],
   data() {
@@ -142,8 +137,7 @@ export default {
           { required: true, message: '必选', trigger: 'blur' }
         ]
       },
-      defaultOpions: [],
-      defaultOpts: []
+      defaultOpions: []
     };
   },
   created() {
@@ -156,13 +150,6 @@ export default {
         name: this.item.bizManName,
         id: this.item.bizManId
       }];
-
-      if (this.parentId) {
-        this.defaultOpts = [{
-          guestName: this.item.parentName,
-          guestId: this.item.parentId
-        }];
-      }
     }
   },
   methods: {
@@ -186,7 +173,7 @@ export default {
         };
         return this.parentId ? editGuestDetail(params) : editGuest(params);
       } else {
-        return this.parentId ? addGuestDetail({ parentId: this.parentId, ...this.form }) : addGuest(this.form);
+        return this.parentId ? addGuestDetail({ ...this.form, parentId: this.parentId }) : addGuest(this.form);
       }
     },
     cancel() {

@@ -179,6 +179,10 @@ export default {
       this.getList();
     },
     add() {
+      if (!this.rowId) {
+        this.$message.error('请选择上级客户后新增');
+        return;
+      }
       this.dialog.item = {};
       this.dialog.show = true;
     },
