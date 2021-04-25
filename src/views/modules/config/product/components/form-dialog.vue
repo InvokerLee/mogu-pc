@@ -76,6 +76,7 @@
               class="w100"
               :controls="false"
               :precision="2"
+              @change="getSalesTaxRate"
             >
             </el-input-number>
           </el-form-item>
@@ -84,7 +85,7 @@
               v-model="form.shelfDays"
               class="w100"
               :controls="false"
-              :precision="0"
+              :precision="2"
             >
             </el-input-number>
           </el-form-item>
@@ -93,7 +94,8 @@
               v-model="form.salesTaxRate"
               class="w100"
               :controls="false"
-              :precision="0"
+              :precision="2"
+              @change="getSalesTaxRate"
             >
             </el-input-number>
           </el-form-item>
@@ -116,6 +118,7 @@
 import CategorySearch from '@/components/CategorySearch';
 import BrandSearch from '@/components/BrandSearch';
 import { addProduct, editProduct } from '@/api/config';
+import calculator from '@/utils/calculator';
 
 export default {
   components: {
@@ -198,6 +201,11 @@ export default {
     },
     cancel() {
       this.$emit('cancel');
+    },
+    getSalesTaxRate() {
+      if (!this.form.salsePrice || !this.form.salesTaxRate) return;
+      const a = calculator.times(this.form.salsePrice, this.form.salesTaxRate).divide(100).done();
+      this.form.salseNoTaxPrice = calculator.minus(this.form.salsePrice, a).done();
     }
   }
 };
