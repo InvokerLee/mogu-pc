@@ -32,7 +32,7 @@
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="毛利率：">
+          <el-form-item label="毛利率(%)：">
             <el-input v-model.trim="form.grossProfitRate" placeholder="自动计算" disabled></el-input>
           </el-form-item>
           <el-form-item label="进货税率(%)：">
@@ -211,7 +211,7 @@ export default {
     },
     getStockTaxRate() {
       if (!this.form.stockPrice || !this.form.salsePrice) return;
-      this.form.grossProfitRate = calculator.minus(this.form.salsePrice, this.form.stockPrice).divide(this.form.salsePrice).toFixed(2).done();
+      this.form.grossProfitRate = calculator.minus(this.form.salsePrice, this.form.stockPrice).divide(this.form.salsePrice).times(100).toFixed(2).done();
     },
     salsePriceChange() {
       this.getSalesTaxRate();
