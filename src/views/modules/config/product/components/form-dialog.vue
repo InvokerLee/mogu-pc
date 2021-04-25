@@ -28,6 +28,7 @@
               class="w100"
               :controls="false"
               :precision="2"
+              @change="getStockTaxRate"
             >
             </el-input-number>
           </el-form-item>
@@ -40,6 +41,7 @@
               class="w100"
               :controls="false"
               :precision="0"
+              @change="getStockTaxRate"
             >
             </el-input-number>
           </el-form-item>
@@ -76,7 +78,7 @@
               class="w100"
               :controls="false"
               :precision="2"
-              @change="getSalesTaxRate"
+              @change="salsePriceChange"
             >
             </el-input-number>
           </el-form-item>
@@ -85,7 +87,7 @@
               v-model="form.shelfDays"
               class="w100"
               :controls="false"
-              :precision="2"
+              :precision="0 "
             >
             </el-input-number>
           </el-form-item>
@@ -94,7 +96,7 @@
               v-model="form.salesTaxRate"
               class="w100"
               :controls="false"
-              :precision="2"
+              :precision="0"
               @change="getSalesTaxRate"
             >
             </el-input-number>
@@ -205,7 +207,15 @@ export default {
     getSalesTaxRate() {
       if (!this.form.salsePrice || !this.form.salesTaxRate) return;
       const a = calculator.times(this.form.salsePrice, this.form.salesTaxRate).divide(100).done();
-      this.form.salseNoTaxPrice = calculator.minus(this.form.salsePrice, a).done();
+      this.form.salseNoTaxPrice = calculator.minus(this.form.salsePrice, a).toFixed(2).done();
+    },
+    getStockTaxRate() {
+      if (!this.form.stockPrice || !this.form.salsePrice) return;
+      this.form.grossProfitRate = calculator.minus(this.form.salsePrice, this.form.stockPrice).divide(this.form.salsePrice).toFixed(2).done();
+    },
+    salsePriceChange() {
+      this.getSalesTaxRate();
+      this.getStockTaxRate();
     }
   }
 };
