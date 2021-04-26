@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { productList } from '@/api/config';
+import { productList, delProduct } from '@/api/config';
 
 import CategorySearch from '@/components/CategorySearch';
 import BrandSearch from '@/components/BrandSearch';
@@ -176,6 +176,16 @@ export default {
     },
     handleCurrentChange() {
       this.getList();
+    },
+    del(item) {
+      this.$confirm('确认要删除吗?', '删除提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => delProduct(item.id)).then(() => {
+        this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
     },
     download() {
       this.$download('/productinfo/export', { ...this.params });

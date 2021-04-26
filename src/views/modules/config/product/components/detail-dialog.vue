@@ -9,9 +9,9 @@
     <el-row type="flex" justify="center">
       <el-col :span="20">
         <el-form ref="safaStockForm" size="mini" label-width="100px" :model="form" :rules="rules">
-          <el-form-item label="商品：" prop="productId">
+          <!-- <el-form-item label="商品：" prop="productId">
             <product-selector :params="form" paramsKey="productId"></product-selector>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="仓库：" prop="storeId">
             <warehous-selector :params="form" paramsKey="storeId"></warehous-selector>
           </el-form-item>
@@ -33,22 +33,21 @@
 </template>
 
 <script>
-import ProductSelector from '@/components/ProductSelector';
+// import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
-import { addStaff, editStaff } from '@/api/config';
+import { addSafeStore, editSafeStore } from '@/api/config';
 
 export default {
   components: {
-    ProductSelector,
+    // ProductSelector,
     WarehousSelector
   },
-  props: ['visible', 'item'],
+  props: ['visible', 'item', 'productId'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
-        productId: '',
         storeId: '',
         maxValue: '',
         minValue: ''
@@ -92,11 +91,11 @@ export default {
     },
     saveForm() {
       return this.isEdit
-        ? editStaff({
+        ? editSafeStore({
           ...this.form,
           id: this.item.id
         })
-        : addStaff(this.form);
+        : addSafeStore({ productId: this.productId, ...this.form });
     },
     cancel() {
       this.$emit('cancel');

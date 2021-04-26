@@ -63,6 +63,36 @@ export function delProduct(id) {
     method: 'get'
   });
 }
+export function productSafeStoreList(data) {
+  return request({
+    url: '/productsafestore/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addSafeStore(data) {
+  return request({
+    url: '/productsafestore/save',
+    method: 'post',
+    data
+  });
+}
+export function editSafeStore(data) {
+  return request({
+    url: '/productsafestore/update',
+    method: 'post',
+    data
+  });
+}
+export function delSafeStore(id) {
+  return request({
+    url: `/productsafestore/delete/${id}`,
+    method: 'get'
+  });
+}
 
 // 客户
 export function guestInfoList(data) {

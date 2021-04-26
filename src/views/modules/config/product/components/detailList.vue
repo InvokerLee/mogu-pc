@@ -23,14 +23,14 @@
             </el-row>
           </template>
         </el-table-column>
-        <el-table-column prop="username" label="品名" align="center" />
-        <el-table-column prop="remarks" label="规格" align="center" />
-        <el-table-column prop="remarks" label="条码" align="center" />
-        <el-table-column prop="remarks" label="仓库" align="center" />
-        <el-table-column prop="remarks" label="库存上限" align="center" />
-        <el-table-column prop="remarks" label="库存下线" align="center" />
+        <el-table-column prop="productName" label="品名" align="center" />
+        <el-table-column prop="productSpec" label="规格" align="center" />
+        <el-table-column :width="80" prop="productBarCode" label="条码" align="center" />
+        <el-table-column :width="80" prop="storeName" label="仓库" align="center" />
+        <el-table-column prop="minValue" label="库存上限" align="center" />
+        <el-table-column prop="maxValue" label="库存下线" align="center" />
       </el-table>
-      <el-pagination
+      <!-- <el-pagination
         v-if="tableData.length"
         layout="total, sizes, prev, pager, next, jumper"
         class="pagination py-3"
@@ -40,11 +40,12 @@
         :page-sizes="[10,20,30]"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-      />
+      /> -->
       <detail-dialog
         v-if="dialog.show"
         :visible="dialog.show"
         :item="dialog.item"
+        :productId="rowId"
         @success="actionSuccess"
         @cancel="closeDialog"
       />
@@ -53,6 +54,8 @@
 </template>
 
 <script>
+import { productSafeStoreList, delSafeStore } from '@/api/config';
+
 import detailDialog from './detail-dialog';
 export default {
   components: {
@@ -62,10 +65,10 @@ export default {
   data() {
     return {
       loading: false,
-      params: {
-        curentPage: 1,
-        pageSize: 10
-      },
+      // params: {
+      //   curentPage: 1,
+      //   pageSize: 10
+      // },
       total: 0,
       tableData: [],
       dialog: {
@@ -74,23 +77,44 @@ export default {
       }
     };
   },
-  created() {
-    // this.getList();
+  watch: {
+    rowId(val) {
+      if (!val) {
+        // Object.assign(this.params, this.$options.data.call(this).params);
+        return;
+      }
+      this.getList();
+    }
   },
   methods: {
     getList() {
-
+      // const params = {};
+      // Object.keys(this.params).forEach((key) => {
+      //   if (this.params[key] !== '') {
+      //     params[key] = this.params[key];
+      //   }
+      // });
+      this.loading = true;
+      productSafeStoreList({
+        productId: this.rowId
+      }).then(({ result }) => {
+        this.tableData = result.dataList;
+        // this.total = result.totalCount;
+      }).finally(() => {
+        this.loading = false;
+      });
     },
-    search() {
-
-    },
-    handleSizeChange(val) {
-      this.params.pageSize = val;
-      this.getList();
-    },
-    handleCurrentChange() {
-      this.getList();
-    },
+    // search() {
+    // this.params.curentPage = 1;
+    // this.getList();
+    // },
+    // handleSizeChange(val) {
+    //   this.params.pageSize = val;
+    //   this.getList();
+    // },
+    // handleCurrentChange() {
+    //   this.getList();
+    // },
     add() {
       this.dialog.item = {};
       this.dialog.show = true;
@@ -106,6 +130,16 @@ export default {
     actionSuccess() {
       this.getList();
       this.closeDialog();
+    },
+    del(item) {
+      this.$confirm('确认要删除吗?', '删除提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => delSafeStore(item.id)).then(() => {
+        this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
     }
   }
 };
