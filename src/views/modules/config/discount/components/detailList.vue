@@ -54,7 +54,7 @@ export default {
   components: {
     detailForm
   },
-  prop: ['rowId'],
+  props: ['rowId'],
   data() {
     return {
       loading: false,

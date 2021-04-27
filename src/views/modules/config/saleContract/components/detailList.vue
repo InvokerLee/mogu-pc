@@ -67,7 +67,7 @@ export default {
   components: {
     itemForm
   },
-  prop: ['rowId'],
+  props: ['rowId'],
   data() {
     return {
       loading: false,

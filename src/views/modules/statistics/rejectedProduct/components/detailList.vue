@@ -42,7 +42,7 @@
 
 <script>
 export default {
-  prop: ['rowId'],
+  props: ['rowId'],
   data() {
     return {
       loading: false,
