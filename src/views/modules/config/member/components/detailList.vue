@@ -6,7 +6,7 @@
         <span style="margin: 0 20px;">
           <el-divider direction="vertical"></el-divider>
         </span>
-        <el-button size="mini" type="primary" @click="openDialog">积分兑换</el-button>
+        <el-button size="mini" type="primary" :disabled="!rowId" @click="openDialog">积分兑换</el-button>
       </div>
       <el-table
         v-loading="loading"
@@ -15,11 +15,11 @@
         :max-height="600"
         :data="tableData"
       >
-        <el-table-column prop="username" label="订单号" align="center" />
-        <el-table-column prop="remarks" label="订单日期" align="center" />
-        <el-table-column prop="remarks" label="订单金额" align="center" />
-        <el-table-column prop="remarks" label="积分" align="center" />
-        <el-table-column prop="remarks" label="备注" align="center" />
+        <el-table-column prop="orderNo" label="订单号" align="center" />
+        <el-table-column :width="90" prop="orderDate" label="订单日期" align="center" />
+        <el-table-column :width="180" prop="orderSum" label="订单金额" align="center" />
+        <el-table-column :width="80" prop="vipScore" label="积分" align="center" />
+        <el-table-column prop="text" label="备注" align="center" />
       </el-table>
       <el-pagination
         v-if="tableData.length"
@@ -35,6 +35,7 @@
       <detail-form
         v-if="dialog.show"
         :visible="dialog.show"
+        :vipId="rowId"
         @success="actionSuccess"
         @cancel="closeDialog"
       />
@@ -103,7 +104,6 @@ export default {
       this.dialog.show = true;
     },
     closeDialog() {
-      this.dialog.name = '';
       this.dialog.show = false;
     },
     actionSuccess() {

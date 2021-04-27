@@ -44,6 +44,13 @@ export function scoreRuleSave(data) {
     data
   });
 }
+export function vipscoreDetailSave(data) {
+  return request({
+    url: '/vipscoredetail/save',
+    method: 'post',
+    data
+  });
+}
 export function vipscoreDetailList(data) {
   return request({
     url: '/vipscoredetail/list',

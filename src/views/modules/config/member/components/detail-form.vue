@@ -10,11 +10,11 @@
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <el-form-item label="订单号：">
-            <el-input v-model.trim="form.phone" disabled placeholder="系统自动生成"></el-input>
+            <el-input v-model.trim="form.orderNo" disabled placeholder="系统自动生成"></el-input>
           </el-form-item>
-          <el-form-item label="订单金额：">
+          <el-form-item label="订单金额：" prop="orderSum">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.orderSum"
               size="mini"
               class="w100"
               :controls="false"
@@ -22,21 +22,21 @@
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="备注：">
-            <el-input v-model.trim="form.remark"></el-input>
+          <el-form-item label="备注：" prop="text">
+            <el-input v-model.trim="form.text"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="订单日期：" prop="">
+          <el-form-item label="订单日期：" prop="orderDate">
             <el-date-picker
-              v-model="form.date"
+              v-model="form.orderDate"
               class="w100"
               value-format="yyyy-MM-dd HH:mm:ss"
             />
           </el-form-item>
-          <el-form-item label="积分扣减：">
+          <el-form-item label="积分扣减：" prop="vipScore">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.vipScore"
               class="w100"
               :controls="false"
               :precision="0"
@@ -56,25 +56,32 @@
 
 <script>
 import dayjs from 'dayjs';
-// import { addUser, editUser } from '@/api/auth/user';
+import { vipscoreDetailSave } from '@/api/config';
 
 export default {
-  props: ['visible', 'item'],
+  props: ['visible', 'vipId'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
-        date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-        phone: '',
-        status: 1,
-        remarks: ''
+        orderNo: '',
+        orderSum: undefined,
+        text: '',
+        orderDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        vipScore: undefined
       },
       rules: {
-        realname: [
+        orderSum: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
-        status: [
+        text: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        vipScore: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        orderDate: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
       }
@@ -86,19 +93,18 @@ export default {
     confirm() {
       this.$refs.itemForm.validate((valid) => {
         if (!valid) return;
+        const params = {
+          vipId: this.vipId,
+          ...this.form
+        };
         this.loading = true;
-        this.saveForm().then(() => {
+        vipscoreDetailSave(params).then(() => {
           this.$message.success('保存成功');
           this.$emit('success');
         }).catch(() => {
           this.loading = false;
         });
       });
-    },
-    saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
     },
     cancel() {
       this.$emit('cancel');
