@@ -6,20 +6,21 @@
           <el-tag type="info">会员信息</el-tag>
         </el-form-item>
         <el-form-item label="手机">
-          <el-input v-model.trim="params.key" placeholder="品名/规格/条码" />
+          <el-input v-model.trim="params.phoneNumber" placeholder="会员手机" />
         </el-form-item>
         <el-form-item label="会员级别">
-          <el-select v-model="params.status" placeholder="请选择">
+          <el-select v-model="params.vipLevel" placeholder="请选择" class="w120px">
             <el-option label="全部" value="" />
-            <el-option label="有效" :value="1" />
-            <el-option label="停用" :value="2" />
+            <el-option label="普通会员" :value="0" />
+            <el-option label="黄金会员" :value="1" />
+            <el-option label="钻石会员" :value="2" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="params.status" placeholder="请选择">
+          <el-select v-model="params.state" placeholder="请选择">
             <el-option label="全部" value="" />
             <el-option label="有效" :value="1" />
-            <el-option label="停用" :value="2" />
+            <el-option label="停用" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -47,12 +48,18 @@
           <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="手机号" align="center" />
-      <el-table-column prop="remarks" label="注册日期" align="center" />
-      <el-table-column prop="remarks" label="生日" align="center" />
-      <el-table-column prop="remarks" label="积分" align="center" />
-      <el-table-column prop="remarks" label="会员级别" align="center" />
-      <el-table-column prop="remarks" label="备注" align="center" />
+      <el-table-column :width="110" prop="phone" label="手机号" align="center" />
+      <el-table-column prop="createDate" label="注册日期" align="center" />
+      <el-table-column prop="birthday" label="生日" align="center" />
+      <el-table-column prop="score" label="积分" align="center" />
+      <el-table-column :width="100" label="会员级别" align="center">
+        <template slot-scope="scope">
+          <span>
+            {{ ['普通会员', '黄金会员', '钻石会员'][scope.row.vipLevel] }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="text" label="备注" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
@@ -65,8 +72,8 @@
       v-if="tableData.length"
       layout="total, sizes, prev, pager, next, jumper"
       class="pagination py-3"
-      :current-page.sync="params.page"
-      :page-size="params.limit"
+      :current-page.sync="params.curentPage"
+      :page-size="params.pageSize"
       :total="total"
       :page-sizes="[10,20,30]"
       @size-change="handleSizeChange"
@@ -90,6 +97,8 @@
 <script>
 import formDialog from './form-dialog';
 import memberSetting from './member-setting';
+import { vipuserList } from '@/api/config';
+
 export default {
   components: {
     formDialog,
@@ -99,11 +108,11 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        phoneNumber: '',
+        vipLevel: '',
+        state: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
       tableData: [{ id: 1 }],
@@ -115,16 +124,32 @@ export default {
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
-
+      const params = {};
+      Object.keys(this.params).forEach((key) => {
+        if (this.params[key] !== '') {
+          params[key] = this.params[key];
+        }
+      });
+      this.loading = true;
+      vipuserList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-
+      this.params.curentPage = 1;
+      this.getList();
     },
-    reset() {},
+    reset() {
+      Object.assign(this.params, this.$options.data.call(this).params);
+      this.getList();
+    },
     add() {
       this.dialog.item = {};
       this.dialog.show = true;
@@ -145,7 +170,7 @@ export default {
       this.$emit('rowClickChange', row);
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {

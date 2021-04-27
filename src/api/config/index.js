@@ -1,5 +1,37 @@
 import request from '@/utils/request';
 
+// 会员VIP
+export function vipuserList(data) {
+  return request({
+    url: '/vipuserinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addVipuser(data) {
+  return request({
+    url: '/vipuserinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function editVipuser(data) {
+  return request({
+    url: '/vipuserinfo/update',
+    method: 'post',
+    data
+  });
+}
+export function delVipuser(id) {
+  return request({
+    url: `/vipuserinfo/delete/${id}`,
+    method: 'get'
+  });
+}
+
 // 公司
 export function companyInfoList(data) {
   return request({
