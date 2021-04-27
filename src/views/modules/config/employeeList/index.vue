@@ -43,7 +43,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="name" label="姓名" align="center" />
-          <el-table-column :width="110" prop="phone" label="手机" align="center" />
+          <el-table-column :width="100" prop="phone" label="手机" align="center" />
           <el-table-column :width="60" label="业务员" align="center">
             <template slot-scope="scope">
               <span>{{ ['否', '是'][scope.row.isBizMan] }}</span>

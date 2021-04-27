@@ -52,7 +52,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="companyName" label="公司名称" align="center" />
-          <el-table-column prop="phone" :width="110" label="手机" align="center" />
+          <el-table-column prop="phone" :width="100" label="手机" align="center" />
           <el-table-column label="账号类型" :width="80" align="center">
             <template slot-scope="scope">
               <div>
