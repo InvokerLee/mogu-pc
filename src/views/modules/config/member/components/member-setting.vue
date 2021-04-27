@@ -12,13 +12,13 @@
       :max-height="300"
       :data="tableData"
     >
-      <el-table-column prop="username" label="会员级别" width="150px" align="center" />
-      <el-table-column prop="username" label="级别名称" align="center" />
-      <el-table-column prop="username" label="级别积分范围" align="center">
-        <template>
+      <el-table-column prop="level" label="会员级别" width="150px" align="center" />
+      <el-table-column prop="label" label="级别名称" align="center" />
+      <el-table-column label="级别积分范围" align="center">
+        <template slot-scope="scope">
           <div>
             <el-input-number
-              v-model="form.quantity"
+              v-model="scope.row.min"
               size="mini"
               style="width: 100px;"
               :controls="false"
@@ -27,7 +27,7 @@
             </el-input-number>
             <span style="margin: 0 15px;">-</span>
             <el-input-number
-              v-model="form.quantity"
+              v-model="scope.row.max"
               size="mini"
               style="width: 100px;"
               :controls="false"
@@ -45,7 +45,7 @@
     <div style="text-align: center;">
       每
       <el-input-number
-        v-model="form.quantity"
+        v-model="form.exchangeBase"
         size="mini"
         style="width: 100px;margin: 0 20px;"
         :controls="false"
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-// import { addUser, editUser } from '@/api/auth/user';
+import { vipRuleInfo, scoreRuleSave } from '@/api/config';
 
 export default {
   props: ['visible'],
@@ -70,40 +70,65 @@ export default {
     return {
       loading: false,
       form: {
-        quantity: '',
-        remarks: ''
+        exchangeBase: ''
       },
-      rules: {
-        realname: [
-          { required: true, message: '必填', trigger: 'blur' }
-        ],
-        status: [
-          { required: true, message: '必选', trigger: 'blur' }
-        ]
-      },
-      tableData: [{}]
+      tableData: [
+        {
+          level: 'LV1',
+          label: '普通会员',
+          min: undefined,
+          max: undefined
+        },
+        {
+          level: 'LV2',
+          label: '黄金会员',
+          min: undefined,
+          max: undefined
+        },
+        {
+          level: 'LV3',
+          label: '钻石会员',
+          min: undefined,
+          max: undefined
+        }
+      ]
     };
   },
   created() {
-
+    this.getInfo();
   },
   methods: {
-    confirm() {
-      this.$refs.productForm.validate((valid) => {
-        if (!valid) return;
-        this.loading = true;
-        this.saveForm().then(() => {
-          this.$message.success('保存成功');
-          this.$emit('success');
-        }).catch(() => {
-          this.loading = false;
-        });
+    getInfo() {
+      this.loading = true;
+      vipRuleInfo().then(({ result }) => {
+        this.form.exchangeBase = result.exchangeBase;
+        this.tableData[0].min = result.levelOneMin;
+        this.tableData[0].max = result.levelOneMax;
+        this.tableData[1].min = result.levelTwoMin;
+        this.tableData[1].max = result.levelTwoMax;
+        this.tableData[2].min = result.levelThrMin;
+        this.tableData[2].max = result.levelThrMax;
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
       });
     },
-    saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+    confirm() {
+      const params = {
+        ...this.form,
+        'levelOneMin': this.tableData[0].min,
+        'levelOneMax': this.tableData[0].max,
+        'levelTwoMin': this.tableData[1].min,
+        'levelTwoMax': this.tableData[1].max,
+        'levelThrMin': this.tableData[2].min,
+        'levelThrMax': this.tableData[2].max
+      };
+      this.loading = true;
+      scoreRuleSave(params).then(() => {
+        this.$message.success('保存成功');
+        this.cancel();
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     cancel() {
       this.$emit('cancel');

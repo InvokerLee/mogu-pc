@@ -6,7 +6,7 @@
         <span style="margin: 0 20px;">
           <el-divider direction="vertical"></el-divider>
         </span>
-        <el-button size="mini" type="primary" @click="add">积分兑换</el-button>
+        <el-button size="mini" type="primary" @click="openDialog">积分兑换</el-button>
       </div>
       <el-table
         v-loading="loading"
@@ -25,8 +25,8 @@
         v-if="tableData.length"
         layout="total, sizes, prev, pager, next, jumper"
         class="pagination py-3"
-        :current-page.sync="params.page"
-        :page-size="params.limit"
+        :current-page.sync="params.curentPage"
+        :page-size="params.pageSize"
         :total="total"
         :page-sizes="[10,20,30]"
         @size-change="handleSizeChange"
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { vipscoreDetailList } from '@/api/config';
 import detailForm from './detail-form';
 export default {
   components: {
@@ -53,11 +54,8 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
       tableData: [],
@@ -66,18 +64,42 @@ export default {
       }
     };
   },
-  created() {
-    // this.getList();
+  watch: {
+    rowId(val) {
+      if (!val) {
+        Object.assign(this.params, this.$options.data.call(this).params);
+        return;
+      }
+      this.getList();
+    }
   },
   methods: {
     getList() {
-
+      const params = {
+        parentId: this.rowId
+      };
+      Object.keys(this.params).forEach((key) => {
+        if (this.params[key] !== '') {
+          params[key] = this.params[key];
+        }
+      });
+      this.loading = true;
+      vipscoreDetailList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-
+      this.params.curentPage = 1;
+      this.getList();
     },
-    reset() {},
-    add() {
+    reset() {
+      Object.assign(this.params, this.$options.data.call(this).params);
+      this.getList();
+    },
+    openDialog() {
       this.dialog.show = true;
     },
     closeDialog() {
@@ -89,7 +111,7 @@ export default {
       this.closeDialog();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {

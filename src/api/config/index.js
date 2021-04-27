@@ -31,6 +31,29 @@ export function delVipuser(id) {
     method: 'get'
   });
 }
+export function vipRuleInfo() {
+  return request({
+    url: '/vipscorerules/info',
+    method: 'get'
+  });
+}
+export function scoreRuleSave(data) {
+  return request({
+    url: '/vipscorerules/save',
+    method: 'post',
+    data
+  });
+}
+export function vipscoreDetailList(data) {
+  return request({
+    url: '/vipscoredetail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
 
 // 公司
 export function companyInfoList(data) {
