@@ -9,7 +9,7 @@
   >
     <el-form ref="orderForm" size="mini" label-width="100px" inline :model="form" :rules="rules">
       <el-form-item label="单据类型：" prop="orderType">
-        <el-select v-model="form.orderType" placeholder="请选择" class="w200px">
+        <el-select v-model="form.orderType" placeholder="请选择" class="w200px" @change="typeChange">
           <el-option v-for="i in orderTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
         </el-select>
       </el-form-item>
@@ -38,6 +38,17 @@
       <el-form-item label="备注：">
         <el-input v-model.trim="form.text" class="w200px"></el-input>
       </el-form-item>
+      <template v-if="isShoppeSales">
+        <el-form-item label="会员：">
+          <el-input v-model.trim="form.vipUserId" placeholder="仅专柜销售单显示" class="w200px"></el-input>
+        </el-form-item>
+        <el-form-item label="积分抵扣：">
+          <el-input v-model.trim="form.vipUsedScore" placeholder="仅专柜销售单显示" class="w200px"></el-input>
+        </el-form-item>
+        <el-form-item label="抵扣金额：">
+          <el-input v-model.trim="form.vipFreeSum" placeholder="仅专柜销售单显示" class="w200px"></el-input>
+        </el-form-item>
+      </template>
     </el-form>
     <el-divider></el-divider>
     <div class="m-t-10 m-b-10">
@@ -49,7 +60,7 @@
       size="mini"
       show-summary
       :summary-method="getSummaries"
-      :data="form.orderProductList"
+      :data="orderProductList"
     >
       <el-table-column type="index" label="序号" :width="55" align="center" />
       <el-table-column :width="60" label="操作" type="action" align="center">
@@ -89,6 +100,16 @@
 import CustomerSelector from '@/components/CustomerSelector';
 import dayjs from 'dayjs';
 
+const initForm = (params) => {
+  return Object.assign({
+    guestId: '',
+    provderId: '',
+    orderDate: dayjs().format('YYYY-MM'),
+    address: '',
+    text: ''
+  }, params);
+};
+
 export default {
   components: {
     CustomerSelector
@@ -98,18 +119,13 @@ export default {
     return {
       loading: false,
       isEdit: false,
-      form: {
-        orderType: 'sales',
-        guestId: '',
-        provderId: '',
-        orderDate: dayjs().format('YYYY-MM'),
-        address: '',
-        text: '',
-        orderProductList: [
-          { count: 1, taxSum: 2, noTaxSum: 3 },
-          { count: 1, taxSum: 2, noTaxSum: 3 }
-        ]
-      },
+      form: initForm({
+        orderType: 'sales' // 默认选中
+      }),
+      orderProductList: [
+        { count: 1, taxSum: 2, noTaxSum: 3 },
+        { count: 1, taxSum: 2, noTaxSum: 3 }
+      ],
       rules: {
         orderType: [
           { required: true, message: '必填', trigger: 'blur' }
@@ -135,6 +151,9 @@ export default {
     },
     showProvider() {
       return ['stock', 'stockReturn'].includes(this.form.orderType);
+    },
+    isShoppeSales() {
+      return ['shoppeSales', 'shoppeSalesReturn'].includes(this.form.orderType);
     }
   },
   created() {
@@ -146,12 +165,11 @@ export default {
     }
   },
   methods: {
-    selectChange(product) {
-      console.log(product);
+    typeChange() {
+      // 重置表单输入
+      Object.assign(this.form, initForm());
     },
     confirm() {
-      console.log(this.form);
-      if (true) return;
       this.$refs.orderForm.validate((valid) => {
         if (!valid) return;
         this.loading = true;
