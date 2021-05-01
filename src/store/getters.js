@@ -4,12 +4,12 @@ const getters = {
   menuList: state => state.user.userInfo.menuList,
   cachedViews: state => state.tagsView.cachedViews,
   routes: state => state.permission.routes,
-  getConstByGroup: state => (group) => {
-    const g = state.app.consts.find(item => item.group === group);
+  getConstByKey: state => (key) => {
+    const g = state.app.consts[key];
     const obj = {};
-    if (g && g.itemList) {
-      obj.itemList = g.itemList;
-      g.itemList.forEach((item) => { obj[item.code] = item.name; });
+    if (g) {
+      obj.options = g;
+      g.forEach((item) => { obj[item.value] = item.label; });
     }
     return obj;
   }

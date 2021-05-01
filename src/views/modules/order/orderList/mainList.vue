@@ -6,15 +6,9 @@
           <el-tag type="info">订单中心</el-tag>
         </el-form-item>
         <el-form-item label="订单类型">
-          <el-select v-model="params.orderType" placeholder="请选择" class="w120px">
+          <el-select v-model="params.orderType" placeholder="请选择" class="w150px">
             <el-option label="全部" value="" />
-            <el-option label="采购订单" value="stock" />
-            <el-option label="销售订单" value="sales" />
-            <el-option label="采购退货" value="stockReturn" />
-            <el-option label="销售退货" value="salesReturn" />
-            <el-option label="专柜销售" value="shoppeSales" />
-            <el-option label="专柜要货申请" value="shoppeApply" />
-            <el-option label="样品申请" value="sampleApply" />
+            <el-option v-for="item in orderTypes.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="查询条件">
@@ -73,7 +67,7 @@
       <el-table-column :width="100" label="订单类型" align="center">
         <template slot-scope="scope">
           <span>
-            {{ orderTypeMap[scope.row.orderType] }}
+            {{ orderTypes[scope.row.orderType] }}
           </span>
         </template>
       </el-table-column>
@@ -134,13 +128,15 @@ export default {
     return {
       loading: false,
       orderTypeList: [
-        { label: '采购订单', value: 'stock' },
         { label: '销售订单', value: 'sales' },
-        { label: '采购退货', value: 'stockReturn' },
-        { label: '销售退货', value: 'salesReturn' },
-        { label: '专柜销售', value: 'shoppeSales' },
-        { label: '专柜要货申请', value: 'shoppeApply' },
-        { label: '样品申请', value: 'sampleApply' }
+        { label: '销售退货单', value: 'salesReturn' },
+        { label: '采购订单', value: 'stock' },
+        { label: '采购退货单', value: 'stockReturn' },
+        { label: '专柜调货申请单', value: 'shoppeApply' },
+        { label: '专柜销售单', value: 'shoppeSales' },
+        { label: '专柜销售退货单', value: 'shoppeSalesReturn' },
+        { label: '样品申请单', value: 'sampleApply' },
+        { label: '样品退回单', value: 'sampleReturn' }
       ],
       params: {
         orderType: '',
@@ -161,10 +157,8 @@ export default {
     };
   },
   computed: {
-    orderTypeMap() {
-      const obj = {};
-      this.orderTypeList.forEach((item) => { obj[item.code] = item.name; });
-      return obj;
+    orderTypes() {
+      return this.$store.getters.getConstByKey('orderType');
     }
   },
   created() {
