@@ -22,7 +22,7 @@
         :max-height="600"
         :data="tableData"
       >
-        <el-table-column type="index" :width="55" align="center" />
+        <el-table-column type="index" label="序号" :width="55" align="center" />
         <el-table-column :width="60" label="操作" type="action" align="center">
           <template slot-scope="scope">
             <el-row type="flex" justify="space-around" class="font-16">
@@ -55,24 +55,24 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
-      <!-- <item-form
+      <item-form
         v-if="dialog.show"
         :visible="dialog.show"
         :item="dialog.item"
         @success="actionSuccess"
         @cancel="closeDialog"
-      /> -->
+      />
     </el-card>
   </div>
 </template>
 
 <script>
 import { receiptOrderDetailList } from '@/api/receipt';
-// import itemForm from './item-form';
+import itemForm from './components/item-form';
 
 export default {
   components: {
-    // itemForm
+    itemForm
   },
   props: ['rowId'],
   data() {
@@ -97,7 +97,7 @@ export default {
         Object.assign(this.params, this.$options.data.call(this).params);
         return;
       }
-      this.getList();
+      // this.getList();
     }
   },
   methods: {
@@ -127,8 +127,8 @@ export default {
       this.getList();
     },
     edit(item) {
-      // this.dialog.item = item;
-      // this.dialog.show = true;
+      this.dialog.item = item;
+      this.dialog.show = true;
     },
     del(item) {
       // this.$confirm('确认要删除吗?', '删除提示', {
