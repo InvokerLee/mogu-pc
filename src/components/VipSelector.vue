@@ -8,23 +8,23 @@
     :multiple="multiple"
     :collapse-tags="multiple"
     reserve-keyword
-    placeholder="模糊查询有效客户"
+    placeholder="模糊查询会员"
     :remote-method="remoteMethod"
     :loading="loading"
     @change="change"
   >
     <el-option
       v-for="i in options"
-      :key="i.guestId"
-      :label="i.guestName"
-      :value="i.guestId"
+      :key="i.id"
+      :label="i.name"
+      :value="i.id"
     >
     </el-option>
   </el-select>
 </template>
 
 <script>
-import { commonSelectGuest } from '@/api/common';
+import { commonSelectVip } from '@/api/common';
 
 export default {
   props: {
@@ -67,9 +67,8 @@ export default {
         return;
       }
       this.loading = true;
-      commonSelectGuest({
-        name: query,
-        orderType: 'other'
+      commonSelectVip({
+        name: query
       }).then((res) => {
         this.options = res.result;
       }).catch(() => {
@@ -80,9 +79,9 @@ export default {
     change(val) {
       let arr = [];
       if (this.multiple) {
-        arr = val.map(guestId => this.options.find(v => v.guestId === guestId));
+        arr = val.map(id => this.options.find(v => v.id === id));
       } else {
-        const item = this.options.find(v => v.guestId === val);
+        const item = this.options.find(v => v.id === val);
         if (item) {
           arr.push(item);
         }

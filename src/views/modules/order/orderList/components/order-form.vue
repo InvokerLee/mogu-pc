@@ -40,13 +40,27 @@
       </el-form-item>
       <template v-if="isShoppeSales">
         <el-form-item label="会员：">
-          <el-input v-model.trim="form.vipUserId" placeholder="仅专柜销售单显示" class="w200px"></el-input>
+          <div class="w200px">
+            <vip-selector :params="form" paramsKey="vipUserId"></vip-selector>
+          </div>
         </el-form-item>
         <el-form-item label="积分抵扣：">
-          <el-input v-model.trim="form.vipUsedScore" placeholder="仅专柜销售单显示" class="w200px"></el-input>
+          <el-input-number
+            v-model="form.vipUsedScore"
+            class="w200px"
+            :controls="false"
+            :precision="0"
+          >
+          </el-input-number>
         </el-form-item>
         <el-form-item label="抵扣金额：">
-          <el-input v-model.trim="form.vipFreeSum" placeholder="仅专柜销售单显示" class="w200px"></el-input>
+          <el-input-number
+            v-model="form.vipFreeSum"
+            class="w200px"
+            :controls="false"
+            :precision="2"
+          >
+          </el-input-number>
         </el-form-item>
       </template>
     </el-form>
@@ -98,6 +112,7 @@
 <script>
 // import { addUser, editUser } from '@/api/auth/user';
 import CustomerSelector from '@/components/CustomerSelector';
+import VipSelector from '@/components/VipSelector';
 import dayjs from 'dayjs';
 
 const initForm = (params) => {
@@ -106,13 +121,17 @@ const initForm = (params) => {
     provderId: '',
     orderDate: dayjs().format('YYYY-MM'),
     address: '',
-    text: ''
+    text: '',
+    vipUserId: '',
+    vipUsedScore: undefined,
+    vipFreeSum: undefined
   }, params);
 };
 
 export default {
   components: {
-    CustomerSelector
+    CustomerSelector,
+    VipSelector
   },
   props: ['visible', 'item'],
   data() {

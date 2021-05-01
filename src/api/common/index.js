@@ -45,6 +45,16 @@ export function commonSelectGuest(data) {
     }
   });
 }
+export function commonSelectVip(data) {
+  return request({
+    url: '/common/selectVipUser',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
 export function commonSelectProduct(data) {
   return request({
     url: '/common/selectProduct',
