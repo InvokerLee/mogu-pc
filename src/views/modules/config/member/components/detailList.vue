@@ -77,7 +77,7 @@ export default {
   methods: {
     getList() {
       const params = {
-        parentId: this.rowId
+        vipId: this.rowId
       };
       Object.keys(this.params).forEach((key) => {
         if (this.params[key] !== '') {

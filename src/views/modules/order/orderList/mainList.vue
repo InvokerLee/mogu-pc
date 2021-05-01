@@ -112,14 +112,23 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <order-form
+      v-if="dialog.show"
+      :visible="dialog.show"
+      :item="dialog.item"
+      @success="actionSuccess"
+      @cancel="closeDialog"
+    />
   </el-card>
 </template>
 
 <script>
 // import { getOrderList, checkOrder, delOrder } from '@/api/order';
+import orderForm from './components/order-form';
 
 export default {
   components: {
+    orderForm
   },
   data() {
     return {
