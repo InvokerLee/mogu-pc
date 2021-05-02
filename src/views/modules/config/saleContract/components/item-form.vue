@@ -1,7 +1,7 @@
 <template>
   <el-dialog
-    width="750px"
-    :title="isEdit ? '合同产品编辑(主表)' : '合同产品新增(主表)'"
+    width="640px"
+    :title="isEdit ? '合同编辑(明细表)' : '合同新增(明细表)'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
@@ -9,25 +9,31 @@
     <el-form ref="itemForm" size="mini" label-width="120px" :model="form" :rules="rules">
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="产品：" prop="realname">
-            <product-selector :params="form" paramsKey="productId" @selectChange="selectChange"></product-selector>
+          <el-form-item label="产品：" prop="productId">
+            <product-selector :params="form" paramsKey="productId" :defaultOpions="options" @selectChange="selectChange"></product-selector>
           </el-form-item>
           <el-form-item label="条码：" required>
-            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.productCode" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="供货价(含税)：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="供货价(含税)：" prop="taxPrice">
+            <el-input-number
+              v-model="form.taxPrice"
+              class="w100"
+              :controls="false"
+              :precision="2"
+            >
+            </el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="货号">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.goodsNum"></el-input>
           </el-form-item>
           <el-form-item label="单位：" required>
-            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="供货价(未税)：" required>
-            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
+          <el-form-item label="供货价(未税)：">
+            <el-input v-model.trim="form.noTaxPrice" disabled placeholder="自动带出"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -42,30 +48,32 @@
 
 <script>
 import ProductSelector from '@/components/ProductSelector';
-// import { addUser, editUser } from '@/api/auth/user';
+import { addSalescontractDetail, editSalescontractDetail } from '@/api/config';
 
 export default {
   components: {
     ProductSelector
   },
-  props: ['visible', 'item'],
+  props: ['visible', 'item', 'salesContractId'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
         productId: '',
-        realname: '',
-        phone: '',
-        status: 1,
-        remarks: ''
+        productCode: '', // 条码
+        taxPrice: undefined, // 供货价含税
+        goodsNum: '',
+        productUnit: '', // 单位
+        noTaxPrice: '' // 供货价未税
       },
+      options: [],
       rules: {
-        realname: [
-          { required: true, message: '必填', trigger: 'blur' }
-        ],
-        status: [
+        productId: [
           { required: true, message: '必选', trigger: 'blur' }
+        ],
+        taxPrice: [
+          { required: true, message: '必填', trigger: 'blur' }
         ]
       }
     };
@@ -77,12 +85,14 @@ export default {
         this.form[k] = this.item[k];
       });
       // 默认给一个筛选框
-      // this.options = [{ value: this.form.id, label: this.form.label }];
+      this.options = [{ name: this.item.productName, productId: this.item.id }];
     }
   },
   methods: {
-    selectChange(product) {
-      console.log(product);
+    selectChange(products) {
+      this.form.productCode = products[0].barCode;
+      this.form.productUnit = products[0].unit;
+      this.form.noTaxPrice = products[0].salseNoTaxPrice;
     },
     confirm() {
       this.$refs.itemForm.validate((valid) => {
@@ -97,9 +107,9 @@ export default {
       });
     },
     saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+      return this.isEdit
+        ? editSalescontractDetail({ id: this.item.id, ...this.form })
+        : addSalescontractDetail({ salesContractId: this.salesContractId, ...this.form });
     },
     cancel() {
       this.$emit('cancel');

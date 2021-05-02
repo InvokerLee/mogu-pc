@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    width="750px"
+    width="640px"
     :title="isEdit ? '合同编辑(主表)' : '合同新增(主表)'"
     :close-on-click-modal="false"
     :visible="visible"
@@ -10,72 +10,66 @@
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="合同编号：" prop="realname">
-            <el-input v-model.trim="form.realname"></el-input>
+          <el-form-item label="合同编号：" prop="contractNum">
+            <el-input v-model.trim="form.contractNum"></el-input>
           </el-form-item>
-          <el-form-item label="客户：" prop="">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="客户：" prop="guestId">
+            <customer-selector :params="form" paramsKey="guestId"></customer-selector>
           </el-form-item>
           <el-form-item label="回款账期：">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.backDay"
               class="w100"
               :controls="false"
               :precision="0"
-              :min="0"
+              :min="1"
               :max="30"
             >
             </el-input-number>
           </el-form-item>
           <el-form-item label="付款日：">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.payDay"
               class="w100"
               :controls="false"
               :precision="0"
-              :min="0"
+              :min="1"
               :max="30"
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="公司抬头：">
-            <el-input v-model.trim="form.phone"></el-input>
+          <el-form-item label="公司抬头：" prop="companyTital">
+            <el-input v-model.trim="form.companyTital"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="状态：">
-            <el-select v-model="form.status" placeholder="请选择" class="w100">
-              <el-option label="有效" :value="1" />
-              <el-option label="停用" :value="2" />
-              <el-option label="只退不售" :value="3" />
+          <el-form-item label="状态：" prop="state">
+            <el-select v-model="form.state" placeholder="请选择" class="w100">
+              <el-option label="启用" :value="1" />
+              <el-option label="停用" :value="0" />
             </el-select>
           </el-form-item>
           <el-form-item label="签订日期：">
             <el-date-picker
-              v-model="form.date"
+              v-model="form.signDate"
+              value-format="yyyy-MM-dd"
               class="w100"
-              size="mini"
-              type="daterange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              range-separator="~"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
             />
           </el-form-item>
-          <el-form-item label="结账日：">
+          <el-form-item label="截账日：">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.closeDay"
               class="w100"
               :controls="false"
               :precision="0"
-              :min="0"
+              :min="1"
               :max="30"
             >
             </el-input-number>
           </el-form-item>
           <el-form-item label="信用额度：">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.creditValue"
               class="w100"
               :controls="false"
               :precision="2"
@@ -83,7 +77,7 @@
             </el-input-number>
           </el-form-item>
           <el-form-item label="备注：">
-            <el-input v-model.trim="form.phone"></el-input>
+            <el-input v-model.trim="form.text"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -97,25 +91,41 @@
 </template>
 
 <script>
-// import { addUser, editUser } from '@/api/auth/user';
+import { addSalescontract, editSalescontract } from '@/api/config';
+import CustomerSelector from '@/components/CustomerSelector';
 
 export default {
+  components: {
+    CustomerSelector
+  },
   props: ['visible', 'item'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
-        realname: '',
-        phone: '',
-        status: 1,
-        remarks: ''
+        contractNum: '',
+        guestId: '',
+        backDay: 1,
+        payDay: 1,
+        companyTital: '',
+        state: 0,
+        signDate: '',
+        closeDay: 1,
+        creditValue: undefined,
+        text: ''
       },
       rules: {
-        realname: [
+        contractNum: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
-        status: [
+        companyTital: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        guestId: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ],
+        state: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
       }
@@ -143,9 +153,9 @@ export default {
       });
     },
     saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+      return this.isEdit
+        ? editSalescontract({ id: this.item.id, ...this.form })
+        : addSalescontract(this.form);
     },
     cancel() {
       this.$emit('cancel');

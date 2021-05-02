@@ -1,5 +1,67 @@
 import request from '@/utils/request';
 
+// 销售合同
+export function salescontractList(data) {
+  return request({
+    url: '/salescontract/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addSalescontract(data) {
+  return request({
+    url: '/salescontract/save',
+    method: 'post',
+    data
+  });
+}
+export function editSalescontract(data) {
+  return request({
+    url: '/salescontract/update',
+    method: 'post',
+    data
+  });
+}
+export function delSalescontract(id) {
+  return request({
+    url: `/salescontract/delete/${id}`,
+    method: 'get'
+  });
+}
+export function salescontractDetailList(data) {
+  return request({
+    url: '/salescontractdetail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addSalescontractDetail(data) {
+  return request({
+    url: '/salescontractdetail/save',
+    method: 'post',
+    data
+  });
+}
+export function editSalescontractDetail(data) {
+  return request({
+    url: '/salescontractdetail/update',
+    method: 'post',
+    data
+  });
+}
+export function delSalescontractDetail(id) {
+  return request({
+    url: `/salescontractdetail/delete/${id}`,
+    method: 'get'
+  });
+}
+
 // 会员VIP
 export function vipuserList(data) {
   return request({

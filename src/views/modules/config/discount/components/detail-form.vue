@@ -11,7 +11,7 @@
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <el-form-item label="赠送产品：" prop="realname">
-            <product-selector :params="form" paramsKey="productId" @selectChange="selectChange"></product-selector>
+            <product-selector :params="form" paramsKey="productId" :defaultOpions="options" @selectChange="selectChange"></product-selector>
           </el-form-item>
           <el-form-item label="单位：">
             <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
@@ -73,7 +73,8 @@ export default {
         status: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
-      }
+      },
+      options: []
     };
   },
   created() {
@@ -83,7 +84,7 @@ export default {
         this.form[k] = this.item[k];
       });
       // 默认给一个筛选框
-      // this.options = [{ value: this.form.id, label: this.form.label }];
+      this.options = [{ name: this.item.productName, productId: this.item.id }];
     }
   },
   methods: {

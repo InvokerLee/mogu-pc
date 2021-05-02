@@ -15,9 +15,9 @@
   >
     <el-option
       v-for="i in options"
-      :key="i.id"
+      :key="i.productId"
       :label="i.name"
-      :value="i.id"
+      :value="i.productId"
     >
     </el-option>
   </el-select>
@@ -79,9 +79,9 @@ export default {
     change(val) {
       let arr = [];
       if (this.multiple) {
-        arr = val.map(id => this.options.find(v => v.id === id));
+        arr = val.map(productId => this.options.find(v => v.productId === productId));
       } else {
-        const item = this.options.find(v => v.id === val);
+        const item = this.options.find(v => v.productId === val);
         if (item) {
           arr.push(item);
         }
