@@ -85,7 +85,7 @@ export default {
         this.form[k] = this.item[k];
       });
       // 默认给一个筛选框
-      this.options = [{ name: this.item.productName, productId: this.item.id }];
+      this.options = [{ name: this.item.productName, productId: this.item.productId }];
     }
   },
   methods: {
