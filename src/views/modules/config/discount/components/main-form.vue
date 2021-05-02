@@ -10,7 +10,7 @@
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <el-form-item label="客户：" prop="guestId">
-            <customer-selector :params="form" paramsKey="guestId" :multiple="true"></customer-selector>
+            <customer-selector :params="form" paramsKey="guestId" :defaultOpions="guestOptions" :multiple="true"></customer-selector>
           </el-form-item>
           <el-form-item label="条码：" required>
             <el-input v-model.trim="form.productBarCode" placeholder="自动带出" disabled></el-input>
@@ -22,7 +22,7 @@
             <el-date-picker
               v-model="form.startDate"
               class="w100"
-              value-format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd HH:mm:ss"
             />
           </el-form-item>
           <el-form-item label="原供价(含税)：" required>
@@ -67,7 +67,7 @@
             <el-date-picker
               v-model="form.endDate"
               class="w100"
-              value-format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd HH:mm:ss"
             />
           </el-form-item>
           <el-form-item label="现供价(含税)：" prop="newTaxPrice">
@@ -162,12 +162,17 @@ export default {
       });
       // 默认给一个筛选框
       this.productOptions = [{ name: this.item.productName, productId: this.item.productId }];
-      this.guestOptions = [];
+      this.guestOptions = this.item.guestName.split(';').map((val, index) => ({
+        guestName: val,
+        guestId: this.item.guestId[index]
+      }));
     }
   },
   methods: {
     selectChange(products) {
       this.form.productBarCode = products[0].barCode;
+      this.form.oldTaxPrice = products[0].salsePrice;
+      this.form.oldNoTaxPrice = products[0].salseNoTaxPrice;
     },
     confirm() {
       this.$refs.contractForm.validate((valid) => {

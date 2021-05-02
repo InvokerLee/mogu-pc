@@ -70,10 +70,10 @@
       <el-table-column :width="80" prop="limitCount" label="限量" align="center" />
       <el-table-column :width="85" prop="startDate" label="开始时间" align="center" />
       <el-table-column :width="85" prop="endDate" label="结束时间" align="center" />
-      <el-table-column :min-width="90" prop="oldTaxSum" label="原供价(含税)" align="center" />
-      <el-table-column :min-width="90" prop="newTaxSum" label="现供价(含税)" align="center" />
-      <el-table-column :min-width="90" prop="newTaxSum" label="原供价(未税)" align="center" />
-      <el-table-column :min-width="90" prop="newNoTaxSum" label="现供价(未税)" align="center" />
+      <el-table-column :min-width="90" prop="oldTaxPrice" label="原供价(含税)" align="center" />
+      <el-table-column :min-width="90" prop="newTaxPrice" label="现供价(含税)" align="center" />
+      <el-table-column :min-width="90" prop="oldNoTaxPrice" label="原供价(未税)" align="center" />
+      <el-table-column :min-width="90" prop="newNoTaxPrice" label="现供价(未税)" align="center" />
       <el-table-column :width="70" prop="giftCount" label="赠品基数" align="center" />
       <el-table-column prop="text" label="备注" align="center" />
       <el-table-column :width="60" label="状态" align="center">
