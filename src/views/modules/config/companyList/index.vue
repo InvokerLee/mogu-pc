@@ -115,9 +115,9 @@ export default {
         }
       });
       this.loading = true;
-      companyInfoList(params).then(({ data }) => {
-        this.tableData = data.data;
-        this.total = data.total;
+      companyInfoList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
       }).catch(() => {}).finally(() => {
         this.loading = false;
       });
