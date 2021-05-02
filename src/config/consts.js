@@ -1,4 +1,5 @@
 export default {
+  // 订单类型
   orderType: [
     { label: '销售订单', value: 'sales' },
     { label: '销售退货单', value: 'salesReturn' },

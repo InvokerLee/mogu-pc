@@ -1,5 +1,74 @@
 import request from '@/utils/request';
 
+// 促销管理
+export function promotionList(data) {
+  return request({
+    url: '/promotionmanager/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addPromotion(data) {
+  return request({
+    url: '/promotionmanager/save',
+    method: 'post',
+    data
+  });
+}
+export function editPromotion(data) {
+  return request({
+    url: '/promotionmanager/update',
+    method: 'post',
+    data
+  });
+}
+export function checkPromotion(data) {
+  return request({
+    url: '/promotionmanager/check',
+    method: 'post',
+    data
+  });
+}
+export function delPromotion(id) {
+  return request({
+    url: `/promotionmanager/delete/${id}`,
+    method: 'get'
+  });
+}
+export function promotionDetailList(data) {
+  return request({
+    url: '/promotiongiftdetail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addPromotionDetail(data) {
+  return request({
+    url: '/promotiongiftdetail/save',
+    method: 'post',
+    data
+  });
+}
+export function editPromotionDetail(data) {
+  return request({
+    url: '/promotiongiftdetail/update',
+    method: 'post',
+    data
+  });
+}
+export function delPromotionDetail(id) {
+  return request({
+    url: `/promotiongiftdetail/delete/${id}`,
+    method: 'get'
+  });
+}
+
 // 销售合同
 export function salescontractList(data) {
   return request({
