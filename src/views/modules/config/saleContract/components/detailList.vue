@@ -17,7 +17,7 @@
             </span>
             <el-button type="success" size="mini" @click="add">新增</el-button>
             <el-button type="primary" size="mini">导入</el-button>
-            <el-button type="primary" size="mini">导出</el-button>
+            <el-button type="primary" size="mini" @click="download">导出</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -160,7 +160,7 @@ export default {
       }).catch(() => {});
     },
     download() {
-      this.$download('/salescontract/export', { ...this.params });
+      this.$download('/salescontractdetail/export', { ...this.params });
     }
   }
 };
