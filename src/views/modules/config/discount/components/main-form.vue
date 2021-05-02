@@ -76,6 +76,7 @@
               class="w100"
               :controls="false"
               :precision="2"
+              @change="calcPrice"
             >
             </el-input-number>
           </el-form-item>
@@ -100,6 +101,7 @@
 import { addPromotion, editPromotion } from '@/api/config';
 import CustomerSelector from '@/components/CustomerSelector';
 import ProductSelector from '@/components/ProductSelector';
+import BigNumber from 'bignumber.js';
 
 export default {
   components: {
@@ -125,7 +127,8 @@ export default {
         endDate: '',
         newTaxPrice: undefined,
         newNoTaxPrice: '',
-        text: ''
+        text: '',
+        salesTaxRate: '' // 用于计算
       },
       rules: {
         guestId: [
@@ -173,6 +176,14 @@ export default {
       this.form.productBarCode = products[0].barCode;
       this.form.oldTaxPrice = products[0].salsePrice;
       this.form.oldNoTaxPrice = products[0].salseNoTaxPrice;
+      // 处理现供价
+      this.form.newTaxPrice = '';
+      this.form.salesTaxRate = products[0].salesTaxRate;
+    },
+    calcPrice(val) {
+      if (!this.form.salesTaxRate) return;
+      const a = new BigNumber(val).times(this.form.salesTaxRate).dividedBy(100);
+      this.form.newNoTaxPrice = new BigNumber(val).minus(a).toFixed(2);
     },
     confirm() {
       this.$refs.contractForm.validate((valid) => {
