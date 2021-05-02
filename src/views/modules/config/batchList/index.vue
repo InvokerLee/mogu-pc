@@ -39,7 +39,7 @@
           <span style="margin: 0 20px;">
             <el-divider direction="vertical"></el-divider>
           </span>
-          <el-button type="primary" size="mini">批量设置无效</el-button>
+          <el-button type="primary" size="mini" @click="mulUpdateState">批量设置无效</el-button>
         </el-form-item>
       </el-form>
       <div>
@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { batchInfoList, delBatch } from '@/api/config';
+import { batchInfoList, delBatch, batchinfoUpdateState } from '@/api/config';
 
 export default {
   name: 'batchList',
@@ -183,6 +183,17 @@ export default {
         type: 'warning'
       }).then(() => delBatch(item.id)).then(() => {
         this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
+    },
+    mulUpdateState() {
+      if (!this.selectItems.length) {
+        this.$message.warning('请选择');
+        return;
+      }
+      const ids = this.selectItems.map(v => v.id).join(',');
+      batchinfoUpdateState({ ids }).then(() => {
+        this.$message.success('设置成功');
         this.getList();
       }).catch(() => {});
     }

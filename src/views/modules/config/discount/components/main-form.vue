@@ -22,7 +22,7 @@
             <el-date-picker
               v-model="form.startDate"
               class="w100"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd"
             />
           </el-form-item>
           <el-form-item label="原供价(含税)：" required>
@@ -67,7 +67,7 @@
             <el-date-picker
               v-model="form.endDate"
               class="w100"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd"
             />
           </el-form-item>
           <el-form-item label="现供价(含税)：" prop="newTaxPrice">

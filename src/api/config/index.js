@@ -371,6 +371,16 @@ export function delBatch(id) {
     method: 'get'
   });
 }
+export function batchinfoUpdateState(data) {
+  return request({
+    url: '/batchinfo/update/state',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
 
 // 供应商
 export function providerInfoList(data) {

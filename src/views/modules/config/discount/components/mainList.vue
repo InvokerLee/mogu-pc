@@ -56,7 +56,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column :min-width="150" prop="guestName" label="客户" align="center" />
+      <el-table-column :width="180" show-overflow-tooltip prop="guestName" label="客户" align="center" />
       <el-table-column prop="productName" label="产品" align="center" />
       <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
       <el-table-column :width="70" label="变价属性" align="center">
@@ -68,8 +68,8 @@
       </el-table-column>
       <el-table-column :width="80" prop="auctionCalendar" label="档期" align="center" />
       <el-table-column :width="80" prop="limitCount" label="限量" align="center" />
-      <el-table-column :width="85" prop="startDate" label="开始时间" align="center" />
-      <el-table-column :width="85" prop="endDate" label="结束时间" align="center" />
+      <el-table-column :width="135" prop="startDate" label="开始时间" align="center" />
+      <el-table-column :width="135" prop="endDate" label="结束时间" align="center" />
       <el-table-column :min-width="90" prop="oldTaxPrice" label="原供价(含税)" align="center" />
       <el-table-column :min-width="90" prop="newTaxPrice" label="现供价(含税)" align="center" />
       <el-table-column :min-width="90" prop="oldNoTaxPrice" label="原供价(未税)" align="center" />
