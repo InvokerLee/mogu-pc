@@ -29,7 +29,10 @@ export function checkPromotion(data) {
   return request({
     url: '/promotionmanager/check',
     method: 'post',
-    data
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
 export function delPromotion(id) {

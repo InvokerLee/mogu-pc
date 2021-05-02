@@ -46,7 +46,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column prop="contractNum" label="合同编号" align="center" />
+      <el-table-column :width="125" prop="contractNum" label="合同编号" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>

@@ -10,8 +10,8 @@
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="合同编号：" prop="contractNum">
-            <el-input v-model.trim="form.contractNum"></el-input>
+          <el-form-item label="合同编号：">
+            <el-input v-model.trim="form.contractNum" placeholder="自动生成" disabled></el-input>
           </el-form-item>
           <el-form-item label="客户：" prop="guestId">
             <customer-selector :params="form" paramsKey="guestId"></customer-selector>
@@ -116,9 +116,6 @@ export default {
         text: ''
       },
       rules: {
-        contractNum: [
-          { required: true, message: '必填', trigger: 'blur' }
-        ],
         companyTital: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
