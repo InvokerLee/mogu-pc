@@ -21,6 +21,7 @@
               class="w100"
               :controls="false"
               :precision="2"
+              @change="calcPrice"
             >
             </el-input-number>
           </el-form-item>
@@ -49,6 +50,7 @@
 <script>
 import ProductSelector from '@/components/ProductSelector';
 import { addSalescontractDetail, editSalescontractDetail } from '@/api/config';
+import BigNumber from 'bignumber.js';
 
 export default {
   components: {
@@ -65,7 +67,8 @@ export default {
         taxPrice: undefined, // 供货价含税
         goodsNum: '',
         productUnit: '', // 单位
-        noTaxPrice: '' // 供货价未税
+        noTaxPrice: '', // 供货价未税
+        salesTaxRate: ''
       },
       options: [],
       rules: {
@@ -92,7 +95,13 @@ export default {
     selectChange(products) {
       this.form.productCode = products[0].barCode;
       this.form.productUnit = products[0].unit;
-      this.form.noTaxPrice = products[0].salseNoTaxPrice;
+      this.form.taxPrice = '';
+      this.form.salesTaxRate = products[0].salesTaxRate;
+    },
+    calcPrice(val) {
+      if (!this.form.salesTaxRate) return;
+      const a = new BigNumber(val).times(this.form.salesTaxRate).dividedBy(100);
+      this.form.noTaxPrice = new BigNumber(val).minus(a).toFixed(2);
     },
     confirm() {
       this.$refs.itemForm.validate((valid) => {
