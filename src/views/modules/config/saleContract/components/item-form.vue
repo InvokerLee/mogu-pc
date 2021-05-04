@@ -93,10 +93,11 @@ export default {
   },
   methods: {
     selectChange(products) {
-      this.form.productCode = products[0].barCode;
-      this.form.productUnit = products[0].unit;
+      const p = products[0] || {};
+      this.form.productCode = p.barCode;
+      this.form.productUnit = p.unit;
       this.form.taxPrice = '';
-      this.form.salesTaxRate = products[0].salesTaxRate;
+      this.form.salesTaxRate = p.salesTaxRate;
     },
     calcPrice(val) {
       if (!this.form.salesTaxRate) return;

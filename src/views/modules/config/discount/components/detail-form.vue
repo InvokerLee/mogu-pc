@@ -88,10 +88,11 @@ export default {
   },
   methods: {
     selectChange(products) {
-      this.form.productBarCode = products[0].barCode;
-      this.form.productUnit = products[0].unit;
-      this.form.taxPrice = products[0].salsePrice;
-      this.form.noTaxPrice = products[0].salseNoTaxPrice;
+      const p = products[0] || {};
+      this.form.productBarCode = p.barCode;
+      this.form.productUnit = p.unit;
+      this.form.taxPrice = p.salsePrice;
+      this.form.noTaxPrice = p.salseNoTaxPrice;
     },
     confirm() {
       this.$refs.itemForm.validate((valid) => {

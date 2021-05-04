@@ -170,12 +170,13 @@ export default {
   },
   methods: {
     selectChange(products) {
-      this.form.productBarCode = products[0].barCode;
-      this.form.oldTaxPrice = products[0].salsePrice;
-      this.form.oldNoTaxPrice = products[0].salseNoTaxPrice;
+      const p = products[0] || {};
+      this.form.productBarCode = p.barCode;
+      this.form.oldTaxPrice = p.salsePrice;
+      this.form.oldNoTaxPrice = p.salseNoTaxPrice;
       // 处理现供价
       this.form.newTaxPrice = '';
-      this.form.salesTaxRate = products[0].salesTaxRate;
+      this.form.salesTaxRate = p.salesTaxRate;
     },
     calcPrice(val) {
       if (!this.form.salesTaxRate) return;
