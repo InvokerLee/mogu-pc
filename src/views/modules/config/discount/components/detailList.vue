@@ -103,14 +103,6 @@ export default {
         this.loading = false;
       });
     },
-    search() {
-      this.params.curentPage = 1;
-      this.getList();
-    },
-    reset() {
-      Object.assign(this.params, this.$options.data.call(this).params);
-      this.getList();
-    },
     add() {
       this.dialog.item = {};
       this.dialog.show = true;

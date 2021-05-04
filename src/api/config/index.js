@@ -1,5 +1,57 @@
 import request from '@/utils/request';
 
+// 特价预留
+export function specialreserveList(data) {
+  return request({
+    url: '/specialreserve/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function addSpecialreserve(data) {
+  return request({
+    url: '/specialreserve/save',
+    method: 'post',
+    data
+  });
+}
+export function editSpecialreserve(data) {
+  return request({
+    url: '/specialreserve/update',
+    method: 'post',
+    data
+  });
+}
+export function checkSpecialreserve(data) {
+  return request({
+    url: '/specialreserve/check',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function delSpecialreserve(id) {
+  return request({
+    url: `/specialreserve/delete/${id}`,
+    method: 'get'
+  });
+}
+export function specialreserveDetailList(data) {
+  return request({
+    url: '/specialreservedetail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+
 // 促销管理
 export function promotionList(data) {
   return request({

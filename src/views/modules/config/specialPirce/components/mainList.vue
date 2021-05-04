@@ -6,14 +6,10 @@
           <el-tag type="info">特价预留</el-tag>
         </el-form-item>
         <el-form-item label="产品">
-          <el-input v-model.trim="params.key" placeholder="品名/规格/条码" />
+          <el-input v-model.trim="params.productName" placeholder="品名/规格/条码" />
         </el-form-item>
         <el-form-item label="客户">
-          <el-select v-model="params.status" placeholder="请选择">
-            <el-option label="全部" value="" />
-            <el-option label="有效" :value="1" />
-            <el-option label="停用" :value="2" />
-          </el-select>
+          <el-input v-model.trim="params.guestName" placeholder="客户名称" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -22,7 +18,6 @@
             <el-divider direction="vertical"></el-divider>
           </span>
           <el-button type="success" size="mini" @click="add">新增</el-button>
-          <el-button type="primary" size="mini">审核</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -35,23 +30,27 @@
       highlight-current-row
       @current-change="rowChange"
     >
-      <el-table-column label="操作" type="action" align="center">
+      <el-table-column :width="100" label="操作" type="action" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
+          <el-row type="flex" justify="space-around" align="middle">
+            <a class="font-blue el-icon-edit font-16" @click="edit(scope.row)"></a>
+            <!-- <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a> -->
+            <a class="font-blue" @click="check(scope.row)">{{ scope.row.state ? '取消审核' : '审核' }}</a>
+          </el-row>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="预留单号" align="center" />
-      <el-table-column prop="remarks" label="客户" align="center" />
-      <el-table-column prop="remarks" label="开始日期" align="center" />
-      <el-table-column prop="remarks" label="结束日期" align="center" />
-      <el-table-column prop="remarks" label="预留数量" align="center" />
-      <el-table-column prop="remarks" label="备注" align="center" />
-      <el-table-column prop="remarks" label="审核人" align="center" />
-      <el-table-column prop="remarks" label="审核时间" align="center" />
+      <el-table-column :width="140" prop="reserveNum" label="预留单号" align="center" />
+      <el-table-column :min-width="120" prop="guestName" label="客户" align="center" />
+      <el-table-column :width="135" prop="startDate" label="开始日期" align="center" />
+      <el-table-column :width="135" prop="endDate" label="结束日期" align="center" />
+      <el-table-column :width="80" prop="reserveCount" label="预留数量" align="center" />
+      <el-table-column :min-width="120" prop="text" label="备注" align="center" />
+      <el-table-column :width="70" prop="checkUserName" label="审核人" align="center" />
+      <el-table-column :width="135" prop="checkDate" label="审核时间" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
-            {{ ['停用', '有效'][scope.row.state] }}
+            {{ ['待审核', '已审核'][scope.row.state] }}
           </span>
         </template>
       </el-table-column>
@@ -60,8 +59,8 @@
       v-if="tableData.length"
       layout="total, sizes, prev, pager, next, jumper"
       class="pagination py-3"
-      :current-page.sync="params.page"
-      :page-size="params.limit"
+      :current-page.sync="params.curentPage"
+      :page-size="params.pageSize"
       :total="total"
       :page-sizes="[10,20,30]"
       @size-change="handleSizeChange"
@@ -78,6 +77,8 @@
 </template>
 
 <script>
+import { specialreserveList, checkSpecialreserve, delSpecialreserve } from '@/api/config';
+
 import formDialog from './form-dialog';
 export default {
   components: {
@@ -87,14 +88,13 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        productName: '',
+        guestName: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
-      tableData: [{ id: 1 }],
+      tableData: [],
       dialog: {
         show: false,
         item: {}
@@ -102,16 +102,32 @@ export default {
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
-
+      const params = {};
+      Object.keys(this.params).forEach((key) => {
+        if (this.params[key] !== '') {
+          params[key] = this.params[key];
+        }
+      });
+      this.loading = true;
+      specialreserveList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-
+      this.params.curentPage = 1;
+      this.getList();
     },
-    reset() {},
+    reset() {
+      Object.assign(this.params, this.$options.data.call(this).params);
+      this.getList();
+    },
     add() {
       this.dialog.item = {};
       this.dialog.show = true;
@@ -132,11 +148,27 @@ export default {
       this.$emit('rowClickChange', row);
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
       this.getList();
+    },
+    check(item) {
+      checkSpecialreserve({ id: item.id }).then(() => {
+        this.$message.success('操作成功');
+        this.getList();
+      }).catch(() => {});
+    },
+    del(item) {
+      this.$confirm('确认要删除吗?', '删除提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => delSpecialreserve(item.id)).then(() => {
+        this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
     }
   }
 };
