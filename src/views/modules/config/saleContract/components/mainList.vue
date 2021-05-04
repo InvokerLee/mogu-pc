@@ -41,7 +41,7 @@
       <el-table-column :width="60" label="操作" type="action" align="center">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-around" class="font-16">
-            <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
+            <a class="font-blue el-icon-edit" @click.stop="edit(scope.row)"></a>
             <!-- <a class="font-red el-icon-delete" @click="del(scope.row)"></a> -->
           </el-row>
         </template>

@@ -10,7 +10,7 @@
       <el-form-item label="预留单号">
         <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
-      <el-form-item label="客户">
+      <el-form-item label="客户" prop="guestId">
         <customer-selector style="width: 200px" :params="form" paramsKey="guestId" :defaultOpions="guestOptions" :multiple="true"></customer-selector>
       </el-form-item>
       <el-form-item label="开始日期" prop="startDate">
@@ -155,9 +155,18 @@ export default {
         this.form.reserveProductList.push(item);
       }
       this.closeDialog();
+      this.calcTotalCount();
     },
     del(i) {
       this.form.reserveProductList.splice(i, 1);
+      this.calcTotalCount();
+    },
+    calcTotalCount() {
+      let c = 0;
+      this.form.reserveProductList.forEach((v) => {
+        c += v.count || 0;
+      });
+      this.form.reserveCount = c;
     },
     confirm() {
       this.$refs.specialPriceForm.validate((valid) => {

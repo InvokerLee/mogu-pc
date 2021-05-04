@@ -33,9 +33,9 @@
       <el-table-column :width="100" label="操作" type="action" align="center">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-around" align="middle">
-            <a class="font-blue el-icon-edit font-16" @click="edit(scope.row)"></a>
+            <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
             <!-- <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a> -->
-            <a class="font-blue" @click="check(scope.row)">{{ scope.row.state ? '取消审核' : '审核' }}</a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '取消审核' : '审核' }}</a>
           </el-row>
         </template>
       </el-table-column>
