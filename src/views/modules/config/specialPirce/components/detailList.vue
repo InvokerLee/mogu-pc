@@ -13,7 +13,7 @@
       >
         <el-table-column type="index" label="序号" :width="55" align="center" />
         <el-table-column prop="productName" label="预留产品" align="center" />
-        <el-table-column prop="productSpec" label="规格" align="center" />
+        <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
         <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
         <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
         <el-table-column :width="80" prop="count" label="预留数量" align="center" />

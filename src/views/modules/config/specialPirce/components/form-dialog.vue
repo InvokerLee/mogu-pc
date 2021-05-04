@@ -11,7 +11,7 @@
         <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
       <el-form-item label="客户">
-        <customer-selector style="width: 200px" :params="form" paramsKey="guestId" :multiple="true"></customer-selector>
+        <customer-selector style="width: 200px" :params="form" paramsKey="guestId" :defaultOpions="guestOptions" :multiple="true"></customer-selector>
       </el-form-item>
       <el-form-item label="开始日期" prop="startDate">
         <el-date-picker
@@ -25,7 +25,7 @@
         <el-input v-model="form.reserveCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input style="width: 200px"></el-input>
+        <el-input v-model.trim="form.text" style="width: 200px"></el-input>
       </el-form-item>
       <el-form-item label="结束日期" prop="endDate">
         <el-date-picker
@@ -47,19 +47,21 @@
       :data="form.reserveProductList"
     >
       <el-table-column type="index" :width="55" label="序号" align="center" />
-      <el-table-column label="操作" type="action" align="center">
+      <el-table-column :width="60" label="操作" type="action" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
-          <el-button size="danger" type="text" @click="del(scope.row)">删除</el-button>
+          <el-row type="flex" justify="space-around" class="font-16">
+            <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
+            <a class="font-red el-icon-delete" @click="del(scope.$index)"></a>
+          </el-row>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="预留单号" align="center" />
-      <el-table-column prop="remarks" label="规格" align="center" />
-      <el-table-column prop="remarks" label="条码" align="center" />
-      <el-table-column prop="remarks" label="单位" align="center" />
-      <el-table-column prop="remarks" label="预留数量" align="center" />
-      <el-table-column prop="remarks" label="预留仓库" align="center" />
-      <el-table-column prop="remarks" label="备注" align="center" />
+      <el-table-column prop="productName" label="预留产品" align="center" />
+      <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
+      <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
+      <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
+      <el-table-column :width="80" prop="count" label="预留数量" align="center" />
+      <el-table-column :width="90" prop="storeName" label="预留仓库" align="center" />
+      <el-table-column prop="text" label="备注" align="center" />
     </el-table>
 
     <div slot="footer">
@@ -116,7 +118,8 @@ export default {
       dialog: {
         show: false,
         item: {}
-      }
+      },
+      guestOptions: []
     };
   },
   created() {
@@ -125,6 +128,10 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
+      this.guestOptions = this.item.guestName.split(';').map((val, index) => ({
+        guestName: val,
+        guestId: this.item.guestId[index]
+      }));
     }
   },
   methods: {
@@ -140,12 +147,17 @@ export default {
       this.dialog.name = '';
       this.dialog.show = false;
     },
-    actionSuccess() {
-      this.getList();
+    actionSuccess(item) {
+      const existItem = this.form.reserveProductList.find(v => v.productId === item.productId);
+      if (existItem) {
+        Object.assign(existItem, item);
+      } else {
+        this.form.reserveProductList.push(item);
+      }
       this.closeDialog();
     },
-    del(row) {
-
+    del(i) {
+      this.form.reserveProductList.splice(i, 1);
     },
     confirm() {
       this.$refs.specialPriceForm.validate((valid) => {
