@@ -171,6 +171,16 @@ export function salescontractDetailList(data) {
     }
   });
 }
+export function uploadSCD(data) {
+  return request({
+    url: '/salescontractdetail/import',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+}
 export function addSalescontractDetail(data) {
   return request({
     url: '/salescontractdetail/save',

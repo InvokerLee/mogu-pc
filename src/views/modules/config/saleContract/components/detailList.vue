@@ -16,7 +16,17 @@
               <el-divider direction="vertical"></el-divider>
             </span>
             <el-button type="success" size="mini" @click="add">新增</el-button>
-            <el-button type="primary" size="mini">导入</el-button>
+            <!-- <el-button type="primary" size="mini">导入</el-button> -->
+            <el-upload
+              ref="uploader"
+              class="uploader"
+              action=""
+              :limit="1"
+              :show-file-list="false"
+              :http-request="uploadRequest"
+            >
+              <el-button slot="trigger" size="mini" type="primary">导入</el-button>
+            </el-upload>
             <el-button type="primary" size="mini" @click="download">导出</el-button>
           </el-form-item>
         </el-form>
@@ -67,7 +77,7 @@
 </template>
 
 <script>
-import { salescontractDetailList, delSalescontractDetail } from '@/api/config';
+import { salescontractDetailList, delSalescontractDetail, uploadSCD } from '@/api/config';
 
 import itemForm from './item-form';
 export default {
@@ -161,6 +171,20 @@ export default {
     },
     download() {
       this.$download('/salescontractdetail/export', { ...this.params });
+    },
+    uploadRequest(params) {
+      const formData = new FormData();
+      formData.append('file', params.file);
+      formData.append('salesContractId', this.rowId);
+      uploadSCD(formData).then(() => {
+        this.$message.success('上传成功');
+        this.getList();
+      }).catch(() => {}).finally(() => {
+        this.$refs.uploader.clearFiles();
+      });
+    },
+    test() {
+      uploadSCD();
     }
   }
 };
@@ -172,6 +196,10 @@ export default {
   margin-top: 3px;
   .pagination {
     text-align: center;
+  }
+  .uploader {
+    display: inline-block;
+    margin: 0 10px;
   }
   ::v-deep {
     .el-card__header, .el-card__body  {
