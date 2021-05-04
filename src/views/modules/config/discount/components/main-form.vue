@@ -63,7 +63,7 @@
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="结束时间：">
+          <el-form-item label="结束时间：" prop="endDate">
             <el-date-picker
               v-model="form.endDate"
               class="w100"
@@ -133,9 +133,6 @@ export default {
       rules: {
         guestId: [
           { required: true, message: '必选', trigger: 'blur' }
-        ],
-        realname: [
-          { required: true, message: '必填', trigger: 'blur' }
         ],
         startDate: [
           { required: true, message: '必选', trigger: 'blur' }

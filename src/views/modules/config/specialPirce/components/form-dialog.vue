@@ -11,26 +11,27 @@
         <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
       <el-form-item label="客户">
-        <customer-selector style="width: 200px" :params="form" paramsKey="customerId" :multiple="true"></customer-selector>
+        <customer-selector style="width: 200px" :params="form" paramsKey="guestId" :multiple="true"></customer-selector>
       </el-form-item>
-      <el-form-item label="开始日期">
+      <el-form-item label="开始日期" prop="startDate">
         <el-date-picker
-          v-model="form.date"
-          class="w100"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          v-model="form.startDate"
+          style="width: 200px"
+          value-format="yyyy-MM-dd"
         />
       </el-form-item>
-      <el-form-item label="预留数量">
-        <el-input style="width: 200px"></el-input>
+      <el-form-item label="预留数量" prop="reserveCount">
+
+        <el-input v-model="form.reserveCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
       </el-form-item>
       <el-form-item label="备注">
         <el-input style="width: 200px"></el-input>
       </el-form-item>
-      <el-form-item label="结束日期">
+      <el-form-item label="结束日期" prop="endDate">
         <el-date-picker
-          v-model="form.date"
-          class="w100"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          v-model="form.endDate"
+          style="width: 200px"
+          value-format="yyyy-MM-dd"
         />
       </el-form-item>
     </el-form>
@@ -43,7 +44,7 @@
       border
       size="mini"
       :max-height="480"
-      :data="tableData"
+      :data="form.reserveProductList"
     >
       <el-table-column type="index" :width="55" label="序号" align="center" />
       <el-table-column label="操作" type="action" align="center">
@@ -78,7 +79,7 @@
 <script>
 import CustomerSelector from '@/components/CustomerSelector';
 import addDialog from './add-dialog';
-// import { addUser, editUser } from '@/api/auth/user';
+import { addSpecialreserve, editSpecialreserve } from '@/api/config';
 
 export default {
   components: {
@@ -91,18 +92,25 @@ export default {
       loading: false,
       isEdit: false,
       form: {
-        realname: '',
-        phone: '',
-        status: 1,
-        remarks: ''
+        guestId: [],
+        startDate: '',
+        endDate: '',
+        text: '',
+        reserveCount: undefined,
+        reserveProductList: []
       },
-      tableData: [],
       rules: {
-        realname: [
-          { required: true, message: '必填', trigger: 'blur' }
-        ],
-        status: [
+        guestId: [
           { required: true, message: '必选', trigger: 'blur' }
+        ],
+        startDate: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ],
+        endDate: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ],
+        reserveCount: [
+          { required: true, message: '必填', trigger: 'blur' }
         ]
       },
       dialog: {
@@ -152,9 +160,9 @@ export default {
       });
     },
     saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+      return this.isEdit
+        ? editSpecialreserve({ id: this.item.id, ...this.form })
+        : addSpecialreserve(this.form);
     },
     cancel() {
       this.$emit('cancel');
