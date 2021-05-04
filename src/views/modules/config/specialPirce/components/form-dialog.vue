@@ -81,7 +81,7 @@
 <script>
 import CustomerSelector from '@/components/CustomerSelector';
 import addDialog from './add-dialog';
-import { addSpecialreserve, editSpecialreserve } from '@/api/config';
+import { specialreserveInfo, addSpecialreserve, editSpecialreserve } from '@/api/config';
 
 export default {
   components: {
@@ -123,18 +123,24 @@ export default {
     };
   },
   created() {
+    console.log(this.item.id);
     if (this.item && this.item.id) {
       this.isEdit = true;
-      Object.keys(this.form).forEach((k) => {
-        this.form[k] = this.item[k];
-      });
-      this.guestOptions = this.item.guestName.split(';').map((val, index) => ({
-        guestName: val,
-        guestId: this.item.guestId[index]
-      }));
+      this.getInfo(this.item.id);
     }
   },
   methods: {
+    getInfo(id) {
+      specialreserveInfo(id).then(({ result }) => {
+        Object.keys(this.form).forEach((k) => {
+          this.form[k] = result[k];
+        });
+        this.guestOptions = result.guestName.split(';').map((val, index) => ({
+          guestName: val,
+          guestId: this.item.guestId[index]
+        }));
+      }).catch(() => {});
+    },
     add() {
       this.dialog.item = {};
       this.dialog.show = true;

@@ -35,7 +35,7 @@
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
             <!-- <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a> -->
-            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '取消审核' : '审核' }}</a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.checkState ? '审核' : '权限审核' }}</a>
           </el-row>
         </template>
       </el-table-column>
@@ -50,7 +50,7 @@
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
-            {{ ['待审核', '已审核'][scope.row.state] }}
+            {{ ['已审核', '待审核'][scope.row.checkState] }}
           </span>
         </template>
       </el-table-column>

@@ -41,6 +41,12 @@ export function delSpecialreserve(id) {
     method: 'get'
   });
 }
+export function specialreserveInfo(id) {
+  return request({
+    url: `/specialreserve/info/${id}`,
+    method: 'get'
+  });
+}
 export function specialreserveDetailList(data) {
   return request({
     url: '/specialreservedetail/list',
