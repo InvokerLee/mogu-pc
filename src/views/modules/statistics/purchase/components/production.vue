@@ -55,8 +55,8 @@
           <el-table-column :width="80" prop="orderInCount" label="入库数量" align="center" />
           <el-table-column :width="80" prop="orderInBoxCount" label="入库箱数" align="center" />
           <el-table-column :width="80" prop="orderInTaxSum" label="入库金额" align="center" />
-          <el-table-column :width="90" prop="returnCount" label="退货单数量" align="center" />
-          <el-table-column :width="90" prop="returnTaxSum" label="退货单金额" align="center" />
+          <el-table-column :width="80" prop="returnCount" label="退货数量" align="center" />
+          <el-table-column :width="90" prop="returnTaxSum" label="退货金额" align="center" />
           <el-table-column :min-width="100" prop="returnOutCount" label="退货出库数量" align="center" />
           <el-table-column :min-width="100" prop="returnOutTaxSum" label="退货出库金额" align="center" />
           <el-table-column :width="80" prop="stockCount" label="采购数量" align="center" />

@@ -21,3 +21,13 @@ export function reportStockProduct(data) {
     }
   });
 }
+export function reportStockDetail(data) {
+  return request({
+    url: '/report/stockDetail',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
