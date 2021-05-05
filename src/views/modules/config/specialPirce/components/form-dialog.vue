@@ -11,7 +11,7 @@
         <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
       <el-form-item label="客户" prop="guestId">
-        <customer-selector style="width: 200px" :params="form" paramsKey="guestId" :defaultOpions="guestOptions" :multiple="true"></customer-selector>
+        <customer-selector style="width: 200px" :params="form" paramsKey="guestId" :defaultOpions="guestOptions"></customer-selector>
       </el-form-item>
       <el-form-item label="开始日期" prop="startDate">
         <el-date-picker
@@ -123,7 +123,6 @@ export default {
     };
   },
   created() {
-    console.log(this.item.id);
     if (this.item && this.item.id) {
       this.isEdit = true;
       this.getInfo(this.item.id);
@@ -135,10 +134,7 @@ export default {
         Object.keys(this.form).forEach((k) => {
           this.form[k] = result[k];
         });
-        this.guestOptions = result.guestName.split(';').map((val, index) => ({
-          guestName: val,
-          guestId: this.item.guestId[index]
-        }));
+        this.guestOptions = [{ guestName: result.guestName, guestId: result.guestId }];
       }).catch(() => {});
     },
     add() {

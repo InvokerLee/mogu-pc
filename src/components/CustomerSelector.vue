@@ -55,6 +55,13 @@ export default {
       options: []
     };
   },
+  watch: {
+    defaultOpions(val) {
+      if (val) {
+        this.options = val;
+      }
+    }
+  },
   created() {
     if (this.defaultOpions) {
       this.options = this.defaultOpions;
