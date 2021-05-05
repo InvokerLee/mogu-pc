@@ -139,7 +139,7 @@ export default {
       this.getList();
     },
     download() {
-      this.$download('/report/providerExport', { ...this.params });
+      this.$download('/report/salesGuestExport', { ...this.params });
     }
   }
 };
