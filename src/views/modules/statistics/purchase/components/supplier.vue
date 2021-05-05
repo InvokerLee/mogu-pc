@@ -5,11 +5,11 @@
         <el-col>
           <el-form ref="searchForm" hide-details size="mini" inline :model="params">
             <el-form-item label="供应商">
-              <el-input v-model.trim="params.searchPar" placeholder="" />
+              <el-input v-model.trim="params.providerName" placeholder="" />
             </el-form-item>
             <el-form-item label="日期">
               <el-date-picker
-                v-model="params.created_at"
+                v-model="dateRange"
                 style="width: 250px;"
                 type="daterange"
                 unlink-panels
@@ -27,7 +27,7 @@
               <span style="margin: 0 20px;">
                 <el-divider direction="vertical"></el-divider>
               </span>
-              <el-button type="primary" size="mini">导出</el-button>
+              <el-button type="primary" size="mini" @click="download">导出</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -41,16 +41,16 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column :width="55" type="index" align="center"></el-table-column>
-          <el-table-column prop="companyName" label="供应商" align="center" />
-          <el-table-column prop="phone" label="订单金额" align="center" />
-          <el-table-column prop="phone" label="入库金额" align="center" />
-          <el-table-column prop="phone" label="退货金额" align="center" />
-          <el-table-column :min-width="100" prop="phone" label="退货出库金额" align="center" />
-          <el-table-column prop="phone" label="采购金额" align="center" />
-          <el-table-column :min-width="100" prop="phone" label="采购调整单金额" align="center" />
-          <el-table-column :min-width="100" prop="phone" label="采购开票金额" align="center" />
-          <el-table-column :min-width="100" prop="phone" label="采购付款金额" align="center" />
+          <el-table-column :width="55" label="序号" type="index" align="center"></el-table-column>
+          <el-table-column :min-width="120" prop="provderName" label="供应商" align="center" />
+          <el-table-column :width="90" prop="orderTaxSum" label="订单金额" align="center" />
+          <el-table-column :width="90" prop="orderInTaxSum" label="入库金额" align="center" />
+          <el-table-column :width="90" prop="returnTaxSum" label="退货金额" align="center" />
+          <el-table-column :width="100" prop="returnOutTaxSum" label="退货出库金额" align="center" />
+          <el-table-column :width="90" prop="stockTaxSum" label="采购金额" align="center" />
+          <el-table-column :width="110" prop="" label="采购调整单金额" align="center" />
+          <el-table-column :width="100" prop="" label="采购开票金额" align="center" />
+          <el-table-column :width="100" prop="" label="采购付款金额" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/auth/user';
+import { reportStockProvider } from '@/api/statistics';
 
 export default {
   components: {
@@ -78,11 +78,11 @@ export default {
     return {
       loading: false,
       params: {
-        searchPar: '',
-        date: '',
+        providerName: '',
         curentPage: 1,
         pageSize: 10
       },
+      dateRange: [],
       total: 0,
       tableData: []
     };
@@ -98,8 +98,9 @@ export default {
           params[key] = this.params[key];
         }
       });
+      Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      getUserList(params).then(({ result }) => {
+      reportStockProvider(params).then(({ result }) => {
         this.tableData = result.dataList;
         this.total = result.totalCount;
       }).catch(() => {}).finally(() => {
@@ -120,6 +121,9 @@ export default {
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/report/providerExport', { ...this.params });
     }
   }
 };

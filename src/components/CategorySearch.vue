@@ -7,7 +7,7 @@
     :collapse-tags="multiple"
     readonly
     reserve-keyword
-    placeholder=""
+    placeholder="请选择类别"
     :loading="loading"
     @change="change"
     @focus="remoteMethod"

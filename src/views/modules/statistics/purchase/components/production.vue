@@ -5,17 +5,17 @@
         <el-col>
           <el-form ref="searchForm" hide-details size="mini" inline :model="params">
             <el-form-item label="产品">
-              <el-input v-model.trim="params.searchPar" placeholder="" />
+              <el-input v-model.trim="params.productName" placeholder="产品名称/规格/条码" />
             </el-form-item>
             <el-form-item label="类别">
-              <category-search paramsKey="leibie" :params="params"></category-search>
+              <category-search paramsKey="productTypeId" :params="params"></category-search>
             </el-form-item>
             <el-form-item label="品牌">
-              <brand-search paramsKey="pinpai" :params="params"></brand-search>
+              <brand-search paramsKey="productBrandId" :params="params"></brand-search>
             </el-form-item>
             <el-form-item label="日期">
               <el-date-picker
-                v-model="params.created_at"
+                v-model="dateRange"
                 style="width: 250px;"
                 type="daterange"
                 unlink-panels
@@ -33,7 +33,7 @@
               <span style="margin: 0 20px;">
                 <el-divider direction="vertical"></el-divider>
               </span>
-              <el-button type="primary" size="mini">导出</el-button>
+              <el-button type="primary" size="mini" @click="download">导出</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -47,20 +47,21 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column :width="55" type="index" align="center"></el-table-column>
-          <el-table-column prop="companyName" label="产品" align="center" />
-          <el-table-column prop="phone" label="订购数量" align="center" />
-          <el-table-column prop="phone" label="订购箱数" align="center" />
-          <el-table-column prop="phone" label="订购金额" align="center" />
-          <el-table-column prop="phone" label="入库数量" align="center" />
-          <el-table-column prop="phone" label="入库箱数" align="center" />
-          <el-table-column prop="phone" label="入库金额" align="center" />
-          <el-table-column prop="phone" label="退货单数量" align="center" />
-          <el-table-column prop="phone" label="退货单金额" align="center" />
-          <el-table-column :min-width="100" prop="phone" label="退货出库数量" align="center" />
-          <el-table-column :min-width="100" prop="phone" label="退货出库金额" align="center" />
-          <el-table-column prop="phone" label="采购数量" align="center" />
-          <el-table-column prop="phone" label="采购箱数" align="center" />
+          <el-table-column :width="55" label="序号" type="index" align="center"></el-table-column>
+          <el-table-column prop="productName" label="产品" align="center" />
+          <el-table-column :width="90" prop="orderCount" label="订购数量" align="center" />
+          <el-table-column :width="80" prop="orderBoxCount" label="订购箱数" align="center" />
+          <el-table-column :width="90" prop="orderTaxSum" label="订购金额" align="center" />
+          <el-table-column :width="80" prop="orderInCount" label="入库数量" align="center" />
+          <el-table-column :width="80" prop="orderInBoxCount" label="入库箱数" align="center" />
+          <el-table-column :width="80" prop="orderInTaxSum" label="入库金额" align="center" />
+          <el-table-column :width="90" prop="returnCount" label="退货单数量" align="center" />
+          <el-table-column :width="90" prop="returnTaxSum" label="退货单金额" align="center" />
+          <el-table-column :min-width="100" prop="returnOutCount" label="退货出库数量" align="center" />
+          <el-table-column :min-width="100" prop="returnOutTaxSum" label="退货出库金额" align="center" />
+          <el-table-column :width="80" prop="stockCount" label="采购数量" align="center" />
+          <el-table-column :width="80" prop="stockBoxCount" label="采购箱数" align="center" />
+          <el-table-column :width="80" prop="stockTaxSum" label="采购金额" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -81,7 +82,7 @@
 <script>
 import CategorySearch from '@/components/CategorySearch';
 import BrandSearch from '@/components/BrandSearch';
-import { getUserList } from '@/api/auth/user';
+import { reportStockProduct } from '@/api/statistics';
 
 export default {
   components: {
@@ -92,12 +93,13 @@ export default {
     return {
       loading: false,
       params: {
-        searchPar: '',
-        date: '',
-        leibie: '',
+        productName: '',
+        productTypeId: '',
+        productBrandId: '',
         curentPage: 1,
         pageSize: 10
       },
+      dateRange: [],
       total: 0,
       tableData: []
     };
@@ -113,8 +115,9 @@ export default {
           params[key] = this.params[key];
         }
       });
+      Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      getUserList(params).then(({ result }) => {
+      reportStockProduct(params).then(({ result }) => {
         this.tableData = result.dataList;
         this.total = result.totalCount;
       }).catch(() => {}).finally(() => {
@@ -135,6 +138,9 @@ export default {
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/report/productExport', { ...this.params });
     }
   }
 };
