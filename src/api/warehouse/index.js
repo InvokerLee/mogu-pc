@@ -1,6 +1,6 @@
 import request from '@/utils/request/index';
 
-// 回单主表
+// 库存
 export function storestockList(data) {
   return request({
     url: '/storestock/list',

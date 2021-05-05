@@ -47,22 +47,28 @@
           height="120px"
           :data="tableData"
         >
-          <el-table-column :width="80" prop="name" label="仓库类型" align="center" />
-          <el-table-column :width="80" prop="name" label="类别" align="center" />
-          <el-table-column :width="100" prop="name" label="品牌" align="center" />
-          <el-table-column prop="name" label="品名" align="center" />
-          <el-table-column :width="120" prop="120" label="规格型号" align="center" />
-          <el-table-column :width="80" prop="address" label="仓库" align="center" />
-          <el-table-column :width="100" prop="address" label="条码" align="center" />
-          <el-table-column :width="60" prop="address" label="单位" align="center" />
-          <el-table-column :width="80" prop="address" label="当前数量" align="center" />
-          <el-table-column :width="80" prop="address" label="当前箱数" align="center" />
-          <el-table-column :width="110" prop="address" label="当前库存成本额" align="center" />
-          <el-table-column :width="100" prop="address" label="计划出库数量" align="center" />
-          <el-table-column :width="100" prop="address" label="计划出库箱数" align="center" />
-          <el-table-column :min-width="100" prop="address" label="实际可用数量" align="center" />
-          <el-table-column :width="80" prop="address" label="成本单价" align="center" />
-          <el-table-column :width="110" prop="address" label="最近一次采购价" align="center" />
+          <el-table-column :width="80" prop="storeType" label="仓库类型" align="center">
+            <template slot-scope="scope">
+              <div>
+                {{ ['一般仓库', '专柜仓库', '样品仓库'][scope.row.storeType] }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column :width="80" prop="productTypeName" label="类别" align="center" />
+          <el-table-column :width="100" prop="productBrandName" label="品牌" align="center" />
+          <el-table-column prop="productName" label="品名" align="center" />
+          <el-table-column :min-width="100" prop="productSpec" label="规格型号" align="center" />
+          <el-table-column :width="80" prop="storeName" label="仓库" align="center" />
+          <el-table-column :width="90" prop="barCode" label="条码" align="center" />
+          <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
+          <el-table-column :width="80" prop="purchaseCount" label="当前数量" align="center" />
+          <el-table-column :width="80" prop="" label="当前箱数" align="center" />
+          <el-table-column :width="110" prop="" label="当前库存成本额" align="center" />
+          <el-table-column :width="100" prop="planOutCount" label="计划出库数量" align="center" />
+          <el-table-column :width="100" prop="" label="计划出库箱数" align="center" />
+          <el-table-column :min-width="100" prop="" label="实际可用数量" align="center" />
+          <el-table-column :width="80" prop="stockPrice" label="成本单价" align="center" />
+          <el-table-column :width="110" prop="" label="最近一次采购价" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
