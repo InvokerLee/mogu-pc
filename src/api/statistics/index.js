@@ -31,3 +31,15 @@ export function reportStockDetail(data) {
     }
   });
 }
+
+// 销售
+export function reportSalesGuest(data) {
+  return request({
+    url: '/report/salesGuest',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

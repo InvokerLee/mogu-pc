@@ -154,6 +154,7 @@ export default {
       this.getList();
     },
     reset() {
+      this.dateRange = [];
       Object.assign(this.params, this.$options.data.call(this).params);
       this.getList();
     },
