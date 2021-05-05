@@ -4,7 +4,7 @@
     <div class="cusAndGoods">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="类型">
-          <el-select v-model="isHead" class="w90px">
+          <el-select v-model="isHead" class="w90px" @change="reset">
             <el-option :value="true" label="总部"></el-option>
             <el-option :value="false" label="门店"></el-option>
           </el-select>
