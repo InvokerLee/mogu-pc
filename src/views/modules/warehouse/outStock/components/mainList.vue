@@ -3,13 +3,34 @@
     <div slot="header">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item>
-          <el-tag type="info">特价预留</el-tag>
+          <el-tag type="info">出库单</el-tag>
         </el-form-item>
-        <el-form-item label="产品">
-          <el-input v-model.trim="params.productName" placeholder="品名/规格/条码" />
+        <el-form-item label="出库类型">
+          <el-select v-model="params.orderType" placeholder="请选择" class="w120px">
+            <el-option label="全部" value="" />
+            <el-option v-for="item in outStockTypes.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="客户">
-          <el-input v-model.trim="params.guestName" placeholder="客户名称" />
+        <el-form-item label="日期">
+          <el-date-picker
+            v-model="dateRange"
+            style="width: 250px;"
+            type="daterange"
+            unlink-panels
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :editable="false"
+            :default-time="['00:00:00', '23:59:59']"
+          />
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="params.state" placeholder="请选择" class="w90px">
+            <el-option label="全部" value="" />
+            <el-option label="已审核" :value="1" />
+            <el-option label="待审核" :value="0" />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -30,23 +51,32 @@
       highlight-current-row
       @current-change="rowChange"
     >
-      <el-table-column :width="100" label="操作" type="action" align="center">
+      <el-table-column :width="150" label="操作" type="action" align="center">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
-            <!-- <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a> -->
-            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.checkState ? '审核' : '反审核' }}</a>
+            <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.checkState ? '审核' : '反审' }}</a>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column :width="140" prop="reserveNum" label="预留单号" align="center" />
-      <el-table-column :min-width="120" prop="guestName" label="客户" align="center" />
-      <el-table-column :width="135" prop="startDate" label="开始日期" align="center" />
-      <el-table-column :width="135" prop="endDate" label="结束日期" align="center" />
-      <el-table-column :width="80" prop="reserveCount" label="预留数量" align="center" />
+      <el-table-column :width="100" label="单据类型" align="center">
+        <template slot-scope="scope">
+          <span>
+            {{ outStockTypes[scope.row.orderType] }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column :width="100" prop="orderNo" label="出库单号" align="center" />
+      <el-table-column :min-width="120" prop="guestName" label="客户/供应商" align="center" />
+      <el-table-column :width="100" prop="orderNo" label="订单号" align="center" />
+      <el-table-column :width="135" prop="startDate" label="订单日期" align="center" />
+      <el-table-column :width="135" prop="startDate" label="出库日期" align="center" />
+      <el-table-column :width="80" prop="reserveCount" label="出库数量" align="center" />
+      <el-table-column :width="110" prop="reserveCount" label="出库金额(含税)" align="center" />
+      <el-table-column :width="110" prop="reserveCount" label="出库金额(未税)" align="center" />
+      <el-table-column :min-width="120" prop="reserveCount" label="地址" align="center" />
       <el-table-column :min-width="120" prop="text" label="备注" align="center" />
-      <el-table-column :width="70" prop="checkUserName" label="审核人" align="center" />
-      <el-table-column :width="135" prop="checkDate" label="审核时间" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
@@ -54,6 +84,7 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column :width="70" prop="checkUserName" label="审核人" align="center" />
     </el-table>
     <el-pagination
       v-if="tableData.length"
@@ -88,11 +119,13 @@ export default {
     return {
       loading: false,
       params: {
-        productName: '',
-        guestName: '',
+        orderType: '',
+        searchPar: '',
+        state: '',
         curentPage: 1,
         pageSize: 10
       },
+      dateRange: [],
       total: 0,
       tableData: [],
       dialog: {
@@ -100,6 +133,11 @@ export default {
         item: {}
       }
     };
+  },
+  computed: {
+    outStockTypes() {
+      return this.$store.getters.getConstByKey('outStockType');
+    }
   },
   created() {
     this.getList();
@@ -112,10 +150,11 @@ export default {
           params[key] = this.params[key];
         }
       });
+      Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
       specialreserveList(params).then(({ result }) => {
-        this.tableData = result.dataList;
-        this.total = result.totalCount;
+        // this.tableData = result.dataList;
+        // this.total = result.totalCount;
       }).finally(() => {
         this.loading = false;
       });

@@ -12,3 +12,4 @@ export function storestockList(data) {
   });
 }
 
+// 出库
