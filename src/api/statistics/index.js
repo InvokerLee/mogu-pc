@@ -74,3 +74,14 @@ export function reportSalesGuestAndProductOfShop(data) {
     }
   });
 }
+
+export function reportSalesBizMan(data) {
+  return request({
+    url: '/report/sales/bizMan',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
