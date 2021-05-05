@@ -7,32 +7,29 @@
     @close="cancel"
   >
     <el-form ref="specialPriceForm" inline size="mini" label-width="80px" :model="form" :rules="rules">
-      <el-form-item label="预留单号">
-        <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
+      <el-form-item label="出库类型" prop="orderType">
+        <el-select v-model="form.orderType" placeholder="请选择" style="width: 200px;">
+          <el-option v-for="i in outStockTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="客户" prop="guestId">
-        <customer-selector style="width: 200px" :params="form" paramsKey="guestId" :defaultOpions="guestOptions"></customer-selector>
+      <el-form-item label="出库数量" prop="reserveCount">
+        <el-input v-model="form.reserveCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
       </el-form-item>
-      <el-form-item label="开始日期" prop="startDate">
+      <el-form-item label="出库日期" prop="startDate">
         <el-date-picker
           v-model="form.startDate"
           style="width: 200px"
           value-format="yyyy-MM-dd"
         />
       </el-form-item>
-      <el-form-item label="预留数量" prop="reserveCount">
-
-        <el-input v-model="form.reserveCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
+      <el-form-item label="出库单号">
+        <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
       <el-form-item label="备注">
         <el-input v-model.trim="form.text" style="width: 200px"></el-input>
       </el-form-item>
-      <el-form-item label="结束日期" prop="endDate">
-        <el-date-picker
-          v-model="form.endDate"
-          style="width: 200px"
-          value-format="yyyy-MM-dd"
-        />
+      <el-form-item label="出库仓库">
+        <el-input style="width: 200px" placeholder="禁止输入，自动计算" readonly></el-input>
       </el-form-item>
     </el-form>
     <div style="padding: 3px 0;border-top: 1px solid #ddd;">
@@ -55,12 +52,13 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column prop="productName" label="预留产品" align="center" />
-      <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
+      <el-table-column prop="productName" label="产品" align="center" />
       <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
       <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
-      <el-table-column :width="80" prop="count" label="预留数量" align="center" />
-      <el-table-column :width="90" prop="storeName" label="预留仓库" align="center" />
+      <el-table-column :width="80" prop="count" label="数量" align="center" />
+      <el-table-column :width="80" prop="count" label="箱数" align="center" />
+      <el-table-column :width="90" prop="storeName" label="出库仓库" align="center" />
+      <el-table-column :width="90" prop="storeName" label="入库仓库" align="center" />
       <el-table-column prop="text" label="备注" align="center" />
     </el-table>
 
@@ -79,13 +77,11 @@
 </template>
 
 <script>
-import CustomerSelector from '@/components/CustomerSelector';
 import addDialog from './add-dialog';
 import { specialreserveInfo, addSpecialreserve, editSpecialreserve } from '@/api/config';
 
 export default {
   components: {
-    CustomerSelector,
     addDialog
   },
   props: ['visible', 'item'],
@@ -94,7 +90,7 @@ export default {
       loading: false,
       isEdit: false,
       form: {
-        guestId: [],
+        orderType: '',
         startDate: '',
         endDate: '',
         text: '',
@@ -102,7 +98,7 @@ export default {
         reserveProductList: []
       },
       rules: {
-        guestId: [
+        orderType: [
           { required: true, message: '必选', trigger: 'blur' }
         ],
         startDate: [
@@ -118,9 +114,13 @@ export default {
       dialog: {
         show: false,
         item: {}
-      },
-      guestOptions: []
+      }
     };
+  },
+  computed: {
+    outStockTypes() {
+      return this.$store.getters.getConstByKey('outStockType');
+    }
   },
   created() {
     if (this.item && this.item.id) {
@@ -134,7 +134,6 @@ export default {
         Object.keys(this.form).forEach((k) => {
           this.form[k] = result[k];
         });
-        this.guestOptions = [{ guestName: result.guestName, guestId: result.guestId }];
       }).catch(() => {});
     },
     add() {
