@@ -43,3 +43,13 @@ export function reportSalesGuest(data) {
     }
   });
 }
+export function reportSalesProduct(data) {
+  return request({
+    url: '/report/sales/product',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
