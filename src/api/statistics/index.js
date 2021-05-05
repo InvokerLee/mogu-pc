@@ -53,3 +53,24 @@ export function reportSalesProduct(data) {
     }
   });
 }
+
+export function reportSalesGuestAndProductOfHeader(data) {
+  return request({
+    url: '/report/sales/guestAndProductOfHeader',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function reportSalesGuestAndProductOfShop(data) {
+  return request({
+    url: '/report/sales/guestAndProductOfShop',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
