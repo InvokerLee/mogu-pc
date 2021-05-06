@@ -97,3 +97,15 @@ export function reportInstockAndOutStock(data) {
     }
   });
 }
+
+// 畅销滞销
+export function reportSalableAndUnsalable(data) {
+  return request({
+    url: '/report/salableAndUnsalable',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

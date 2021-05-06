@@ -4,29 +4,30 @@
     <div class="salesRank">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="销售计算方式">
-          <el-select v-model="params.state" placeholder="请选择">
+          <el-select v-model="params.salesReportType" placeholder="请选择" class="w120px">
             <el-option label="全部" value="" />
-            <el-option label="有效" :value="1" />
-            <el-option label="禁用" :value="0" />
+            <el-option label="验收-退货" :value="0" />
+            <el-option label="验收" :value="1" />
+            <el-option label="发货" :value="2" />
           </el-select>
         </el-form-item>
         <el-form-item label="排序方式">
-          <el-select v-model="params.state" placeholder="请选择">
+          <el-select v-model="params.sortType" placeholder="请选择" class="w90px">
             <el-option label="全部" value="" />
-            <el-option label="有效" :value="1" />
-            <el-option label="禁用" :value="0" />
+            <el-option label="滞销" :value="1" />
+            <el-option label="畅销" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item label="统计标准">
-          <el-select v-model="params.state" placeholder="请选择">
+          <el-select v-model="params.statisticsType" placeholder="请选择" class="w90px">
             <el-option label="全部" value="" />
-            <el-option label="有效" :value="1" />
-            <el-option label="禁用" :value="0" />
+            <el-option label="数量" :value="1" />
+            <el-option label="金额" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="params.created_at"
+            v-model="dateRange"
             style="width: 250px;"
             type="daterange"
             unlink-panels
@@ -51,15 +52,14 @@
           size="mini"
           height="120px"
           :data="tableData"
-          @selection-change="(val) => { selectItems = val }"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="username" label="产品" align="center" />
-          <el-table-column prop="remarks" label="条码" align="center" />
-          <el-table-column prop="remarks" label="单位" align="center" />
-          <el-table-column prop="remarks" label="销售数量" align="center" />
-          <el-table-column prop="remarks" label="销售金额" align="center" />
-          <el-table-column prop="remarks" :min-width="100" label="当前库存数量" align="center" />
+          <el-table-column prop="productName" label="产品" align="center" />
+          <el-table-column prop="productBarCode" label="条码" align="center" />
+          <el-table-column prop="productUnit" label="单位" align="center" />
+          <el-table-column prop="salesCount" label="销售数量" align="center" />
+          <el-table-column prop="salesSum" label="销售金额" align="center" />
+          <el-table-column prop="storeCount" :min-width="100" label="当前库存数量" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-// import { getUserList } from '@/api/auth/user';
+import { reportSalableAndUnsalable } from '@/api/statistics';
 
 export default {
   name: 'salesRank',
@@ -88,18 +88,24 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        salesReportType: '',
+        sortType: '',
+        statisticsType: '',
+        curentPage: 1,
+        pageSize: 10
       },
+      dateRange: [],
       total: 0,
       tableData: []
     };
   },
+  computed: {
+    inOutStockTypes() {
+      return this.$store.getters.getConstByKey('inOutStockType');
+    }
+  },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
@@ -109,28 +115,33 @@ export default {
           params[key] = this.params[key];
         }
       });
+      Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      // getUserList(params).then(({ data }) => {
-      //   this.tableData = data.data;
-      //   this.total = data.total;
-      // }).catch(() => {}).finally(() => {
-      //   this.loading = false;
-      // });
+      reportSalableAndUnsalable(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-      this.params.page = 1;
-      // this.getList();
+      this.params.curentPage = 1;
+      this.getList();
     },
     reset() {
+      this.dateRange = [];
       Object.assign(this.params, this.$options.data.call(this).params);
-      // this.getList();
+      this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/report/storeInAndStoreOutExport', { ...this.params });
     }
   }
 };
