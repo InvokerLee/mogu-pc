@@ -48,9 +48,6 @@
           <el-table-column :width="90" prop="returnTaxSum" label="退货金额" align="center" />
           <el-table-column :width="100" prop="returnOutTaxSum" label="退货出库金额" align="center" />
           <el-table-column :width="90" prop="stockTaxSum" label="采购金额" align="center" />
-          <el-table-column :width="110" prop="" label="采购调整单金额" align="center" />
-          <el-table-column :width="100" prop="" label="采购开票金额" align="center" />
-          <el-table-column :width="100" prop="" label="采购付款金额" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
