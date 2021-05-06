@@ -85,3 +85,15 @@ export function reportSalesBizMan(data) {
     }
   });
 }
+
+// 出入库记录
+export function reportInstockAndOutStock(data) {
+  return request({
+    url: '/report/storeInAndStoreOut',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

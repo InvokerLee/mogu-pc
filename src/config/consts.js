@@ -19,5 +19,18 @@ export default {
     { label: '专柜发货出库', value: 'shoppeOutStore' },
     { label: '样品发货出库', value: 'sampleOutStore' },
     { label: '其他出库', value: 'otherOutStore' }
+  ],
+  inOutStockType: [
+    { label: '采购退货出库', value: 'stockReturnOutStore' },
+    { label: '销售发货出库', value: 'salesOutStore' },
+    { label: '报损出库', value: 'damageOutStore' },
+    { label: '外仓调拨出库', value: 'outStoreAllocationOutStore' },
+    { label: '专柜发货出库', value: 'shoppeOutStore' },
+    { label: '样品发货出库', value: 'sampleOutStore' },
+    { label: '其他出库', value: 'otherOutStore' },
+    { label: '采购进货入库', value: 'stockInStore' },
+    { label: '销售退货入库', value: 'salesReturnInStore' },
+    { label: '其他入库', value: 'otherInStore' },
+    { label: '外仓调拨入库', value: 'outStoreAllocationInStore' }
   ]
 };
