@@ -109,3 +109,15 @@ export function reportSalableAndUnsalable(data) {
     }
   });
 }
+
+// 客户异常
+export function reportProductGrossProfit(data) {
+  return request({
+    url: '/report/productGrossProfit',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

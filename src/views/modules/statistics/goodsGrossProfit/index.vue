@@ -4,14 +4,14 @@
     <div class="goodsGrossProfit">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="产品">
-          <el-input v-model.trim="params.key" placeholder="名称/规格/条码" />
+          <el-input v-model.trim="params.productName" placeholder="名称/规格/条码" />
         </el-form-item>
-        <el-form-item label="毛利率低于">
-          <el-input v-model.trim="params.key" placeholder="" class="w60px" />
+        <el-form-item label="毛利额低于">
+          <el-input v-model.trim="params.grossRate" placeholder="" class="w120px" />
         </el-form-item>
         <el-form-item label="月份">
           <el-date-picker
-            v-model="params.month"
+            v-model="params.yearMonth"
             style="width: 120px;"
             type="month"
             value-format="yyyy-MM"
@@ -34,14 +34,14 @@
           :data="tableData"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="username" label="月份" align="center" />
-          <el-table-column prop="username" label="产品" align="center" />
-          <el-table-column prop="remarks" label="条码" align="center" />
-          <el-table-column prop="remarks" label="单位" align="center" />
-          <el-table-column prop="remarks" label="销售金额" align="center" />
-          <el-table-column prop="remarks" label="成本金额" align="center" />
-          <el-table-column prop="remarks" label="毛利额" align="center" />
-          <el-table-column prop="remarks" label="毛利率" align="center" />
+          <el-table-column :width="80" prop="yearMonth" label="月份" align="center" />
+          <el-table-column prop="productName" label="产品" align="center" />
+          <el-table-column :width="80" prop="productBarCode" label="条码" align="center" />
+          <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
+          <el-table-column prop="salesSum" label="销售金额" align="center" />
+          <el-table-column prop="costSum" label="成本金额" align="center" />
+          <el-table-column prop="grossMargin" label="毛利额" align="center" />
+          <el-table-column prop="grossRate" label="毛利率" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-// import { getUserList } from '@/api/auth/user';
+import { reportProductGrossProfit } from '@/api/statistics';
 
 export default {
   name: 'goodsGrossProfit',
@@ -70,18 +70,24 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        productName: '',
+        grossRate: '',
+        yearMonth: '',
+        curentPage: 1,
+        pageSize: 10
       },
+      dateRange: [],
       total: 0,
       tableData: []
     };
   },
+  computed: {
+    inOutStockTypes() {
+      return this.$store.getters.getConstByKey('inOutStockType');
+    }
+  },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
@@ -91,29 +97,33 @@ export default {
           params[key] = this.params[key];
         }
       });
+      Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      // getUserList(params).then(({ data }) => {
-      //   this.tableData = data.data;
-      //   this.total = data.total;
-      // }).catch(() => {}).finally(() => {
-      //   this.loading = false;
-      // });
+      reportProductGrossProfit(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-      this.params.page = 1;
-      console.log(this.params);
-      // this.getList();
+      this.params.curentPage = 1;
+      this.getList();
     },
     reset() {
+      this.dateRange = [];
       Object.assign(this.params, this.$options.data.call(this).params);
-      // this.getList();
+      this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/report/productGrossProfitExport', { ...this.params });
     }
   }
 };
