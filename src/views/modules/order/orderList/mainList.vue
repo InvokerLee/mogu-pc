@@ -60,11 +60,11 @@
             <a class="font-blue el-icon-edit font-16" @click="edit(scope.row)"></a>
             <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
             <a class="font-blue">审核</a>
-            <a class="font-blue">打印</a>
+            <!-- <a class="font-blue">打印</a> -->
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column :width="100" label="订单类型" align="center">
+      <el-table-column :width="110" label="订单类型" align="center">
         <template slot-scope="scope">
           <span>
             {{ orderTypes[scope.row.orderType] }}
@@ -78,13 +78,13 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column :width="100" prop="orderNo" label="订单号" align="center" />
-      <el-table-column :width="100" prop="1" label="订单日期" align="center" />
+      <el-table-column :width="145" prop="orderNo" label="订单号" align="center" />
+      <el-table-column :width="135" prop="orderDate" label="订单日期" align="center" />
       <el-table-column :width="120" prop="taxSum" label="订购金额(含税)" align="center" />
       <el-table-column :width="120" prop="noTaxSum" label="订购金额(未税)" align="center" />
       <el-table-column :width="80" prop="orderCount" label="订购数量" align="center" />
-      <el-table-column prop="address" label="地址" align="center" />
-      <el-table-column prop="text" label="备注" align="center" />
+      <el-table-column :min-width="250" prop="address" label="地址" align="center" />
+      <el-table-column :min-width="180" prop="text" label="备注" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
@@ -92,8 +92,8 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="1" label="审核人" align="center" />
-      <el-table-column prop="1" label="审核时间" align="center" />
+      <el-table-column :width="80" prop="checkUserName" label="审核人" align="center" />
+      <el-table-column :width="135" prop="checkDate" label="审核时间" align="center" />
     </el-table>
     <el-pagination
       v-if="tableData.length"
@@ -118,6 +118,7 @@
 
 <script>
 // import { getOrderList, checkOrder, delOrder } from '@/api/order';
+import { getOrderList } from '@/api/order';
 import orderForm from './components/order-form';
 
 export default {
@@ -162,7 +163,7 @@ export default {
     }
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
@@ -173,13 +174,13 @@ export default {
         }
       });
       Object.assign(params, this.formatDate(this.dateRange));
-      // this.loading = true;
-      // getOrderList(params).then(({ result }) => {
-      //   this.tableData = result.dataList;
-      //   this.total = result.totalCount;
-      // }).finally(() => {
-      //   this.loading = false;
-      // });
+      this.loading = true;
+      getOrderList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
       this.params.curentPage = 1;
