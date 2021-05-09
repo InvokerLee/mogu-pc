@@ -203,3 +203,46 @@ export function reportReturnNoComeInDetail(data) {
     }
   });
 }
+
+// 退货未回
+export function reportNoCheck(data) {
+  return request({
+    url: '/report/noCheck',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function reportNoCheckDetail(data) {
+  return request({
+    url: '/report/noCheckDetail',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+// 拒收产品未回
+export function reportRejectedNoComeIn(data) {
+  return request({
+    url: '/report/rejectedNoComeIn',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function reportRejectedNoComeInDetail(data) {
+  return request({
+    url: '/report/rejectedNoComeInDetail',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
