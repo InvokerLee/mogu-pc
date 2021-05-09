@@ -59,6 +59,7 @@
         v-if="dialog.show"
         :visible="dialog.show"
         :item="dialog.item"
+        :orderId="rowId"
         @success="actionSuccess"
         @cancel="closeDialog"
       />
@@ -67,7 +68,7 @@
 </template>
 
 <script>
-import { getOrderDetailList } from '@/api/order';
+import { getOrderDetailList, delOrderDetail } from '@/api/order';
 import itemForm from './components/item-form';
 
 export default {
@@ -131,14 +132,17 @@ export default {
       this.dialog.show = true;
     },
     del(item) {
-      // this.$confirm('确认要删除吗?', '删除提示', {
-      //   confirmButtonText: '确认',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => delOrder(item.id)).then(() => {
-      //   this.$message.success('删除成功');
-      //   this.getList();
-      // }).catch(() => {});
+      this.$confirm('确认要删除吗?', '删除提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => delOrderDetail({
+        orderId: this.rowId,
+        ids: item.id
+      })).then(() => {
+        this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
     },
     closeDialog() {
       this.dialog.name = '';

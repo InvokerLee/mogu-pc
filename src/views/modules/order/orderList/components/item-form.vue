@@ -6,24 +6,49 @@
     :visible="visible"
     @close="cancel"
   >
+    <!-- {
+  "batchId": 0,
+  "boxCount": "string",
+  "companyId": 0,
+  "count": 0,
+  "createUserId": 0,
+  "id": 0,
+  "noTaxPrice": 0,
+  "noTaxSum": 0,
+  "orderId": 0,
+  "priceTip": "string",
+  "productBarCode": "string",
+  "productBoxCount": 0,
+  "productId": 0,
+  "productName": "string",
+  "productSpec": "string",
+  "productUnit": "string",
+  "storeId": 0,
+  "storeName": "string",
+  "taxPrice": 0,
+  "taxRate": 0,
+  "taxSum": 0,
+  "text": "string",
+  "uuid": "string"
+} -->
     <el-form ref="orderDetailForm" size="mini" label-width="100px" :model="form" :rules="rules">
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="产品：" prop="">
-            <product-selector :params="form" paramsKey="productId" @selectChange="selectChange"></product-selector>
+          <el-form-item label="产品：" prop="productId">
+            <product-selector :params="form" paramsKey="productId" :defaultOpions="productOpts" @selectChange="selectChange"></product-selector>
           </el-form-item>
-          <el-form-item label="数量：" prop="">
+          <el-form-item label="数量：" prop="count">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.count"
               class="w100"
               :controls="false"
               :precision="0"
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="箱数：" prop="">
+          <el-form-item label="箱数：">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.boxCount"
               class="w100"
               :controls="false"
               :precision="0"
@@ -31,10 +56,10 @@
             </el-input-number>
           </el-form-item>
           <el-form-item label="税率：">
-            <el-input v-model.trim="form.realname" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.taxRate" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="仓库：" prop="">
-            <warehous-selector :params="form" paramsKey="storeId"></warehous-selector>
+          <el-form-item label="仓库：" prop="storeId">
+            <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts"></warehous-selector>
           </el-form-item>
           <el-form-item label="备注：">
             <el-input v-model.trim="form.text"></el-input>
@@ -42,17 +67,17 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="单位：">
-            <el-input v-model.trim="form.realname" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="可用数量：">
-            <el-input v-model.trim="form.realname" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.productCount" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="箱装量：">
-            <el-input v-model.trim="form.realname" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.productBoxCount" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="含税单价：" prop="">
+          <el-form-item label="含税单价：" prop="taxPrice">
             <el-input-number
-              v-model="form.quantity"
+              v-model="form.taxPrice"
               class="w100"
               :controls="false"
               :precision="2"
@@ -60,10 +85,10 @@
             </el-input-number>
           </el-form-item>
           <el-form-item label="未税单价：">
-            <el-input v-model.trim="form.realname" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.noTaxPrice" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="价格提示：">
-            <el-input v-model.trim="form.text"></el-input>
+            <el-input v-model.trim="form.priceTip"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -77,7 +102,7 @@
 </template>
 
 <script>
-// import { addUser, editUser } from '@/api/auth/user';
+import { addOrderDetail, editOrderDetail } from '@/api/order';
 import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
 
@@ -86,26 +111,42 @@ export default {
     ProductSelector,
     WarehousSelector
   },
-  props: ['visible', 'item'],
+  props: ['visible', 'item', 'orderId'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
-        customerId: '',
-        realname: '',
-        phone: '',
-        status: 1,
-        remarks: ''
+        productId: '',
+        count: '',
+        boxCount: '',
+        taxRate: '',
+        storeId: '',
+        text: '',
+
+        productUnit: '',
+        productCount: '',
+        productBoxCount: '',
+        taxPrice: '',
+        noTaxPrice: '',
+        priceTip: ''
       },
       rules: {
-        realname: [
+        productId: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
-        status: [
+        taxPrice: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        count: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        storeId: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
-      }
+      },
+      productOpts: [],
+      warehouseOpts: []
     };
   },
   created() {
@@ -114,11 +155,18 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
+      this.productOpts = [{ name: this.item.productName, productId: this.item.productId }];
+      this.warehouseOpts = [{ name: this.item.storeName, id: this.item.storeId }];
     }
   },
   methods: {
-    selectChange(product) {
-      console.log(product);
+    selectChange(products) {
+      const p = products[0] || {};
+      this.form.productUnit = p.unit;
+      // TODO:可用数量
+      this.form.productBoxCount = p.boxCount;
+      this.form.noTaxPrice = p.salseNoTaxPrice;
+      this.form.taxRate = p.salesTaxRate;
     },
     confirm() {
       this.$refs.orderDetailForm.validate((valid) => {
@@ -133,9 +181,9 @@ export default {
       });
     },
     saveForm() {
-      // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+      return this.isEdit
+        ? editOrderDetail({ id: this.item.id, orderId: this.orderId, ...this.form })
+        : addOrderDetail({ ...this.form, orderId: this.orderId });
     },
     cancel() {
       this.$emit('cancel');
