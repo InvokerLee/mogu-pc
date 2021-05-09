@@ -6,10 +6,10 @@
           <el-tag type="info">退货未回异常</el-tag>
         </el-form-item>
         <el-form-item label="退货未回周期(天)">
-          <el-input v-model.trim="params.key" placeholder="天数" class="w60px" />
+          <el-input v-model.trim="params.noCheckDay" placeholder="天数" class="w90px" />
         </el-form-item>
         <el-form-item label="客户">
-          <el-input v-model.trim="params.key" placeholder="客户名称" />
+          <el-input v-model.trim="params.guestName" placeholder="客户名称" />
 
         </el-form-item>
         <el-form-item>
@@ -27,7 +27,13 @@
       highlight-current-row
       @current-change="rowChange"
     >
-      <el-table-column prop="username" label="单据类型" align="center" />
+      <el-table-column label="单据类型" align="center">
+        <template slot-scope="scope">
+          <span>
+            {{ inOutStockTypes[scope.row.orderType] }}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column prop="remarks" label="客户" align="center" />
       <el-table-column prop="remarks" label="订单号" align="center" />
       <el-table-column prop="remarks" label="订单日期" align="center" />
@@ -61,6 +67,8 @@
 </template>
 
 <script>
+import { reportReturnNoComeIn } from '@/api/statistics';
+
 export default {
   components: {
   },
@@ -68,32 +76,49 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        guestName: '',
+        noCheckDay: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
-      tableData: [{ id: 1 }]
+      tableData: []
     };
   },
+  computed: {
+    inOutStockTypes() {
+      return this.$store.getters.getConstByKey('inOutStockType');
+    }
+  },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
-
+      const params = {};
+      Object.keys(this.params).forEach((key) => {
+        if (this.params[key] !== '') {
+          params[key] = this.params[key];
+        }
+      });
+      this.loading = true;
+      reportReturnNoComeIn(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-
+      this.params.curentPage = 1;
+      this.getList();
     },
-    reset() {},
-    rowChange(row) {
-      this.$emit('rowClickChange', row);
+    reset() {
+      Object.assign(this.params, this.$options.data.call(this).params);
+      this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {

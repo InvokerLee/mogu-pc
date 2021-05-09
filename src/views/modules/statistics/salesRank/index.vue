@@ -99,11 +99,6 @@ export default {
       tableData: []
     };
   },
-  computed: {
-    inOutStockTypes() {
-      return this.$store.getters.getConstByKey('inOutStockType');
-    }
-  },
   created() {
     this.getList();
   },

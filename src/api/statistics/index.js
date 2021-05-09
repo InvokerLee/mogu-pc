@@ -181,3 +181,25 @@ export function reportOrderOutageRate(data) {
     }
   });
 }
+
+// 退货未回
+export function reportReturnNoComeIn(data) {
+  return request({
+    url: '/report/returnNoComeIn',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function reportReturnNoComeInDetail(data) {
+  return request({
+    url: '/report/returnNoComeInDetail',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

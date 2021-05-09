@@ -20,6 +20,12 @@ export default {
     { label: '样品发货出库', value: 'sampleOutStore' },
     { label: '其他出库', value: 'otherOutStore' }
   ],
+  inStockType: [
+    { label: '采购进货入库', value: 'stockInStore' },
+    { label: '销售退货入库', value: 'salesReturnInStore' },
+    { label: '其他入库', value: 'otherInStore' },
+    { label: '外仓调拨入库', value: 'outStoreAllocationInStore' }
+  ],
   inOutStockType: [
     { label: '采购退货出库', value: 'stockReturnOutStore' },
     { label: '销售发货出库', value: 'salesOutStore' },
