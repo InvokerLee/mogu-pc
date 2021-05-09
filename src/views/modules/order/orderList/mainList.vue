@@ -57,8 +57,8 @@
       <el-table-column :width="130" label="操作" type="action" align="center">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-around" align="middle">
-            <a class="font-blue el-icon-edit font-16" @click="edit(scope.row)"></a>
-            <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
+            <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
+            <a class="font-red el-icon-delete font-16" @click.stop="del(scope.row)"></a>
             <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '审核' : '反审' }}</a>
             <!-- <a class="font-blue">打印</a> -->
           </el-row>
@@ -78,7 +78,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column :width="145" prop="orderNo" label="订单号" align="center" />
+      <el-table-column :width="160" prop="orderNo" label="订单号" align="center" />
       <el-table-column :width="135" prop="orderDate" label="订单日期" align="center" />
       <el-table-column :width="120" prop="taxSum" label="订购金额(含税)" align="center" />
       <el-table-column :width="120" prop="noTaxSum" label="订购金额(未税)" align="center" />
@@ -117,8 +117,7 @@
 </template>
 
 <script>
-// import { getOrderList, checkOrder, delOrder } from '@/api/order';
-import { getOrderList, checkOrder } from '@/api/order';
+import { getOrderList, checkOrder, delOrder } from '@/api/order';
 import orderForm from './components/order-form';
 
 export default {
@@ -224,14 +223,14 @@ export default {
       }).catch(() => {});
     },
     del(item) {
-      // this.$confirm('确认要删除吗?', '删除提示', {
-      //   confirmButtonText: '确认',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => delOrder(item.id)).then(() => {
-      //   this.$message.success('删除成功');
-      //   this.getList();
-      // }).catch(() => {});
+      this.$confirm('确认要删除吗?', '删除提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => delOrder({ ids: item.id })).then(() => {
+        this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
     }
   }
 };

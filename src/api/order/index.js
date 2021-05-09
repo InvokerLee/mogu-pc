@@ -24,10 +24,14 @@ export function editOrder(data) {
     data
   });
 }
-export function delOrder(id) {
+export function delOrder(data) {
   return request({
-    url: `/orderinfo/delete/${id}`,
-    method: 'get'
+    url: `/orderinfo/delete`,
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
 export function checkOrder(data) {
