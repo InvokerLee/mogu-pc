@@ -145,3 +145,15 @@ export function reportGuestGrossProfit(data) {
     }
   });
 }
+
+// 安全库存
+export function reportSafeStoreException(data) {
+  return request({
+    url: '/report/safeStoreException',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

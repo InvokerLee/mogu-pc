@@ -4,7 +4,7 @@
     <div class="safetyStock">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="产品">
-          <el-input v-model.trim="params.key" placeholder="产品名称/规格/条码" />
+          <el-input v-model.trim="params.productName" placeholder="产品名称/规格/条码" />
         </el-form-item>
         <el-form-item label="仓库">
           <warehous-selector :params="params" paramsKey="storeId"></warehous-selector>
@@ -15,7 +15,7 @@
           <span style="margin: 0 20px;">
             <el-divider direction="vertical"></el-divider>
           </span>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="primary" size="mini" @click="download">导出</el-button>
         </el-form-item>
       </el-form>
       <div>
@@ -28,13 +28,13 @@
           :data="tableData"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="remarks" label="仓库" align="center" />
-          <el-table-column prop="remarks" label="产品" align="center" />
-          <el-table-column prop="remarks" label="条码" align="center" />
-          <el-table-column prop="remarks" label="单位" align="center" />
-          <el-table-column prop="remarks" label="库存量" align="center" />
-          <el-table-column prop="remarks" label="库存上限" align="center" />
-          <el-table-column prop="remarks" label="库存下限" align="center" />
+          <el-table-column :width="80" prop="storeName" label="仓库" align="center" />
+          <el-table-column prop="productName" label="产品" align="center" />
+          <el-table-column :width="90" prop="productBarCode" label="条码" align="center" />
+          <el-table-column :width="70" prop="productUnit" label="单位" align="center" />
+          <el-table-column prop="storeCount" label="库存量" align="center" />
+          <el-table-column prop="maxValues" label="库存上限" align="center" />
+          <el-table-column prop="minValues" label="库存下限" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -54,7 +54,7 @@
 
 <script>
 import WarehousSelector from '@/components/WarehousSelector';
-// import { getUserList } from '@/api/auth/user';
+import { reportSafeStoreException } from '@/api/statistics';
 
 export default {
   name: 'safetyStock',
@@ -65,18 +65,18 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        productName: '',
+        storeId: '',
+        curentPage: 1,
+        pageSize: 10
       },
+      dateRange: [],
       total: 0,
       tableData: []
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
@@ -86,28 +86,33 @@ export default {
           params[key] = this.params[key];
         }
       });
+      Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      // getUserList(params).then(({ data }) => {
-      //   this.tableData = data.data;
-      //   this.total = data.total;
-      // }).catch(() => {}).finally(() => {
-      //   this.loading = false;
-      // });
+      reportSafeStoreException(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-      this.params.page = 1;
-      // this.getList();
+      this.params.curentPage = 1;
+      this.getList();
     },
     reset() {
+      this.dateRange = [];
       Object.assign(this.params, this.$options.data.call(this).params);
-      // this.getList();
+      this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/report/safeStoreExceptionExport', { ...this.params });
     }
   }
 };
