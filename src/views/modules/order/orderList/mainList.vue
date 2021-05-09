@@ -59,7 +59,7 @@
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
             <a class="font-red el-icon-delete font-16" @click.stop="del(scope.row)"></a>
-            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '审核' : '反审' }}</a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '反审' : '审核' }}</a>
             <!-- <a class="font-blue">打印</a> -->
           </el-row>
         </template>
