@@ -4,13 +4,13 @@
     <div class="outOfStockRate">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="客户">
-          <el-input v-model.trim="params.key" placeholder="客户名称" />
+          <el-input v-model.trim="params.productName" placeholder="客户名称" />
         </el-form-item>
         <el-form-item label="订单缺货率大于">
-          <el-input v-model.trim="params.key" placeholder="" class="w60px" />
+          <el-input v-model.trim="params.orderLackRate" placeholder="" class="w90px" />
         </el-form-item>
         <el-form-item label="出库缺货率大于">
-          <el-input v-model.trim="params.key" placeholder="" class="w60px" />
+          <el-input v-model.trim="params.outLackRate" placeholder="" class="w90px" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -18,7 +18,7 @@
           <span style="margin: 0 20px;">
             <el-divider direction="vertical"></el-divider>
           </span>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="primary" size="mini" @click="download">导出</el-button>
         </el-form-item>
       </el-form>
       <div>
@@ -31,19 +31,19 @@
           :data="tableData"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="username" label="订购日期" align="center" />
-          <el-table-column prop="username" label="订单号" align="center" />
-          <el-table-column prop="username" label="客户" align="center" />
-          <el-table-column prop="username" label="产品" align="center" />
-          <el-table-column prop="username" label="订购数量" align="center" />
-          <el-table-column prop="username" label="订购箱数" align="center" />
-          <el-table-column prop="username" label="订购金额" align="center" />
-          <el-table-column prop="username" label="出库数量" align="center" />
-          <el-table-column prop="username" label="出库箱数" align="center" />
-          <el-table-column prop="username" label="验收数量" align="center" />
-          <el-table-column prop="username" label="验收箱数" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="订单缺货率" align="center" />
-          <el-table-column :min-width="100" prop="remarks" label="出库缺货率" align="center" />
+          <el-table-column :width="135" prop="orderDate" label="订购日期" align="center" />
+          <el-table-column :width="140" prop="orderNo" label="订单号" align="center" />
+          <el-table-column :min-width="120" prop="guestName" label="客户" align="center" />
+          <el-table-column :min-width="120" prop="productName" label="产品" align="center" />
+          <el-table-column prop="orderCount" label="订购数量" align="center" />
+          <el-table-column prop="orderBoxCount" label="订购箱数" align="center" />
+          <el-table-column prop="orderTaxSum" label="订购金额" align="center" />
+          <el-table-column prop="outStoreCount" label="出库数量" align="center" />
+          <el-table-column prop="outStoreBoxCount" label="出库箱数" align="center" />
+          <el-table-column prop="checkCount" label="验收数量" align="center" />
+          <el-table-column prop="checkBoxCount" label="验收箱数" align="center" />
+          <el-table-column :min-width="95" prop="orderLackRate" label="订单缺货率" align="center" />
+          <el-table-column :min-width="95" prop="outLackRate" label="出库缺货率" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-// import { getUserList } from '@/api/auth/user';
+import { reportOrderOutageRate } from '@/api/statistics';
 
 export default {
   name: 'outOfStockRate',
@@ -72,18 +72,18 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        productName: '',
+        orderLackRate: '',
+        outLackRate: '',
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
       tableData: []
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
@@ -94,28 +94,30 @@ export default {
         }
       });
       this.loading = true;
-      // getUserList(params).then(({ data }) => {
-      //   this.tableData = data.data;
-      //   this.total = data.total;
-      // }).catch(() => {}).finally(() => {
-      //   this.loading = false;
-      // });
+      reportOrderOutageRate(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-      this.params.page = 1;
-      console.log(this.params);
-      // this.getList();
+      this.params.curentPage = 1;
+      this.getList();
     },
     reset() {
       Object.assign(this.params, this.$options.data.call(this).params);
-      // this.getList();
+      this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/report/orderOutageRateExport', { ...this.params });
     }
   }
 };

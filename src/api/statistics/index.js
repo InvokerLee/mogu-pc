@@ -169,3 +169,15 @@ export function reportAgeException(data) {
     }
   });
 }
+
+// 订单缺货率
+export function reportOrderOutageRate(data) {
+  return request({
+    url: '/report/orderOutageRate',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
