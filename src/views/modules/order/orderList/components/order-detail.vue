@@ -35,7 +35,7 @@
             <el-input v-model.trim="form.taxRate" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="仓库：" prop="storeId">
-            <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts"></warehous-selector>
+            <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts" @selectChange="warehouseChange"></warehous-selector>
           </el-form-item>
           <el-form-item label="备注：">
             <el-input v-model.trim="form.text"></el-input>
@@ -46,7 +46,7 @@
             <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="可用数量：">
-            <el-input v-model.trim="form.productCount" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.canUsedCount" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="箱装量：">
             <el-input v-model.trim="form.productBoxCount" disabled placeholder="自动带出"></el-input>
@@ -80,6 +80,7 @@
 <script>
 import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
+import { commonCanUsedCount } from '@/api/common';
 
 export default {
   components: {
@@ -93,18 +94,21 @@ export default {
       isEdit: false,
       form: {
         productId: '',
+        productName: '',
+        productBarCode: '',
+        productUnit: '',
+        taxRate: '',
         count: undefined,
         boxCount: undefined,
-        taxRate: '',
         storeId: '',
+        storeName: '',
         text: '',
 
-        productUnit: '',
-        productCount: '',
-        productBoxCount: '',
         taxPrice: undefined,
         noTaxPrice: '',
-        priceTip: ''
+        productBoxCount: '',
+        priceTip: '',
+        canUsedCount: ''
       },
       rules: {
         productId: [
@@ -137,16 +141,41 @@ export default {
   methods: {
     selectChange(products) {
       const p = products[0] || {};
+      this.form.productName = p.name;
+      this.form.productBarCode = p.barCode;
       this.form.productUnit = p.unit;
       // TODO:可用数量
       this.form.productBoxCount = p.boxCount;
       this.form.noTaxPrice = p.salseNoTaxPrice;
       this.form.taxRate = p.salesTaxRate;
+      this.getCanUsedCount();
+    },
+    warehouseChange(warehouse) {
+      const w = warehouse[0] || {};
+      this.form.storeName = w.name;
+      this.getCanUsedCount();
+    },
+    getCanUsedCount() {
+      if (!this.form.productId || !this.form.storeId) return;
+      commonCanUsedCount({
+        orderType: 'public',
+        productId: this.form.productId,
+        storeId: this.form.storeId
+      }).then(({ result }) => {
+        this.form.canUsedCount = result.count;
+      }).catch(() => {});
     },
     confirm() {
       this.$refs.orderDetailForm.validate((valid) => {
         if (!valid) return;
-        this.$emit('finish', this.form);
+        const product = {
+          ...this.form,
+          taxBoxPrice: this.form.productBoxCount * this.form.taxPrice,
+          noTaxBoxPrice: this.form.productBoxCount * this.form.noTaxPrice,
+          taxSum: this.form.taxPrice * this.form.count,
+          noTaxSum: this.form.noTaxPrice * this.form.count
+        };
+        this.$emit('finish', product);
       });
     },
     cancel() {

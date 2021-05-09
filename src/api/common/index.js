@@ -1,6 +1,16 @@
 import request from '@/utils/request';
 
-//
+export function commonCanUsedCount(data) {
+  return request({
+    url: '/common/canUsedCount',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+
 export function commonCompanyList() {
   return request({
     url: '/common/selectCompany',

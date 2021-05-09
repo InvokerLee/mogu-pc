@@ -90,16 +90,16 @@
       <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
       <el-table-column :width="60" prop="taxRate" label="税率" align="center" />
       <el-table-column :width="60" prop="count" label="数量" align="center" />
-      <el-table-column :width="60" prop="1" label="箱数" align="center" />
+      <el-table-column :width="60" prop="boxCount" label="箱数" align="center" />
       <template v-if="!showLessColumn">
-        <el-table-column :width="80" prop="1" label="含税单价" align="center" />
-        <el-table-column :width="80" prop="1" label="未税单价" align="center" />
-        <el-table-column :width="90" prop="1" label="含税箱单价" align="center" />
-        <el-table-column :width="90" prop="1" label="未税箱单价" align="center" />
+        <el-table-column :width="80" prop="taxPrice" label="含税单价" align="center" />
+        <el-table-column :width="80" prop="noTaxPrice" label="未税单价" align="center" />
+        <el-table-column :width="90" prop="taxBoxPrice" label="含税箱单价" align="center" />
+        <el-table-column :width="90" prop="noTaxBoxPrice" label="未税箱单价" align="center" />
         <el-table-column :width="90" prop="taxSum" label="含税金额" align="center" />
         <el-table-column :width="90" prop="noTaxSum" label="未税金额" align="center" />
       </template>
-      <el-table-column :width="90" prop="1" label="仓库" align="center" />
+      <el-table-column :width="90" prop="storeName" label="仓库" align="center" />
       <el-table-column prop="text" label="备注" align="center" />
     </el-table>
     <div slot="footer">
