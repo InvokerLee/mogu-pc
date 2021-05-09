@@ -87,7 +87,7 @@ export default {
     ProductSelector,
     WarehousSelector
   },
-  props: ['visible', 'item', 'orderId'],
+  props: ['visible', 'item', 'order'],
   data() {
     return {
       loading: false,
@@ -149,12 +149,20 @@ export default {
     getCanUsedCount() {
       if (!this.form.productId || !this.form.storeId) return;
       commonCanUsedCount({
-        orderType: 'public',
+        orderType: this.getStoreType(),
         productId: this.form.productId,
         storeId: this.form.storeId
       }).then(({ result }) => {
         this.form.canUsedCount = result.count;
       }).catch(() => {});
+    },
+    getStoreType() {
+      if (this.order.orderType.startsWith('shoppe')) {
+        return 'shoppe';
+      } else if (this.order.orderType.startsWith('sample')) {
+        return 'sample';
+      }
+      return 'public';
     },
     confirm() {
       this.$refs.orderDetailForm.validate((valid) => {
@@ -170,8 +178,8 @@ export default {
     },
     saveForm() {
       return this.isEdit
-        ? editOrderDetail({ id: this.item.id, orderId: this.orderId, ...this.form })
-        : addOrderDetail({ ...this.form, orderId: this.orderId });
+        ? editOrderDetail({ id: this.item.id, orderId: this.order.id, ...this.form })
+        : addOrderDetail({ ...this.form, orderId: this.order.id });
     },
     cancel() {
       this.$emit('cancel');

@@ -87,7 +87,7 @@ export default {
     ProductSelector,
     WarehousSelector
   },
-  props: ['visible', 'item'],
+  props: ['visible', 'item', 'storeType'],
   data() {
     return {
       loading: false,
@@ -158,7 +158,7 @@ export default {
     getCanUsedCount() {
       if (!this.form.productId || !this.form.storeId) return;
       commonCanUsedCount({
-        orderType: 'public',
+        orderType: this.storeType,
         productId: this.form.productId,
         storeId: this.form.storeId
       }).then(({ result }) => {

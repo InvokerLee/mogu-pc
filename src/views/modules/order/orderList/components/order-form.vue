@@ -9,7 +9,7 @@
   >
     <el-form ref="orderForm" size="mini" label-width="100px" inline :model="form" :rules="rules">
       <el-form-item label="单据类型：" prop="orderType">
-        <el-select v-model="form.orderType" placeholder="请选择" class="w200px" @change="typeChange">
+        <el-select v-model="form.orderType" placeholder="请选择" :disabled="!!orderProductList.length" class="w200px" @change="typeChange">
           <el-option v-for="i in orderTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
         </el-select>
       </el-form-item>
@@ -110,6 +110,7 @@
       v-if="dialog.show"
       :visible="dialog.show"
       :item="dialog.item"
+      :storeType="dialog.storeType"
       @finish="insertProduct"
       @cancel="closeDialog"
     />
@@ -168,6 +169,7 @@ export default {
       },
       dialog: {
         show: false,
+        storeType: '',
         item: {}
       }
     };
@@ -226,7 +228,16 @@ export default {
     },
     openDialog(item) {
       this.dialog.item = item || {};
+      this.dialog.storeType = this.getStoreType();
       this.dialog.show = true;
+    },
+    getStoreType() {
+      if (this.form.orderType.startsWith('shoppe')) {
+        return 'shoppe';
+      } else if (this.form.orderType.startsWith('sample')) {
+        return 'sample';
+      }
+      return 'public';
     },
     closeDialog() {
       this.dialog.show = false;

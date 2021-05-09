@@ -1,5 +1,5 @@
 <template>
-  <div v-if="rowId">
+  <div v-if="row.id">
     <el-card shadow="never" class="detail-list">
       <div slot="header">
         <el-form ref="searchForm" hide-details size="mini" inline :model="params">
@@ -60,7 +60,7 @@
         v-if="dialog.show"
         :visible="dialog.show"
         :item="dialog.item"
-        :orderId="rowId"
+        :order="row"
         @success="actionSuccess"
         @cancel="closeDialog"
       />
@@ -76,7 +76,7 @@ export default {
   components: {
     itemForm
   },
-  props: ['rowId'],
+  props: ['row'],
   data() {
     return {
       loading: false,
@@ -94,7 +94,7 @@ export default {
     };
   },
   watch: {
-    rowId(val) {
+    row(val) {
       if (!val) {
         Object.assign(this.params, this.$options.data.call(this).params);
         return;
@@ -105,7 +105,7 @@ export default {
   methods: {
     getList() {
       const params = {
-        orderId: this.rowId
+        orderId: this.row.id
       };
       Object.keys(this.params).forEach((key) => {
         if (this.params[key] !== '') {
@@ -138,7 +138,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => delOrderDetail({
-        orderId: this.rowId,
+        orderId: this.row.id,
         ids: item.id
       })).then(() => {
         this.$message.success('删除成功');
