@@ -18,7 +18,7 @@
         :prop="showProvider ? 'provderId' :'guestId'"
       >
         <div class="w200px">
-          <customer-selector :params="form" :paramsKey="showProvider ? 'provderId' :'guestId'"></customer-selector>
+          <customer-selector :params="form" :paramsKey="showProvider ? 'provderId' :'guestId'" @selectChange="selectChange"></customer-selector>
         </div>
       </el-form-item>
       <el-form-item label="日期：" prop="orderDate">
@@ -30,7 +30,7 @@
         />
       </el-form-item>
       <el-form-item label="单号：">
-        <el-input placeholder="系统自动生成" class="w200px" disabled></el-input>
+        <el-input v-model="form.orderNo" placeholder="系统自动生成" class="w200px" disabled></el-input>
       </el-form-item>
       <el-form-item label="地址：">
         <el-input v-model="form.address" placeholder="自动带出客户地址" class="w200px" readonly></el-input>
@@ -110,7 +110,7 @@
 </template>
 
 <script>
-// import { addUser, editUser } from '@/api/auth/user';
+// import { addOrder, editOrder } from '@/api/order';
 import CustomerSelector from '@/components/CustomerSelector';
 import VipSelector from '@/components/VipSelector';
 import dayjs from 'dayjs';
@@ -119,6 +119,7 @@ const initForm = (params) => {
   return Object.assign({
     guestId: '',
     provderId: '',
+    orderNo: '',
     orderDate: dayjs().format('YYYY-MM'),
     address: '',
     text: '',
@@ -141,10 +142,7 @@ export default {
       form: initForm({
         orderType: 'sales' // 默认选中
       }),
-      orderProductList: [
-        { count: 1, taxSum: 2, noTaxSum: 3 },
-        { count: 1, taxSum: 2, noTaxSum: 3 }
-      ],
+      orderProductList: [],
       rules: {
         orderType: [
           { required: true, message: '必填', trigger: 'blur' }
@@ -188,7 +186,12 @@ export default {
       // 重置表单输入
       Object.assign(this.form, initForm());
     },
+    selectChange(guests) {
+      const g = guests[0] || {};
+      this.form.address = g.address;
+    },
     confirm() {
+      console.log(this.form);
       this.$refs.orderForm.validate((valid) => {
         if (!valid) return;
         this.loading = true;
@@ -202,8 +205,8 @@ export default {
     },
     saveForm() {
       // return this.isEdit
-      //   ? editUser(this.item.id, this.form)
-      //   : addUser(this.form);
+      //   ? editOrder(this.item.id, this.form)
+      //   : addOrder(this.form);
     },
     cancel() {
       this.$emit('cancel');
