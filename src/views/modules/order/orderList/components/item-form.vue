@@ -34,7 +34,7 @@
             <el-input v-model.trim="form.taxRate" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="仓库：" prop="storeId">
-            <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts"></warehous-selector>
+            <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts" @selectChange="getCanUsedCount"></warehous-selector>
           </el-form-item>
           <el-form-item label="备注：">
             <el-input v-model.trim="form.text"></el-input>
@@ -45,7 +45,7 @@
             <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="可用数量：">
-            <el-input v-model.trim="form.productCount" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.canUsedCount" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="箱装量：">
             <el-input v-model.trim="form.productBoxCount" disabled placeholder="自动带出"></el-input>
@@ -78,6 +78,7 @@
 
 <script>
 import { addOrderDetail, editOrderDetail } from '@/api/order';
+import { commonCanUsedCount } from '@/api/common';
 import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
 
@@ -100,7 +101,7 @@ export default {
         text: '',
 
         productUnit: '',
-        productCount: '',
+        canUsedCount: '',
         productBoxCount: '',
         taxPrice: undefined,
         noTaxPrice: '',
@@ -130,6 +131,7 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
+      this.getCanUsedCount();
       this.productOpts = [{ name: this.item.productName, productId: this.item.productId }];
       this.warehouseOpts = [{ name: this.item.storeName, id: this.item.storeId }];
     }
@@ -142,6 +144,17 @@ export default {
       this.form.productBoxCount = p.boxCount;
       this.form.noTaxPrice = p.salseNoTaxPrice;
       this.form.taxRate = p.salesTaxRate;
+      this.getCanUsedCount();
+    },
+    getCanUsedCount() {
+      if (!this.form.productId || !this.form.storeId) return;
+      commonCanUsedCount({
+        orderType: 'public',
+        productId: this.form.productId,
+        storeId: this.form.storeId
+      }).then(({ result }) => {
+        this.form.canUsedCount = result.count;
+      }).catch(() => {});
     },
     confirm() {
       this.$refs.orderDetailForm.validate((valid) => {
