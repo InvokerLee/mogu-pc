@@ -67,7 +67,7 @@
     <el-divider></el-divider>
     <div class="m-t-10 m-b-10">
       <span>明细</span>
-      <el-button class="m-l-10" type="success" size="mini">新增</el-button>
+      <el-button class="m-l-10" type="success" size="mini" @click="openDialog">新增</el-button>
     </div>
     <el-table
       border
@@ -80,8 +80,8 @@
       <el-table-column :width="60" label="操作" type="action" align="center">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-around" class="font-16">
-            <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
-            <a class="font-red el-icon-delete" @click="del(scope.row)"></a>
+            <a class="font-blue el-icon-edit" @click="openDialog(scope.row)"></a>
+            <a class="font-red el-icon-delete" @click="del(scope.$index)"></a>
           </el-row>
         </template>
       </el-table-column>
@@ -106,6 +106,13 @@
       <el-button size="mini" @click="cancel">取消</el-button>
       <el-button type="primary" size="mini" :loading="loading" @click="confirm">提交</el-button>
     </div>
+    <order-detail
+      v-if="dialog.show"
+      :visible="dialog.show"
+      :item="dialog.item"
+      @finish="insertProduct"
+      @cancel="closeDialog"
+    />
   </el-dialog>
 </template>
 
@@ -113,6 +120,7 @@
 // import { addOrder, editOrder } from '@/api/order';
 import CustomerSelector from '@/components/CustomerSelector';
 import VipSelector from '@/components/VipSelector';
+import orderDetail from './order-detail';
 import dayjs from 'dayjs';
 
 const initForm = (params) => {
@@ -132,7 +140,8 @@ const initForm = (params) => {
 export default {
   components: {
     CustomerSelector,
-    VipSelector
+    VipSelector,
+    orderDetail
   },
   props: ['visible', 'item'],
   data() {
@@ -156,6 +165,10 @@ export default {
         orderDate: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
+      },
+      dialog: {
+        show: false,
+        item: {}
       }
     };
   },
@@ -210,6 +223,25 @@ export default {
     },
     cancel() {
       this.$emit('cancel');
+    },
+    openDialog(item) {
+      this.dialog.item = item || {};
+      this.dialog.show = true;
+    },
+    closeDialog() {
+      this.dialog.show = false;
+    },
+    insertProduct(item) {
+      const existItem = this.orderProductList.find(v => v.productId === item.productId);
+      if (existItem) {
+        Object.assign(existItem, item);
+      } else {
+        this.orderProductList.push(item);
+      }
+      this.closeDialog();
+    },
+    del(i) {
+      this.orderProductList.splice(i, 1);
     },
     getSummaries(param) {
       const { columns, data } = param;

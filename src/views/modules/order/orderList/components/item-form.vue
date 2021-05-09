@@ -93,8 +93,8 @@ export default {
       isEdit: false,
       form: {
         productId: '',
-        count: '',
-        boxCount: '',
+        count: undefined,
+        boxCount: undefined,
         taxRate: '',
         storeId: '',
         text: '',
@@ -102,7 +102,7 @@ export default {
         productUnit: '',
         productCount: '',
         productBoxCount: '',
-        taxPrice: '',
+        taxPrice: undefined,
         noTaxPrice: '',
         priceTip: ''
       },

@@ -3,6 +3,7 @@
     width="640px"
     :title="isEdit ? '订单产品编辑' : '订单产品新增'"
     :close-on-click-modal="false"
+    :append-to-body="true"
     :visible="visible"
     @close="cancel"
   >
@@ -85,15 +86,15 @@ export default {
     ProductSelector,
     WarehousSelector
   },
-  props: ['visible', 'item', 'orderId'],
+  props: ['visible', 'item'],
   data() {
     return {
       loading: false,
       isEdit: false,
       form: {
         productId: '',
-        count: '',
-        boxCount: '',
+        count: undefined,
+        boxCount: undefined,
         taxRate: '',
         storeId: '',
         text: '',
@@ -101,7 +102,7 @@ export default {
         productUnit: '',
         productCount: '',
         productBoxCount: '',
-        taxPrice: '',
+        taxPrice: undefined,
         noTaxPrice: '',
         priceTip: ''
       },
