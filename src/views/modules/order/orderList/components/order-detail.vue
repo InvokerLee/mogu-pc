@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import { addOrderDetail, editOrderDetail } from '@/api/order';
 import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
 
@@ -125,7 +124,7 @@ export default {
     };
   },
   created() {
-    if (this.item && this.item.id) {
+    if (this.item && this.item.productId) {
       this.isEdit = true;
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
@@ -146,19 +145,8 @@ export default {
     confirm() {
       this.$refs.orderDetailForm.validate((valid) => {
         if (!valid) return;
-        this.loading = true;
-        this.saveForm().then(() => {
-          this.$message.success('保存成功');
-          this.$emit('success');
-        }).catch(() => {
-          this.loading = false;
-        });
+        this.$emit('finish', this.form);
       });
-    },
-    saveForm() {
-      return this.isEdit
-        ? editOrderDetail({ id: this.item.id, orderId: this.orderId, ...this.form })
-        : addOrderDetail({ ...this.form, orderId: this.orderId });
     },
     cancel() {
       this.$emit('cancel');
