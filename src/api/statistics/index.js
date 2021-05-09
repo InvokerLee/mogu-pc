@@ -121,3 +121,27 @@ export function reportProductGrossProfit(data) {
     }
   });
 }
+
+// 订单异常
+export function reportOrderGrossProfit(data) {
+  return request({
+    url: '/report/orderGrossProfit',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+
+// 客户异常
+export function reportGuestGrossProfit(data) {
+  return request({
+    url: '/report/guestGrossProfit',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
