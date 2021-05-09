@@ -35,15 +35,15 @@
         <el-table-column :width="80" prop="productBarCode" label="条码" align="center" />
         <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
         <el-table-column :width="60" prop="taxRate" label="税率" align="center" />
-        <el-table-column :width="60" prop="1" label="数量" align="center" />
-        <el-table-column :width="60" prop="1" label="箱数" align="center" />
-        <el-table-column :width="80" prop="1" label="含税单价" align="center" />
-        <el-table-column :width="80" prop="1" label="未税单价" align="center" />
+        <el-table-column :width="60" prop="count" label="数量" align="center" />
+        <el-table-column :width="60" prop="boxCount" label="箱数" align="center" />
+        <el-table-column :width="80" prop="taxPrice" label="含税单价" align="center" />
+        <el-table-column :width="80" prop="noTaxPrice" label="未税单价" align="center" />
         <el-table-column :width="90" prop="1" label="含税箱单价" align="center" />
         <el-table-column :width="90" prop="1" label="未税箱单价" align="center" />
-        <el-table-column :width="80" prop="1" label="含税金额" align="center" />
-        <el-table-column :width="90" prop="1" label="仓库" align="center" />
-        <el-table-column prop="text" label="备注" align="center" />
+        <el-table-column :width="80" prop="taxSum" label="含税金额" align="center" />
+        <el-table-column :width="90" prop="storeName" label="仓库" align="center" />
+        <el-table-column :min-width="150" prop="text" label="备注" align="center" />
       </el-table>
       <el-pagination
         layout="total, sizes, prev, pager, next, jumper"
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { receiptOrderDetailList } from '@/api/receipt';
+import { getOrderDetailList } from '@/api/order';
 import itemForm from './components/item-form';
 
 export default {
@@ -84,7 +84,7 @@ export default {
         pageSize: 10
       },
       total: 0,
-      tableData: [{}],
+      tableData: [],
       dialog: {
         show: false,
         item: {}
@@ -97,7 +97,7 @@ export default {
         Object.assign(this.params, this.$options.data.call(this).params);
         return;
       }
-      // this.getList();
+      this.getList();
     }
   },
   methods: {
@@ -111,7 +111,7 @@ export default {
         }
       });
       this.loading = true;
-      receiptOrderDetailList(params).then(({ result }) => {
+      getOrderDetailList(params).then(({ result }) => {
         this.tableData = result.dataList;
         this.total = result.totalCount;
       }).finally(() => {

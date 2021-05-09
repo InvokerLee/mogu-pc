@@ -44,3 +44,40 @@ export function checkOrder(data) {
     }
   });
 }
+
+// 明细
+export function getOrderDetailList(data) {
+  return request({
+    url: '/orderproductdetail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+
+export function addOrderDetail(data) {
+  return request({
+    url: '/orderproductdetail/save',
+    method: 'post',
+    data
+  });
+}
+export function editOrderDetail(data) {
+  return request({
+    url: '/orderproductdetail/update',
+    method: 'post',
+    data
+  });
+}
+export function delOrderDetail(data) {
+  return request({
+    url: `/orderproductdetail/delete`,
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
