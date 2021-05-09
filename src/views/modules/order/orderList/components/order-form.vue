@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="orderDialog"
-    fullscreen
+    width="1000px"
     :title="isEdit ? '订单编辑' : '订单新增'"
     :close-on-click-modal="false"
     :visible="visible"
