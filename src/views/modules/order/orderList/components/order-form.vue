@@ -118,7 +118,7 @@
 </template>
 
 <script>
-// import { addOrder, editOrder } from '@/api/order';
+import { addOrder, editOrder } from '@/api/order';
 import CustomerSelector from '@/components/CustomerSelector';
 import VipSelector from '@/components/VipSelector';
 import orderDetail from './order-detail';
@@ -219,9 +219,9 @@ export default {
       });
     },
     saveForm() {
-      // return this.isEdit
-      //   ? editOrder(this.item.id, this.form)
-      //   : addOrder(this.form);
+      return this.isEdit
+        ? editOrder({ id: this.item.id, ...this.form, orderProductList: this.orderProductList })
+        : addOrder({ ...this.form, orderProductList: this.orderProductList });
     },
     cancel() {
       this.$emit('cancel');
