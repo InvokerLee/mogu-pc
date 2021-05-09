@@ -35,7 +35,7 @@
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
             <!-- <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a> -->
-            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.checkState ? '审核' : '反审核' }}</a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.checkState ? '审核' : '反审' }}</a>
           </el-row>
         </template>
       </el-table-column>

@@ -59,7 +59,7 @@
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click="edit(scope.row)"></a>
             <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
-            <a class="font-blue">审核</a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '审核' : '反审' }}</a>
             <!-- <a class="font-blue">打印</a> -->
           </el-row>
         </template>
@@ -118,7 +118,7 @@
 
 <script>
 // import { getOrderList, checkOrder, delOrder } from '@/api/order';
-import { getOrderList } from '@/api/order';
+import { getOrderList, checkOrder } from '@/api/order';
 import orderForm from './components/order-form';
 
 export default {
@@ -150,7 +150,7 @@ export default {
       dateRange: [],
 
       total: 0,
-      tableData: [{ id: 1, text: '2313' }],
+      tableData: [],
       dialog: {
         show: false,
         item: {}
@@ -216,6 +216,12 @@ export default {
     },
     handleCurrentChange() {
       this.getList();
+    },
+    check(item) {
+      checkOrder({ id: item.id }).then(() => {
+        this.$message.success('操作成功');
+        this.getList();
+      }).catch(() => {});
     },
     del(item) {
       // this.$confirm('确认要删除吗?', '删除提示', {

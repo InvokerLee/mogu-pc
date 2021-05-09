@@ -30,9 +30,13 @@ export function delOrder(id) {
     method: 'get'
   });
 }
-export function checkOrder(id) {
+export function checkOrder(data) {
   return request({
-    url: `/orderinfo/check/${id}`,
-    method: 'get'
+    url: `/orderinfo/check`,
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
