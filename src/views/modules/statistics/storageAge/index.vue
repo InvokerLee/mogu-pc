@@ -4,18 +4,21 @@
     <div class="storageAge">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="产品">
-          <el-input v-model.trim="params.key" placeholder="产品名称/规格/条码" />
+          <el-input v-model.trim="params.productName" placeholder="产品名称/规格/条码" />
         </el-form-item>
         <el-form-item label="仓库">
-          <warehous-selector :params="params" paramsKey="stock"></warehous-selector>
+          <warehous-selector :params="params" paramsKey="storeId"></warehous-selector>
         </el-form-item>
         <el-form-item label="类别">
-          <category-search paramsKey="leibie" :params="params"></category-search>
+          <category-search paramsKey="productTypeId" :params="params"></category-search>
         </el-form-item>
         <el-form-item label="保质期剩余">
-          <el-select v-model="params.state" placeholder="请选择">
+          <el-select v-model="params.surplusType" placeholder="请选择">
             <el-option label="全部" value="" />
+            <el-option label="二分之一" :value="0" />
             <el-option label="三分之一" :value="1" />
+            <el-option label="三分之二" :value="2" />
+            <el-option label="四分之一" :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -24,7 +27,7 @@
           <span style="margin: 0 20px;">
             <el-divider direction="vertical"></el-divider>
           </span>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="primary" size="mini" @click="download">导出</el-button>
         </el-form-item>
       </el-form>
       <div>
@@ -37,17 +40,17 @@
           :data="tableData"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="remarks" label="仓库" align="center" />
-          <el-table-column prop="remarks" label="供应商" align="center" />
-          <el-table-column prop="remarks" label="类别" align="center" />
-          <el-table-column prop="remarks" label="产品" align="center" />
-          <el-table-column prop="remarks" label="条码" align="center" />
-          <el-table-column prop="remarks" label="库存量" align="center" />
-          <el-table-column prop="remarks" label="批号" align="center" />
-          <el-table-column prop="remarks" label="生产日期" align="center" />
-          <el-table-column prop="remarks" label="有效期" align="center" />
-          <el-table-column prop="remarks" label="保质期" align="center" />
-          <el-table-column prop="remarks" label="剩余天数" align="center" />
+          <el-table-column :width="80" prop="storeName" label="仓库" align="center" />
+          <el-table-column :min-width="100" prop="providerName" label="供应商" align="center" />
+          <el-table-column prop="productTypeName" label="类别" align="center" />
+          <el-table-column :min-width="120" prop="productName" label="产品" align="center" />
+          <el-table-column :width="80" prop="productBarCode" label="条码" align="center" />
+          <el-table-column prop="salesCount" label="库存量" align="center" />
+          <el-table-column prop="batchNum" label="批号" align="center" />
+          <el-table-column prop="productDate" label="生产日期" align="center" />
+          <el-table-column :width="70" prop="productValidityDate" label="有效期" align="center" />
+          <el-table-column :width="70" prop="shortTime" label="保质期" align="center" />
+          <el-table-column :width="70" prop="surplusDay" label="剩余天数" align="center" />
         </el-table>
         <el-pagination
           v-if="tableData.length"
@@ -69,7 +72,7 @@
 import WarehousSelector from '@/components/WarehousSelector';
 import CategorySearch from '@/components/CategorySearch';
 
-// import { getUserList } from '@/api/auth/user';
+import { reportAgeException } from '@/api/statistics';
 
 export default {
   name: 'storageAge',
@@ -81,18 +84,20 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
-        page: 1,
-        limit: 10
+        productName: '',
+        storeId: '',
+        productTypeId: '',
+        surplusType: '',
+        curentPage: 1,
+        pageSize: 10
       },
+      dateRange: [],
       total: 0,
       tableData: []
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     getList() {
@@ -102,28 +107,33 @@ export default {
           params[key] = this.params[key];
         }
       });
+      Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      // getUserList(params).then(({ data }) => {
-      //   this.tableData = data.data;
-      //   this.total = data.total;
-      // }).catch(() => {}).finally(() => {
-      //   this.loading = false;
-      // });
+      reportAgeException(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).catch(() => {}).finally(() => {
+        this.loading = false;
+      });
     },
     search() {
-      this.params.page = 1;
-      // this.getList();
+      this.params.curentPage = 1;
+      this.getList();
     },
     reset() {
+      this.dateRange = [];
       Object.assign(this.params, this.$options.data.call(this).params);
-      // this.getList();
+      this.getList();
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
       this.getList();
+    },
+    download() {
+      this.$download('/report/storeAgeExceptionExport', { ...this.params });
     }
   }
 };

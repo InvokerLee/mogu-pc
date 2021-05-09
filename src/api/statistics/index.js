@@ -157,3 +157,15 @@ export function reportSafeStoreException(data) {
     }
   });
 }
+
+// 库龄库存
+export function reportAgeException(data) {
+  return request({
+    url: '/report/storeAgeException',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
