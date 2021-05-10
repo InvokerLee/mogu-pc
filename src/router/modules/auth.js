@@ -24,6 +24,12 @@ const auth = {
       name: 'permission',
       component: () => import('@/views/modules/auth/permission'),
       meta: { title: '菜单管理' }
+    },
+    {
+      path: 'sysSet',
+      name: 'sysSet',
+      component: () => import('@/views/modules/auth/sysSet'),
+      meta: { title: '系统配置项' }
     }
   ]
 };

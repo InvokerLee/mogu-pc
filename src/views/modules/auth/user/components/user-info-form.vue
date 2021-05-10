@@ -123,6 +123,10 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
+      this.companyList = [{
+        id: this.item.companyId,
+        name: this.item.companyName
+      }];
     }
   },
   methods: {
