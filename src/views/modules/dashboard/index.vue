@@ -13,19 +13,19 @@
         <el-col :span="8">
           <el-row type="flex" justify="space-between" class="item">
             <span>待审核订单</span>
-            <span>(<span class="num">10</span>)</span>
+            <span>(<span class="num">{{ waitDealEvent.orderCount }}</span>)</span>
           </el-row>
         </el-col>
         <el-col :span="8">
           <el-row type="flex" justify="space-between" class="item">
             <span>待出库订单</span>
-            <span>(<span class="num">10</span>)</span>
+            <span>(<span class="num">{{ waitDealEvent.outStoreCount }}</span>)</span>
           </el-row>
         </el-col>
         <el-col :span="8">
           <el-row type="flex" justify="space-between" class="item">
             <span>待入库订单</span>
-            <span>(<span class="num">10</span>)</span>
+            <span>(<span class="num">{{ waitDealEvent.inStoreCount }}</span>)</span>
           </el-row>
         </el-col>
       </el-row>
@@ -55,7 +55,7 @@ import rankCustomer from './components/rank-customer';
 import rankSalesman from './components/rank-salesman';
 import rankProduct from './components/rank-product';
 
-import { getHomeData, getPieData } from '@/api/dashboard';
+import { currentDayData, orderCount } from '@/api/dashboard';
 
 export default {
   name: 'DashboardAdmin',
@@ -71,6 +71,7 @@ export default {
   data() {
     return {
       orderDaily: {},
+      waitDealEvent: {},
       lineChartData: {
         categoryData: [],
         valueData: []
@@ -79,18 +80,21 @@ export default {
     };
   },
   created() {
-    // this.fetchData();
+    this.fetchData();
   },
   methods: {
     fetchData() {
-      getHomeData().then(res => {
-        this.orderDaily = res.data.orderDaily;
-        this.lineChartData.categoryData = res.data.orderChart.x1;
-        this.lineChartData.valueData = res.data.orderChart.paid;
+      currentDayData().then(res => {
+        this.orderDaily = res.result;
+        // this.lineChartData.categoryData = res.data.orderChart.x1;
+        // this.lineChartData.valueData = res.data.orderChart.paid;
       });
-      getPieData().then(res => {
-        this.pieCardData = res.data;
+      orderCount().then(res => {
+        this.waitDealEvent = res.result;
       });
+      // getPieData().then(res => {
+      //   this.pieCardData = res.data;
+      // });
     }
   }
 };
@@ -102,11 +106,11 @@ export default {
 
   .wait-for-deal {
     .item {
-      cursor: pointer;
+      // cursor: pointer;
       font-size: 12px;
-      &:hover {
-        color: #42B983;
-      }
+      // &:hover {
+      //   color: #42B983;
+      // }
       .num {
         color: red;
       }

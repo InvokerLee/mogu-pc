@@ -10,8 +10,7 @@
             今日订购金额
           </div>
           <div class="card-panel-num">
-            <span>￥</span>
-            <count-to :start-val="0" :end-val="30000" :duration="1000" />
+            <span>￥{{ datas.salesSum }}</span>
           </div>
         </div>
       </div>
@@ -26,8 +25,7 @@
             今日发货金额
           </div>
           <div class="card-panel-num">
-            <span>￥</span>
-            <count-to :start-val="0" :end-val="30000" :duration="1000" />
+            <span>￥{{ datas.outStoreSum }}</span>
           </div>
         </div>
       </div>
@@ -42,8 +40,7 @@
             今日退货金额
           </div>
           <div class="card-panel-num">
-            <span>￥</span>
-            <count-to :start-val="0" :end-val="30000" :duration="1000" />
+            <span>￥{{ datas.returnSum }}</span>
           </div>
         </div>
       </div>
@@ -64,8 +61,7 @@
             今日回单金额
           </div>
           <div class="card-panel-num">
-            <span>￥</span>
-            <count-to :start-val="0" :end-val="30000" :duration="1000" />
+            <span>￥{{ datas.checkSum }}</span>
           </div>
         </div>
       </div>
@@ -74,21 +70,19 @@
 </template>
 
 <script>
-import CountTo from 'vue-count-to';
 
 export default {
   components: {
-    CountTo
   },
   props: {
     datas: {
       type: Object,
       default: function() {
         return {
-          todayCount: 0,
-          todayMax: 0,
-          yesDayCount: 0,
-          yesDayMax: 0
+          salesSum: 0,
+          outStoreSum: 0,
+          checkSum: 0,
+          returnSum: 0
         };
       }
     }
