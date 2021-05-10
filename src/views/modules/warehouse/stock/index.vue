@@ -6,7 +6,7 @@
           <el-form ref="searchForm" hide-details size="mini" inline :model="params">
             <el-form-item label="库存种类">
               <el-select v-model="params.searchType" placeholder="请选择" class="w120px">
-                <el-option label="产品库存" value="store" />
+                <el-option label="产品库存" value="stock" />
                 <el-option label="批号库存" value="batch" />
               </el-select>
             </el-form-item>
@@ -101,7 +101,7 @@ export default {
     return {
       loading: false,
       params: {
-        searchType: 'store',
+        searchType: 'stock',
         storeType: '',
         productTypeId: '',
         productBrandId: '',

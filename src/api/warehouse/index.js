@@ -13,3 +13,13 @@ export function storestockList(data) {
 }
 
 // 出库
+export function orderOutStoreInfoList(data) {
+  return request({
+    url: '/orderoutstoreinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

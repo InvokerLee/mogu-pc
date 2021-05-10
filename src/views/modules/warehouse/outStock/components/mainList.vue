@@ -11,6 +11,9 @@
             <el-option v-for="item in outStockTypes.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="查询条件">
+          <el-input v-model.trim="params.searchPar" placeholder="订单/客户/供应商/产品" />
+        </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
             v-model="dateRange"
@@ -108,7 +111,8 @@
 </template>
 
 <script>
-import { specialreserveList, checkSpecialreserve, delSpecialreserve } from '@/api/config';
+import { checkSpecialreserve, delSpecialreserve } from '@/api/config';
+import { orderOutStoreInfoList } from '@/api/warehouse';
 
 import formDialog from './form-dialog';
 export default {
@@ -152,9 +156,9 @@ export default {
       });
       Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      specialreserveList(params).then(({ result }) => {
-        // this.tableData = result.dataList;
-        // this.total = result.totalCount;
+      orderOutStoreInfoList(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
       }).finally(() => {
         this.loading = false;
       });
