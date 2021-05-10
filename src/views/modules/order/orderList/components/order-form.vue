@@ -24,8 +24,8 @@
       <el-form-item label="日期：" prop="orderDate">
         <el-date-picker
           v-model="form.orderDate"
-          type="month"
-          value-format="yyyy-MM"
+          type="date"
+          value-format="yyyy-MM-dd"
           class="w200px"
         />
       </el-form-item>
@@ -129,7 +129,7 @@ const initForm = (params) => {
     guestId: '',
     provderId: '',
     orderNo: '',
-    orderDate: dayjs().format('YYYY-MM'),
+    orderDate: dayjs().format('YYYY-MM-DD'),
     address: '',
     text: '',
     vipUserId: '',
