@@ -1,6 +1,6 @@
 <template>
   <base-wrapper>
-    <div class="role">
+    <div class="sys">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="公司">
           <el-input v-model.trim="params.companyName" placeholder="公司名称、手机"></el-input>
@@ -159,7 +159,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.role {
+.sys {
   width: 100%;
   .tar {
     width: auto;

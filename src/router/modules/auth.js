@@ -30,6 +30,12 @@ const auth = {
       name: 'sysSet',
       component: () => import('@/views/modules/auth/sysSet'),
       meta: { title: '系统配置项' }
+    },
+    {
+      path: 'applyList',
+      name: 'applyList',
+      component: () => import('@/views/modules/auth/applyList'),
+      meta: { title: '申请列表' }
     }
   ]
 };
