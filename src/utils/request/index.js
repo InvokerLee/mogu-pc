@@ -9,8 +9,7 @@ import store from '@/store';
 const INVALID_TOKENS = [100001, 100002, 50012, 50014];
 
 const request = axios.create({
-  // baseURL: process.env.VUE_APP_BASE_API
-  baseURL: 'http://47.100.77.98:9090'
+  baseURL: process.env.VUE_APP_BASE_API
   // withCredentials: true // 跨域允许携带cookie
 });
 
