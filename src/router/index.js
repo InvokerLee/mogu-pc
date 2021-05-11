@@ -40,6 +40,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/apply',
+    component: () => import('@/views/apply/index'),
+    hidden: true
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
