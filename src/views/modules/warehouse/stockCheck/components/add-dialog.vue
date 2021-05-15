@@ -10,10 +10,21 @@
     <el-form ref="contractForm" size="mini" label-width="120px" :model="form" :rules="rules">
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="预留产品：" prop="productId">
+          <el-form-item label="产品：" prop="productId">
             <product-selector :params="form" paramsKey="productId" :defaultOpions="productOptions" @selectChange="selectChange"></product-selector>
           </el-form-item>
-          <el-form-item label="预留数量：">
+          <el-form-item label="原有数量：">
+            <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
+          </el-form-item>
+          <el-form-item label="盈亏数量：">
+            <el-input v-model.trim="form.productUnit" disabled placeholder="自动计算"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="单位：">
+            <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
+          </el-form-item>
+          <el-form-item label="现有数量：" prop="">
             <el-input-number
               v-model="form.count"
               class="w100"
@@ -22,15 +33,7 @@
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="备注：">
-            <el-input v-model.trim="form.text"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="规格：">
-            <el-input v-model.trim="form.productSpec" disabled placeholder="自动带出"></el-input>
-          </el-form-item>
-          <el-form-item label="单位：">
+          <el-form-item label="生产日期：">
             <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
           </el-form-item>
         </el-col>
@@ -58,7 +61,6 @@ export default {
       form: {
         productId: '',
         count: undefined,
-        text: '',
         storeId: '',
 
         productName: '',
