@@ -39,9 +39,23 @@
         </el-checkbox>
       </div>
       <div style="margin-top: 20px;">
-        <el-button class="w280" type="primary" @click.native.prevent="handleLogin">申请</el-button>
+        <el-button class="w280" type="primary" @click.native.prevent="handleApply">申请</el-button>
       </div>
     </section>
+    <el-dialog
+      title="申请提示"
+      :visible.sync="dialogVisible"
+      width="640px"
+    >
+      <span>
+        请确保贵公司为第一次申请小摩菇智慧管理平台免费使用，请填写真实的公司名称，
+        后期打印模板中的公司名称以申请的公司名称为准，申请后工作人员会在24小时内核实并通过！
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -72,6 +86,7 @@ export default {
           { required: true, message: '请输入联系人', trigger: 'blur' }
         ]
       },
+      dialogVisible: false,
       loading: false,
       checkCodeApi: ''
     };
@@ -88,18 +103,22 @@ export default {
     changeCheckCode() {
       this.checkCodeApi = `${process.env.VUE_APP_BASE_API}/getVerify?s=${Math.random()}`;
     },
-    handleLogin() {
-      this.$refs.accountForm.validate(valid => {
-        if (!valid) return;
-        this.loading = true;
-        this.$store.dispatch('user/login', this.applyForm)
-          .then(() => {
-          })
-          .catch(() => {})
-          .finally(() => {
-            this.loading = false;
-          });
-      });
+    handleApply() {
+      this.dialogVisible = true;
+      // this.$refs.accountForm.validate(valid => {
+      //   if (!valid) return;
+      // });
+    },
+    confirm() {
+      this.dialogVisible = false;
+      //   this.loading = true;
+      //   this.$store.dispatch('user/login', this.applyForm)
+      //     .then(() => {
+      //     })
+      //     .catch(() => {})
+      //     .finally(() => {
+      //       this.loading = false;
+      //     });
     }
   }
 };
