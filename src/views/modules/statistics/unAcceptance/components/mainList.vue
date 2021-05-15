@@ -6,10 +6,10 @@
           <el-tag type="info">未验收异常</el-tag>
         </el-form-item>
         <el-form-item label="未验收周期(天)">
-          <el-input v-model.trim="params.key" placeholder="天数" class="w60px" />
+          <el-input v-model.trim="params.noCheckDay" placeholder="天数" class="w60px" />
         </el-form-item>
         <el-form-item label="客户">
-          <el-input v-model.trim="params.key" placeholder="客户名称" />
+          <el-input v-model.trim="params.guestName" placeholder="客户名称" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -68,9 +68,8 @@ export default {
     return {
       loading: false,
       params: {
-        key: '',
-        level: '',
-        status: '',
+        guestName: '',
+        noCheckDay: '',
         page: 1,
         limit: 10
       },
