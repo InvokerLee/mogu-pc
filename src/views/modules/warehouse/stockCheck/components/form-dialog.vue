@@ -1,38 +1,27 @@
 <template>
   <el-dialog
     width="960px"
-    :title="isEdit ? '特价编辑' : '特价新增'"
+    :title="isEdit ? '盘点单编辑' : '盘点单新增'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
   >
-    <el-form ref="specialPriceForm" inline size="mini" label-width="80px" :model="form" :rules="rules">
-      <el-form-item label="预留单号">
+    <el-form ref="stockCheckForm" inline size="mini" label-width="80px" :model="form" :rules="rules">
+      <el-form-item label="盘点单号">
         <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
-      <el-form-item label="客户" prop="guestId">
-        <customer-selector style="width: 200px" :params="form" paramsKey="guestId" :defaultOpions="guestOptions"></customer-selector>
-      </el-form-item>
-      <el-form-item label="开始日期" prop="startDate">
+      <el-form-item label="盘点日期" prop="orderDate">
         <el-date-picker
-          v-model="form.startDate"
+          v-model="form.orderDate"
           style="width: 200px"
           value-format="yyyy-MM-dd"
         />
       </el-form-item>
-      <el-form-item label="预留数量" prop="reserveCount">
-
-        <el-input v-model="form.reserveCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
+      <el-form-item label="仓库" prop="storeId">
+        <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts"></warehous-selector>
       </el-form-item>
       <el-form-item label="备注">
         <el-input v-model.trim="form.text" style="width: 200px"></el-input>
-      </el-form-item>
-      <el-form-item label="结束日期" prop="endDate">
-        <el-date-picker
-          v-model="form.endDate"
-          style="width: 200px"
-          value-format="yyyy-MM-dd"
-        />
       </el-form-item>
     </el-form>
     <div style="padding: 3px 0;border-top: 1px solid #ddd;">
@@ -55,13 +44,16 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column prop="productName" label="预留产品" align="center" />
-      <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
       <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
+      <el-table-column prop="" label="批号" align="center" />
+      <el-table-column prop="" label="生产日期" align="center" />
       <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
-      <el-table-column :width="80" prop="count" label="预留数量" align="center" />
-      <el-table-column :width="90" prop="storeName" label="预留仓库" align="center" />
-      <el-table-column prop="text" label="备注" align="center" />
+      <el-table-column :width="80" prop="" label="原有数量" align="center" />
+      <el-table-column :width="80" prop="" label="现有数量" align="center" />
+      <el-table-column :width="80" prop="" label="盈亏数" align="center" />
+      <el-table-column :width="100" prop="" label="原数量成本额" align="center" />
+      <el-table-column :width="100" prop="" label="现数量成本额" align="center" />
+      <el-table-column :width="100" prop="" label="盈亏成本额" align="center" />
     </el-table>
 
     <div slot="footer">
@@ -79,13 +71,14 @@
 </template>
 
 <script>
-import CustomerSelector from '@/components/CustomerSelector';
+import WarehousSelector from '@/components/WarehousSelector';
 import addDialog from './add-dialog';
 import { specialreserveInfo, addSpecialreserve, editSpecialreserve } from '@/api/config';
+import dayjs from 'dayjs';
 
 export default {
   components: {
-    CustomerSelector,
+    WarehousSelector,
     addDialog
   },
   props: ['visible', 'item'],
@@ -94,32 +87,24 @@ export default {
       loading: false,
       isEdit: false,
       form: {
-        guestId: [],
-        startDate: '',
-        endDate: '',
+        orderDate: dayjs().format('YYYY-MM-DD'),
+        storeId: [],
         text: '',
-        reserveCount: undefined,
         reserveProductList: []
       },
       rules: {
-        guestId: [
+        storeId: [
           { required: true, message: '必选', trigger: 'blur' }
         ],
-        startDate: [
+        orderDate: [
           { required: true, message: '必选', trigger: 'blur' }
-        ],
-        endDate: [
-          { required: true, message: '必选', trigger: 'blur' }
-        ],
-        reserveCount: [
-          { required: true, message: '必填', trigger: 'blur' }
         ]
       },
       dialog: {
         show: false,
         item: {}
       },
-      guestOptions: []
+      warehouseOpts: []
     };
   },
   created() {
@@ -134,7 +119,7 @@ export default {
         Object.keys(this.form).forEach((k) => {
           this.form[k] = result[k];
         });
-        this.guestOptions = [{ guestName: result.guestName, guestId: result.guestId }];
+        this.warehouseOpts = [{ name: this.item.storeName, id: this.item.storeId }];
       }).catch(() => {});
     },
     add() {
@@ -157,21 +142,12 @@ export default {
         this.form.reserveProductList.push(item);
       }
       this.closeDialog();
-      this.calcTotalCount();
     },
     del(i) {
       this.form.reserveProductList.splice(i, 1);
-      this.calcTotalCount();
-    },
-    calcTotalCount() {
-      let c = 0;
-      this.form.reserveProductList.forEach((v) => {
-        c += v.count || 0;
-      });
-      this.form.reserveCount = c;
     },
     confirm() {
-      this.$refs.specialPriceForm.validate((valid) => {
+      this.$refs.stockCheckForm.validate((valid) => {
         if (!valid) return;
         this.loading = true;
         this.saveForm().then(() => {

@@ -51,23 +51,20 @@
       highlight-current-row
       @current-change="rowChange"
     >
-      <el-table-column :width="100" label="操作" type="action" align="center">
+      <el-table-column :width="120" label="操作" type="action" align="center">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
-            <!-- <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a> -->
+            <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
             <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.checkState ? '审核' : '反审' }}</a>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column :width="140" prop="reserveNum" label="预留单号" align="center" />
-      <el-table-column :min-width="120" prop="guestName" label="客户" align="center" />
-      <el-table-column :width="135" prop="startDate" label="开始日期" align="center" />
-      <el-table-column :width="135" prop="endDate" label="结束日期" align="center" />
-      <el-table-column :width="80" prop="reserveCount" label="预留数量" align="center" />
+      <el-table-column :width="140" prop="reserveNum" label="盘点单号" align="center" />
+      <el-table-column :width="135" prop="startDate" label="盘点日期" align="center" />
+      <el-table-column :width="90" prop="guestName" label="盈亏金额" align="center" />
+      <el-table-column :width="90" prop="reserveCount" label="仓库" align="center" />
       <el-table-column :min-width="120" prop="text" label="备注" align="center" />
-      <el-table-column :width="70" prop="checkUserName" label="审核人" align="center" />
-      <el-table-column :width="135" prop="checkDate" label="审核时间" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
@@ -75,6 +72,8 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column :width="70" prop="checkUserName" label="审核人" align="center" />
+      <el-table-column :width="135" prop="checkDate" label="审核时间" align="center" />
     </el-table>
     <el-pagination
       v-if="tableData.length"
