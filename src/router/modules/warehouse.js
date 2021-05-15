@@ -16,8 +16,14 @@ export default {
     {
       path: 'outStock',
       component: () => import('@/views/modules/warehouse/outStock'),
-      name: 'stooutStockck',
+      name: 'outStock',
       meta: { title: '出库单据' }
+    },
+    {
+      path: 'inStock',
+      component: () => import('@/views/modules/warehouse/inStock'),
+      name: 'inStock',
+      meta: { title: '入库单据' }
     }
   ]
 };
