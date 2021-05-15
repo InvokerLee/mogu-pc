@@ -14,7 +14,7 @@
         <el-table-column type="index" label="序号" :width="55" align="center" />
         <el-table-column :min-width="120" prop="productName" label="产品" align="center" />
         <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
-        <el-table-column :width="60" prop="remarks" label="单位" align="center" />
+        <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
         <el-table-column :width="70" prop="taxRate" label="税率" align="center" />
         <el-table-column :width="90" prop="inStoreCount" label="入库数量" align="center" />
         <el-table-column :width="90" prop="boxCount" label="入库箱数" align="center" />

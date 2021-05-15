@@ -27,7 +27,7 @@
       highlight-current-row
       @current-change="rowChange"
     >
-      <el-table-column label="单据类型" align="center">
+      <el-table-column :width="100" label="单据类型" align="center">
         <template slot-scope="scope">
           <span>
             {{ inOutStockTypes[scope.row.orderType] }}

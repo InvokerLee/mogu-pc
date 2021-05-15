@@ -204,7 +204,7 @@ export function reportReturnNoComeInDetail(data) {
   });
 }
 
-// 退货未回
+// 未验收异常
 export function reportNoCheck(data) {
   return request({
     url: '/report/noCheck',
