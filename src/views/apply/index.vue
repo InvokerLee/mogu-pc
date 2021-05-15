@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <section class="box">
-      <el-form ref="accountForm" label-position="right" label-width="80px" :model="applyForm" :rules="rules" class="form">
+      <el-form ref="accountForm" label-position="left" label-width="120px" :model="applyForm" :rules="rules" class="form">
         <el-form-item label="公司名称" prop="companyName">
           <el-input
             v-model.trim="applyForm.companyName"
@@ -18,7 +18,7 @@
           <el-row type="flex" align="middle" class="w280">
             <el-input
               v-model="applyForm.checkCode"
-              style="width: 160px;"
+              style="width: 180px;"
             >
             </el-input>
             <img alt="验证码" style="flex: 1;margin-left:15px;" height="40" :src="checkCodeApi" @click="changeCheckCode">
@@ -30,10 +30,17 @@
             class="w280"
           />
         </el-form-item>
-        <div>
-          <el-button class="w280" type="primary" @click.native.prevent="handleLogin">申请</el-button>
-        </div>
       </el-form>
+      <div class="m-t-10">
+        <el-checkbox v-model="applyForm.isAgree">
+          <span>同意</span>
+          <a class="link" target="_blank" :href="`${publicPath}/use-protocol.pdf`">小摩菇智慧管理平台用户协议</a>
+          <a class="link" target="_blank" :href="`${publicPath}/pricy-protocol.pdf`">小摩菇智慧管理平台用户隐私政策</a>
+        </el-checkbox>
+      </div>
+      <div style="margin-top: 20px;">
+        <el-button class="w280" type="primary" @click.native.prevent="handleLogin">申请</el-button>
+      </div>
     </section>
   </div>
 </template>
@@ -47,7 +54,8 @@ export default {
         companyName: '',
         phone: '',
         checkCode: '',
-        contactName: ''
+        contactName: '',
+        isAgree: ''
       },
       rules: {
         companyName: [
@@ -67,6 +75,11 @@ export default {
       loading: false,
       checkCodeApi: ''
     };
+  },
+  computed: {
+    publicPath() {
+      return process.env.BASE_URL;
+    }
   },
   created() {
     this.changeCheckCode();
@@ -117,9 +130,14 @@ export default {
     overflow: hidden;
     margin-top: 20px;
     text-align: center;
-    .w280 {
-      width: 280px;
-    }
   }
+    .w280 {
+      width: 320px;
+    }
+    .link {
+      margin-left: 10px;
+      color: #16d;
+      text-decoration: underline;
+    }
 }
 </style>
