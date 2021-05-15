@@ -117,6 +117,9 @@ export default {
       Object.assign(this.params, this.$options.data.call(this).params);
       this.getList();
     },
+    rowChange(row) {
+      this.$emit('rowClickChange', row);
+    },
     handleSizeChange(val) {
       this.params.pageSize = val;
       this.getList();
