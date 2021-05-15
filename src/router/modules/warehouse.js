@@ -24,6 +24,12 @@ export default {
       component: () => import('@/views/modules/warehouse/inStock'),
       name: 'inStock',
       meta: { title: '入库单据' }
+    },
+    {
+      path: 'stockCheck',
+      component: () => import('@/views/modules/warehouse/stockCheck'),
+      name: 'stockCheck',
+      meta: { title: '库存盘点' }
     }
   ]
 };
