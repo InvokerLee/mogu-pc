@@ -1,15 +1,28 @@
 <template>
-  <div>
-    stockCheck
-  </div>
+  <base-wrapper>
+    <main-list @rowClickChange="rowClickChange"></main-list>
+    <detail-list :rowId="selectRowId"></detail-list>
+  </base-wrapper>
 </template>
 
 <script>
+import mainList from './components/mainList';
+import detailList from './components/detailList';
 export default {
-
+  name: 'stockCheck',
+  components: {
+    mainList,
+    detailList
+  },
+  data() {
+    return {
+      selectRowId: ''
+    };
+  },
+  methods: {
+    rowClickChange(row) {
+      this.selectRowId = row ? row.id : '';
+    }
+  }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
