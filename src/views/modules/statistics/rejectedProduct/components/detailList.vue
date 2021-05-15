@@ -1,5 +1,5 @@
 <template>
-  <div class="rowId">
+  <div v-if="rowId">
     <el-card shadow="never" class="detail-list">
       <div slot="header">
         <el-tag type="info">产品明细</el-tag>
@@ -12,20 +12,20 @@
         :data="tableData"
       >
         <el-table-column type="index" label="序号" :width="55" align="center" />
-        <el-table-column prop="username" label="产品" align="center" />
-        <el-table-column prop="remarks" label="条码" align="center" />
-        <el-table-column prop="remarks" label="单位" align="center" />
-        <el-table-column prop="remarks" label="税率" align="center" />
-        <el-table-column prop="remarks" label="入库数量" align="center" />
-        <el-table-column prop="remarks" label="入库箱数" align="center" />
-        <el-table-column prop="remarks" label="含税单价" align="center" />
-        <el-table-column prop="remarks" label="未税单价" align="center" />
-        <el-table-column :min-width="90" prop="remarks" label="含税箱单价" align="center" />
-        <el-table-column :min-width="90" prop="remarks" label="未税箱单价" align="center" />
-        <el-table-column :min-width="100" prop="remarks" label="含税入库金额" align="center" />
-        <el-table-column :min-width="100" prop="remarks" label="未税入库金额" align="center" />
-        <el-table-column prop="remarks" label="仓库" align="center" />
-        <el-table-column prop="remarks" label="备注" align="center" />
+        <el-table-column :min-width="120" prop="productName" label="产品" align="center" />
+        <el-table-column :min-width="120" prop="productBarCode" label="条码" align="center" />
+        <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
+        <el-table-column :width="70" prop="taxRate" label="税率" align="center" />
+        <el-table-column :width="90" prop="inStoreCount" label="入库数量" align="center" />
+        <el-table-column :width="90" prop="boxCount" label="入库箱数" align="center" />
+        <el-table-column :width="90" prop="taxPrice" label="含税单价" align="center" />
+        <el-table-column :width="90" prop="noTaxPrice" label="未税单价" align="center" />
+        <el-table-column :min-width="90" prop="" label="含税箱单价" align="center" />
+        <el-table-column :min-width="90" prop="" label="未税箱单价" align="center" />
+        <el-table-column :min-width="110" prop="taxSum" label="含税入库金额" align="center" />
+        <el-table-column :min-width="110" prop="noTaxSum" label="未税入库金额" align="center" />
+        <el-table-column :width="90" prop="storeName" label="仓库" align="center" />
+        <el-table-column :min-width="120" prop="text" label="备注" align="center" />
       </el-table>
       <el-pagination
         v-if="tableData.length"
@@ -43,28 +43,50 @@
 </template>
 
 <script>
+import { reportRejectedNoComeInDetail } from '@/api/statistics';
+
 export default {
   props: ['rowId'],
   data() {
     return {
       loading: false,
       params: {
-        page: 1,
-        limit: 10
+        curentPage: 1,
+        pageSize: 10
       },
       total: 0,
-      tableData: [{ id: 1 }]
+      tableData: []
     };
   },
-  created() {
-    // this.getList();
+  watch: {
+    rowId(val) {
+      if (!val) {
+        Object.assign(this.params, this.$options.data.call(this).params);
+        return;
+      }
+      this.getList();
+    }
   },
   methods: {
     getList() {
-
+      const params = {
+        orderId: this.rowId
+      };
+      Object.keys(this.params).forEach((key) => {
+        if (this.params[key] !== '') {
+          params[key] = this.params[key];
+        }
+      });
+      this.loading = true;
+      reportRejectedNoComeInDetail(params).then(({ result }) => {
+        this.tableData = result.dataList;
+        this.total = result.totalCount;
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     handleSizeChange(val) {
-      this.params.limit = val;
+      this.params.pageSize = val;
       this.getList();
     },
     handleCurrentChange() {
