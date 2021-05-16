@@ -24,6 +24,13 @@ export function editOrder(data) {
     data
   });
 }
+export function orderInfo(id) {
+  return request({
+    url: `/orderinfo/info/${id}`,
+    method: 'get'
+  });
+}
+
 export function delOrder(data) {
   return request({
     url: `/orderinfo/delete`,

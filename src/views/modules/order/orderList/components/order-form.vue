@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { addOrder, editOrder } from '@/api/order';
+import { addOrder, editOrder, orderInfo } from '@/api/order';
 import CustomerSelector from '@/components/CustomerSelector';
 import VipSelector from '@/components/VipSelector';
 import orderDetail from './order-detail';
@@ -134,7 +134,8 @@ const initForm = (params) => {
     text: '',
     vipUserId: '',
     vipUsedScore: undefined,
-    vipFreeSum: undefined
+    vipFreeSum: undefined,
+    vipUserName: ''
   }, params);
 };
 
@@ -189,14 +190,20 @@ export default {
     }
   },
   created() {
-    if (this.item && this.item.id) {
-      this.isEdit = true;
-      Object.keys(this.form).forEach((k) => {
-        this.form[k] = this.item[k];
-      });
-    }
+    this.getOrderInfo();
   },
   methods: {
+    getOrderInfo() {
+      if (this.item && this.item.id) {
+        this.isEdit = true;
+        orderInfo(this.item.id).then(({ result }) => {
+          Object.keys(this.form).forEach((k) => {
+            this.form[k] = result[k];
+          });
+          this.orderProductList = result.orderProductList;
+        }).catch(() => {});
+      }
+    },
     typeChange() {
       // 重置表单输入
       Object.assign(this.form, initForm());

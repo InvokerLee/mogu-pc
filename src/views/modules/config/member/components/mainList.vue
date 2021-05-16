@@ -51,6 +51,7 @@
           </el-row>
         </template>
       </el-table-column>
+      <el-table-column :width="80" prop="name" label="姓名" align="center" />
       <el-table-column :width="100" prop="phone" label="手机号" align="center" />
       <el-table-column :width="90" prop="createDate" label="注册日期" align="center" />
       <el-table-column :width="90" prop="birthday" label="生日" align="center" />

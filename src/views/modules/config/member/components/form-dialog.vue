@@ -31,6 +31,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
+          <el-form-item label="姓名：" prop="name">
+            <el-input v-model.trim="form.name"></el-input>
+          </el-form-item>
           <el-form-item label="注册日期：" prop="createDate">
             <el-date-picker
               v-model="form.createDate"
@@ -74,6 +77,7 @@ export default {
         birthday: '',
         score: '',
         createDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        name: '',
         vipLevel: 0,
         state: 1,
         text: ''
@@ -82,6 +86,9 @@ export default {
         phone: [
           { required: true, message: '必填', trigger: 'blur' },
           { pattern: /^[0-9]*$/, message: '格式为数字', trigger: 'blur' }
+        ],
+        name: [
+          { required: true, message: '必填', trigger: 'blur' }
         ],
         state: [
           { required: true, message: '必选', trigger: 'blur' }
