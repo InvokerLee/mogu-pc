@@ -53,13 +53,15 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="confirm">确 定</el-button>
+        <el-button size="mini" type="primary" :loading="loading" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { applySave } from '@/api/auth/applyList';
+
 export default {
   name: 'Login',
   data() {
@@ -105,20 +107,17 @@ export default {
     },
     handleApply() {
       this.dialogVisible = true;
-      // this.$refs.accountForm.validate(valid => {
-      //   if (!valid) return;
-      // });
     },
     confirm() {
-      this.dialogVisible = false;
-      //   this.loading = true;
-      //   this.$store.dispatch('user/login', this.applyForm)
-      //     .then(() => {
-      //     })
-      //     .catch(() => {})
-      //     .finally(() => {
-      //       this.loading = false;
-      //     });
+      this.loading = true;
+      applySave(this.applyForm).then((res) => {
+        this.$message.success('提交成功');
+      }).catch(() => {
+        this.changeCheckCode();
+      }).finally(() => {
+        this.loading = false;
+        this.dialogVisible = false;
+      });
     }
   }
 };

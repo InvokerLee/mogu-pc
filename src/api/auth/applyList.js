@@ -10,6 +10,13 @@ export function getApplyList(data) {
     }
   });
 }
+export function applySave(data) {
+  return request({
+    url: '/apply/save',
+    method: 'post',
+    data
+  });
+}
 
 export function auditPass(id) {
   return request({
