@@ -86,7 +86,6 @@ export default {
       this.tableLoading = true;
       getMenus().then((res) => {
         this.tableData = handleTree(res.result, 'menuId');
-        console.log(this.tableData);
       }).catch(() => {}).finally(() => {
         this.tableLoading = false;
       });
