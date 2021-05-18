@@ -13,12 +13,14 @@
           <el-option v-for="i in orderTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item
-        :label="showProvider ? '供应商：' : '客户：'"
-        :prop="showProvider ? 'provderId' :'guestId'"
-      >
+      <el-form-item v-if="showProvider" label="供应商" prop="provderId">
         <div class="w200px">
-          <customer-selector :params="form" :paramsKey="showProvider ? 'provderId' :'guestId'" @selectChange="selectChange"></customer-selector>
+          <provider-selector :params="form" paramsKey="provderId" :defaultOpions="providerOptions" @selectChange="selectChange"></provider-selector>
+        </div>
+      </el-form-item>
+      <el-form-item v-else label="客户" prop="guestId">
+        <div class="w200px">
+          <customer-selector :params="form" paramsKey="guestId" :defaultOpions="guestOptions" @selectChange="selectChange"></customer-selector>
         </div>
       </el-form-item>
       <el-form-item label="日期：" prop="orderDate">
@@ -41,7 +43,7 @@
       <template v-if="isShoppeSales">
         <el-form-item label="会员：">
           <div class="w200px">
-            <vip-selector :params="form" paramsKey="vipUserId"></vip-selector>
+            <vip-selector :params="form" paramsKey="vipUserId" :defaultOpions="vipOptions"></vip-selector>
           </div>
         </el-form-item>
         <el-form-item label="积分抵扣：">
@@ -120,6 +122,7 @@
 <script>
 import { addOrder, editOrder, orderInfo } from '@/api/order';
 import CustomerSelector from '@/components/CustomerSelector';
+import ProviderSelector from '@/components/ProviderSelector';
 import VipSelector from '@/components/VipSelector';
 import orderDetail from './order-detail';
 import dayjs from 'dayjs';
@@ -142,6 +145,7 @@ const initForm = (params) => {
 export default {
   components: {
     CustomerSelector,
+    ProviderSelector,
     VipSelector,
     orderDetail
   },
@@ -172,7 +176,10 @@ export default {
         show: false,
         storeType: '',
         item: {}
-      }
+      },
+      guestOptions: [],
+      providerOptions: [],
+      vipOptions: []
     };
   },
   computed: {
@@ -201,6 +208,10 @@ export default {
             this.form[k] = result[k];
           });
           this.orderProductList = result.orderProductList;
+
+          this.guestOptions = [{ guestName: result.guestName, guestId: result.guestId }];
+          this.providerOptions = [{ name: result.provderName, id: result.provderId }];
+          this.vipOptions = [{ name: result.vipUserName, id: result.vipUserId }];
         }).catch(() => {});
       }
     },

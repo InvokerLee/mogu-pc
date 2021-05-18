@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { commonSelectGuest } from '@/api/common';
+import { commonSelectProvider } from '@/api/common';
 
 export default {
   props: {
@@ -74,7 +74,7 @@ export default {
         return;
       }
       this.loading = true;
-      commonSelectGuest({
+      commonSelectProvider({
         name: query,
         orderType: 'other'
       }).then((res) => {
