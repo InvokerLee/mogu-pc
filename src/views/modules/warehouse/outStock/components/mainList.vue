@@ -59,7 +59,7 @@
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
             <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
-            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.checkState ? '审核' : '反审' }}</a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '反审' : '审核' }}</a>
           </el-row>
         </template>
       </el-table-column>
@@ -70,20 +70,20 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column :width="100" prop="orderNo" label="出库单号" align="center" />
+      <el-table-column :width="180" prop="orderNo" label="出库单号" align="center" />
       <el-table-column :min-width="120" prop="guestName" label="客户/供应商" align="center" />
-      <el-table-column :width="100" prop="orderNo" label="订单号" align="center" />
-      <el-table-column :width="135" prop="startDate" label="订单日期" align="center" />
-      <el-table-column :width="135" prop="startDate" label="出库日期" align="center" />
-      <el-table-column :width="80" prop="reserveCount" label="出库数量" align="center" />
-      <el-table-column :width="110" prop="reserveCount" label="出库金额(含税)" align="center" />
-      <el-table-column :width="110" prop="reserveCount" label="出库金额(未税)" align="center" />
-      <el-table-column :min-width="120" prop="reserveCount" label="地址" align="center" />
+      <el-table-column :width="180" prop="orderNo" label="订单号" align="center" />
+      <el-table-column :width="135" prop="orderDate" label="订单日期" align="center" />
+      <el-table-column :width="135" prop="checkDate" label="出库日期" align="center" />
+      <el-table-column :width="80" prop="orderCount" label="出库数量" align="center" />
+      <el-table-column :width="110" prop="taxSum" label="出库金额(含税)" align="center" />
+      <el-table-column :width="110" prop="noTaxSum" label="出库金额(未税)" align="center" />
+      <el-table-column :min-width="120" prop="" label="地址" align="center" />
       <el-table-column :min-width="120" prop="text" label="备注" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
-            {{ ['已审核', '待审核'][scope.row.checkState] }}
+            {{ ['待审核', '已审核'][scope.row.state] }}
           </span>
         </template>
       </el-table-column>
