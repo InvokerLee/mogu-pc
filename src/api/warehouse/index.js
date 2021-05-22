@@ -43,6 +43,22 @@ export function outStockInfo(id) {
     method: 'get'
   });
 }
+export function outStockCheck(data) {
+  return request({
+    url: '/orderoutstoreinfo/check',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function delOutStock(id) {
+  return request({
+    url: `/orderoutstoreinfo/delete/${id}`,
+    method: 'get'
+  });
+}
 export function outStoreDetailList(data) {
   return request({
     url: '/outstoredetail/list',

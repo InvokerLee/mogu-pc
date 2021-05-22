@@ -58,7 +58,7 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
-            <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
+            <a class="font-red el-icon-delete font-16" @click.stop="del(scope.row)"></a>
             <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '反审' : '审核' }}</a>
           </el-row>
         </template>
@@ -111,8 +111,7 @@
 </template>
 
 <script>
-import { checkSpecialreserve, delSpecialreserve } from '@/api/config';
-import { orderOutStoreInfoList } from '@/api/warehouse';
+import { orderOutStoreInfoList, outStockCheck, delOutStock } from '@/api/warehouse';
 
 import formDialog from './form-dialog';
 export default {
@@ -199,7 +198,7 @@ export default {
       this.getList();
     },
     check(item) {
-      checkSpecialreserve({ id: item.id }).then(() => {
+      outStockCheck({ id: item.id }).then(() => {
         this.$message.success('操作成功');
         this.getList();
       }).catch(() => {});
@@ -209,7 +208,7 @@ export default {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delSpecialreserve(item.id)).then(() => {
+      }).then(() => delOutStock(item.id)).then(() => {
         this.$message.success('删除成功');
         this.getList();
       }).catch(() => {});

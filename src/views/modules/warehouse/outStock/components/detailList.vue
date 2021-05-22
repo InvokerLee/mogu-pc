@@ -108,7 +108,7 @@ export default {
   },
   watch: {
     row(val) {
-      if (!val) {
+      if (!val || !val.id) {
         Object.assign(this.params, this.$options.data.call(this).params);
         return;
       }
