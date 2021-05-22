@@ -1,22 +1,22 @@
 <template>
   <base-wrapper>
     <main-list @rowClickChange="rowClickChange"></main-list>
-    <!-- <detail-list :rowId="selectRow.id"></detail-list> -->
+    <detail-list :row="selectRow"></detail-list>
   </base-wrapper>
 </template>
 
 <script>
 import mainList from './components/mainList';
-// import detailList from './components/detailList';
+import detailList from './components/detailList';
 export default {
   name: 'outStock',
   components: {
-    mainList
-    // detailList
+    mainList,
+    detailList
   },
   data() {
     return {
-      selectRow: ''
+      selectRow: {}
     };
   },
   methods: {

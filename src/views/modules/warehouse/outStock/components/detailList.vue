@@ -1,8 +1,19 @@
 <template>
-  <div v-if="rowId">
+  <div v-if="row.id">
     <el-card shadow="never" class="detail-list">
       <div slot="header">
-        <el-tag type="info">产品明细</el-tag>
+        <el-form ref="searchForm" hide-details size="mini" inline :model="params">
+          <el-form-item label="">
+            <el-tag type="info">产品明细</el-tag>
+          </el-form-item>
+          <el-form-item label="查询条件">
+            <el-input v-model.trim="params.searchPar" placeholder="名称/规格/条码" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="search">查询</el-button>
+            <el-button type="info" @click="reset">重置</el-button>
+          </el-form-item>
+        </el-form>
       </div>
       <el-table
         v-loading="loading"
@@ -12,13 +23,27 @@
         :data="tableData"
       >
         <el-table-column type="index" label="序号" :width="55" align="center" />
-        <el-table-column prop="productName" label="预留产品" align="center" />
-        <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
+        <el-table-column prop="productName" label="产品" align="center" />
         <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
+        <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
         <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
-        <el-table-column :width="80" prop="count" label="预留数量" align="center" />
-        <el-table-column :width="90" prop="" label="预留仓库" align="center" />
-        <el-table-column prop="text" label="备注" align="center" />
+        <el-table-column :width="80" prop="count" label="数量" align="center" />
+        <el-table-column :width="80" prop="boxCount" label="箱数" align="center" />
+        <template v-if="showMore">
+          <el-table-column :width="70" prop="taxRate" label="税率" align="center" />
+          <el-table-column :width="80" prop="taxPrice" label="含税单价" align="center" />
+          <el-table-column :width="80" prop="noTaxPrice" label="未税单价" align="center" />
+          <el-table-column :width="100" prop="" label="含税箱单价" align="center" />
+          <el-table-column :width="100" prop="" label="未税箱单价" align="center" />
+          <el-table-column :width="110" prop="taxSum" label="含税出库金额" align="center" />
+          <el-table-column :width="110" prop="noTaxSum" label="未税出库金额" align="center" />
+          <el-table-column :width="90" prop="storeOutName" label="仓库" align="center" />
+        </template>
+        <template v-else>
+          <el-table-column :width="90" prop="storeOutName" label="出库仓库" align="center" />
+          <el-table-column :width="90" prop="storeInName" label="入库仓库" align="center" />
+        </template>
+        <el-table-column :min-width="120" prop="text" label="备注" align="center" />
       </el-table>
       <el-pagination
         v-if="tableData.length"
@@ -36,14 +61,15 @@
 </template>
 
 <script>
-import { specialreserveDetailList } from '@/api/config';
+import { outStoreDetailList } from '@/api/warehouse';
 
 export default {
-  props: ['rowId'],
+  props: ['row'],
   data() {
     return {
       loading: false,
       params: {
+        searchPar: '',
         curentPage: 1,
         pageSize: 10
       },
@@ -51,8 +77,13 @@ export default {
       tableData: []
     };
   },
+  computed: {
+    showMore() {
+      return !['damageOutStore', 'otherOutStore', 'outStoreAllocationOutStore'].includes(this.row.orderType);
+    }
+  },
   watch: {
-    rowId(val) {
+    row(val) {
       if (!val) {
         Object.assign(this.params, this.$options.data.call(this).params);
         return;
@@ -63,7 +94,7 @@ export default {
   methods: {
     getList() {
       const params = {
-        specialReserveId: this.rowId
+        orderId: this.row.id
       };
       Object.keys(this.params).forEach((key) => {
         if (this.params[key] !== '') {
@@ -71,12 +102,20 @@ export default {
         }
       });
       this.loading = true;
-      specialreserveDetailList(params).then(({ result }) => {
+      outStoreDetailList(params).then(({ result }) => {
         this.tableData = result.dataList;
         this.total = result.totalCount;
       }).finally(() => {
         this.loading = false;
       });
+    },
+    search() {
+      this.params.curentPage = 1;
+      this.getList();
+    },
+    reset() {
+      Object.assign(this.params, this.$options.data.call(this).params);
+      this.getList();
     },
     handleSizeChange(val) {
       this.params.pageSize = val;

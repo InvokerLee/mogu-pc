@@ -43,6 +43,16 @@ export function outStockInfo(id) {
     method: 'get'
   });
 }
+export function outStoreDetailList(data) {
+  return request({
+    url: '/outstoredetail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
 
 // 库存盘点
 export function storecheckList(data) {
