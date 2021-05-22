@@ -1,27 +1,27 @@
 <template>
   <base-wrapper>
     <main-list @rowClickChange="rowClickChange"></main-list>
-    <!-- <detail-list :rowId="selectRowId"></detail-list> -->
+    <detail-list :row="selectRow"></detail-list>
   </base-wrapper>
 </template>
 
 <script>
 import mainList from './components/mainList';
-// import detailList from './components/detailList';
+import detailList from './components/detailList';
 export default {
   name: 'inStock',
   components: {
-    mainList
-    // detailList
+    mainList,
+    detailList
   },
   data() {
     return {
-      selectRow: ''
+      selectRow: {}
     };
   },
   methods: {
     rowClickChange(row) {
-      this.selectRowId = row ? row.id : '';
+      this.selectRow = row || {};
     }
   }
 };

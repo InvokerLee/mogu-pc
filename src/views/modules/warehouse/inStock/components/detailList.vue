@@ -35,22 +35,16 @@
         <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
         <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
         <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
-        <el-table-column :width="80" prop="count" label="数量" align="center" />
-        <el-table-column :width="80" prop="boxCount" label="箱数" align="center" />
-        <template v-if="showMore">
-          <el-table-column :width="70" prop="taxRate" label="税率" align="center" />
-          <el-table-column :width="80" prop="taxPrice" label="含税单价" align="center" />
-          <el-table-column :width="80" prop="noTaxPrice" label="未税单价" align="center" />
-          <el-table-column :width="100" prop="" label="含税箱单价" align="center" />
-          <el-table-column :width="100" prop="" label="未税箱单价" align="center" />
-          <el-table-column :width="110" prop="taxSum" label="含税出库金额" align="center" />
-          <el-table-column :width="110" prop="noTaxSum" label="未税出库金额" align="center" />
-          <el-table-column :width="90" prop="storeOutName" label="仓库" align="center" />
-        </template>
-        <template v-else>
-          <el-table-column :width="90" prop="storeOutName" label="出库仓库" align="center" />
-          <el-table-column :width="90" prop="storeInName" label="入库仓库" align="center" />
-        </template>
+        <el-table-column :width="80" prop="count" label="入库数量" align="center" />
+        <el-table-column :width="80" prop="boxCount" label="入库箱数" align="center" />
+        <el-table-column :width="70" prop="taxRate" label="税率" align="center" />
+        <el-table-column :width="80" prop="taxPrice" label="含税单价" align="center" />
+        <el-table-column :width="80" prop="noTaxPrice" label="未税单价" align="center" />
+        <el-table-column :width="100" prop="" label="含税箱单价" align="center" />
+        <el-table-column :width="100" prop="" label="未税箱单价" align="center" />
+        <el-table-column :width="110" prop="taxSum" label="含税入库金额" align="center" />
+        <el-table-column :width="110" prop="noTaxSum" label="未税入库金额" align="center" />
+        <el-table-column :width="90" prop="storeInName" label="仓库" align="center" />
         <el-table-column :min-width="120" prop="text" label="备注" align="center" />
       </el-table>
       <el-pagination
@@ -77,7 +71,7 @@
 </template>
 
 <script>
-import { outStoreDetailList, delOutStockDetail } from '@/api/warehouse';
+import { inStoreDetailList, delInStockDetail } from '@/api/warehouse';
 import detailForm from './detail-form';
 
 export default {
@@ -101,11 +95,6 @@ export default {
       }
     };
   },
-  computed: {
-    showMore() {
-      return !['damageOutStore', 'otherOutStore', 'outStoreAllocationOutStore'].includes(this.row.orderType);
-    }
-  },
   watch: {
     row(val) {
       if (!val || !val.id) {
@@ -126,7 +115,7 @@ export default {
         }
       });
       this.loading = true;
-      outStoreDetailList(params).then(({ result }) => {
+      inStoreDetailList(params).then(({ result }) => {
         this.tableData = result.dataList;
         this.total = result.totalCount;
       }).finally(() => {
@@ -165,9 +154,9 @@ export default {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delOutStockDetail({
+      }).then(() => delInStockDetail({
         orderId: this.row.id,
-        ids: item.id
+        id: item.id
       })).then(() => {
         this.$message.success('删除成功');
         this.getList();

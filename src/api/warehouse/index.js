@@ -48,6 +48,34 @@ export function inStockInfo(id) {
   });
 }
 
+export function inStoreDetailList(data) {
+  return request({
+    url: '/orderinstoredetail/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function delInStockDetail(data) {
+  return request({
+    url: `/orderinstoredetail/delete`,
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+export function inStockDetailEdit(data) {
+  return request({
+    url: '/orderinstoredetail/update',
+    method: 'post',
+    data
+  });
+}
+
 // 库存
 export function storestockList(data) {
   return request({

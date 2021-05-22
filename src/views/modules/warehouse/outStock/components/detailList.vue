@@ -167,7 +167,7 @@ export default {
         type: 'warning'
       }).then(() => delOutStockDetail({
         orderId: this.row.id,
-        ids: item.id
+        id: item.id
       })).then(() => {
         this.$message.success('删除成功');
         this.getList();

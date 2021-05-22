@@ -39,11 +39,11 @@
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="出库仓库：" prop="storeOutId">
-            <warehous-selector :params="form" paramsKey="storeOutId" :defaultOpions="warehouseOpts" @selectChange="storeChange"></warehous-selector>
-          </el-form-item>
-          <el-form-item v-if="order.orderType === 'outStoreAllocationOutStore'" label="入库仓库：">
+          <el-form-item label="入库仓库：" prop="storeInId">
             <warehous-selector :params="form" paramsKey="storeInId" :defaultOpions="warehouseOpts2" @selectChange="inStoreChange"></warehous-selector>
+          </el-form-item>
+          <el-form-item v-if="order.orderType === 'outStoreAllocationInStore'" label="出库仓库：" prop="storeOutId">
+            <warehous-selector :params="form" paramsKey="storeOutId" :defaultOpions="warehouseOpts" @selectChange="storeChange"></warehous-selector>
           </el-form-item>
         </el-col>
       </el-row>
@@ -59,7 +59,8 @@
 <script>
 import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
-import { outStockDetailEdit } from '@/api/warehouse';
+import { inStockDetailEdit } from '@/api/warehouse';
+
 export default {
   components: {
     ProductSelector,
@@ -73,7 +74,6 @@ export default {
         productId: '',
         count: undefined,
         text: '',
-        boxCount: '',
         storeOutId: '',
         storeOutName: '',
         storeInId: '',
@@ -92,6 +92,9 @@ export default {
         ],
         count: [
           { required: true, message: '必填', trigger: 'blur' }
+        ],
+        storeInId: [
+          { required: true, message: '必选', trigger: 'blur' }
         ],
         storeOutId: [
           { required: true, message: '必选', trigger: 'blur' }
@@ -148,16 +151,11 @@ export default {
       });
     },
     saveForm() {
-      return outStockDetailEdit({
+      return inStockDetailEdit({
         orderId: this.order.id,
-        orderOutStoreProductDetailDTO: {
-          id: this.item.id,
-          ...this.form
-        }
+        id: this.item.id,
+        ...this.form
       });
-      // return this.isEdit
-      // ? editOrderDetail({ id: this.item.id, orderId: this.order.id, ...this.form })
-      // : addOrderDetail({ ...this.form, orderId: this.order.id });
     },
     cancel() {
       this.$emit('cancel');
