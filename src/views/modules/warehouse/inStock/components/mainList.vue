@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { orderInStoreInfoList, outStockCheck, delOutStock } from '@/api/warehouse';
+import { orderInStoreInfoList, inStockCheck, delInStock } from '@/api/warehouse';
 
 import formDialog from './form-dialog';
 export default {
@@ -198,7 +198,7 @@ export default {
       this.getList();
     },
     check(item) {
-      outStockCheck({ id: item.id }).then(() => {
+      inStockCheck({ id: item.id }).then(() => {
         this.$message.success('操作成功');
         this.getList();
       }).catch(() => {});
@@ -208,7 +208,7 @@ export default {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delOutStock(item.id)).then(() => {
+      }).then(() => delInStock(item.id)).then(() => {
         this.$message.success('删除成功');
         this.getList();
       }).catch(() => {});

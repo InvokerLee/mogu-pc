@@ -11,6 +11,23 @@ export function orderInStoreInfoList(data) {
     }
   });
 }
+export function inStockCheck(data) {
+  return request({
+    url: '/orderinstoreinfo/check',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+
+export function delInStock(id) {
+  return request({
+    url: `/orderinstoreinfo/delete/${id}`,
+    method: 'get'
+  });
+}
 
 // 库存
 export function storestockList(data) {
