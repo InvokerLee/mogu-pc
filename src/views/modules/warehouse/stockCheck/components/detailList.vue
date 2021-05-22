@@ -2,7 +2,18 @@
   <div v-if="rowId">
     <el-card shadow="never" class="detail-list">
       <div slot="header">
-        <el-tag type="info">产品明细</el-tag>
+        <el-form ref="searchForm" hide-details size="mini" inline :model="params">
+          <el-form-item label="">
+            <el-tag type="info">产品明细</el-tag>
+          </el-form-item>
+          <el-form-item label="查询条件">
+            <el-input v-model.trim="params.searchPar" placeholder="名称/规格/条码" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="search">查询</el-button>
+            <el-button type="info" @click="reset">重置</el-button>
+          </el-form-item>
+        </el-form>
       </div>
       <el-table
         v-loading="loading"
@@ -12,13 +23,26 @@
         :data="tableData"
       >
         <el-table-column type="index" label="序号" :width="55" align="center" />
-        <el-table-column prop="productName" label="预留产品" align="center" />
-        <el-table-column :min-width="100" prop="productSpec" label="规格" align="center" />
+        <el-table-column :width="60" label="操作" type="action" align="center">
+          <template slot-scope="scope">
+            <el-row type="flex" justify="space-around" class="font-16">
+              <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
+              <a class="font-red el-icon-delete" @click="del(scope.row)"></a>
+            </el-row>
+          </template>
+        </el-table-column>
+        <el-table-column prop="productName" label="产品" align="center" />
         <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
+        <el-table-column :min-width="100" prop="batchNum" label="批号" align="center" />
+        <el-table-column :width="135" prop="productDate" label="生产日期" align="center" />
         <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
-        <el-table-column :width="80" prop="count" label="预留数量" align="center" />
-        <el-table-column :width="90" prop="" label="预留仓库" align="center" />
-        <el-table-column prop="text" label="备注" align="center" />
+        <el-table-column :width="90" prop="oldCount" label="原有数量" align="center" />
+        <el-table-column :width="90" prop="currCount" label="现有数量" align="center" />
+        <el-table-column :width="90" prop="profirCount" label="盈亏数" align="center" />
+        <el-table-column :min-width="120" prop="oldCost" label="原数量成本额" align="center" />
+        <el-table-column :min-width="120" prop="currCost" label="现数量成本额" align="center" />
+        <el-table-column :min-width="120" prop="profirCost" label="盈亏成本额" align="center" />
+        <el-table-column :min-width="120" prop="text" label="备注" align="center" />
       </el-table>
       <el-pagination
         v-if="tableData.length"
@@ -32,23 +56,40 @@
         @current-change="handleCurrentChange"
       />
     </el-card>
+    <detail-form
+      v-if="dialog.show"
+      :visible="dialog.show"
+      :item="dialog.item"
+      :orderId="rowId"
+      @success="actionSuccess"
+      @cancel="closeDialog"
+    ></detail-form>
   </div>
 </template>
 
 <script>
-import { specialreserveDetailList } from '@/api/config';
+import { getStorecheckdetailList, delStorecheckdetail } from '@/api/warehouse';
+import detailForm from './detail-form';
 
 export default {
+  components: {
+    detailForm
+  },
   props: ['rowId'],
   data() {
     return {
       loading: false,
       params: {
+        searchPar: '',
         curentPage: 1,
         pageSize: 10
       },
       total: 0,
-      tableData: []
+      tableData: [],
+      dialog: {
+        show: false,
+        item: {}
+      }
     };
   },
   watch: {
@@ -63,7 +104,7 @@ export default {
   methods: {
     getList() {
       const params = {
-        specialReserveId: this.rowId
+        orderId: this.rowId
       };
       Object.keys(this.params).forEach((key) => {
         if (this.params[key] !== '') {
@@ -71,12 +112,20 @@ export default {
         }
       });
       this.loading = true;
-      specialreserveDetailList(params).then(({ result }) => {
+      getStorecheckdetailList(params).then(({ result }) => {
         this.tableData = result.dataList;
         this.total = result.totalCount;
       }).finally(() => {
         this.loading = false;
       });
+    },
+    search() {
+      this.params.curentPage = 1;
+      this.getList();
+    },
+    reset() {
+      Object.assign(this.params, this.$options.data.call(this).params);
+      this.getList();
     },
     handleSizeChange(val) {
       this.params.pageSize = val;
@@ -84,6 +133,28 @@ export default {
     },
     handleCurrentChange() {
       this.getList();
+    },
+    edit(item) {
+      this.dialog.item = item;
+      this.dialog.show = true;
+    },
+    closeDialog() {
+      this.dialog.name = '';
+      this.dialog.show = false;
+    },
+    actionSuccess() {
+      this.getList();
+      this.closeDialog();
+    },
+    del(item) {
+      this.$confirm('确认要删除吗?', '删除提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => delStorecheckdetail(item.id)).then(() => {
+        this.$message.success('删除成功');
+        this.getList();
+      }).catch(() => {});
     }
   }
 };
