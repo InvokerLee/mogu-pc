@@ -150,10 +150,8 @@ export default {
     saveForm() {
       return outStockDetailEdit({
         orderId: this.order.id,
-        orderOutStoreProductDetailDTO: {
-          id: this.item.id,
-          ...this.form
-        }
+        id: this.item.id,
+        ...this.form
       });
       // return this.isEdit
       // ? editOrderDetail({ id: this.item.id, orderId: this.order.id, ...this.form })
