@@ -70,6 +70,7 @@
       v-if="dialog.show"
       :visible="dialog.show"
       :item="dialog.item"
+      :orderType="form.orderType"
       @success="actionSuccess"
       @cancel="closeDialog"
     ></add-dialog>
