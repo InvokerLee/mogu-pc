@@ -8,20 +8,26 @@
   >
     <el-form ref="stockCheckForm" inline size="mini" label-width="80px" :model="form" :rules="rules">
       <el-form-item label="盘点单号">
-        <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
+        <el-input v-model.trim="form.checkNum" style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
-      <el-form-item label="盘点日期" prop="orderDate">
+      <el-form-item label="盘点数量" prop="checkCount">
+        <el-input v-model="form.checkCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
+      </el-form-item>
+      <el-form-item label="盘点日期" prop="checkDate">
         <el-date-picker
-          v-model="form.orderDate"
+          v-model="form.checkDate"
           style="width: 200px"
           value-format="yyyy-MM-dd"
         />
       </el-form-item>
       <el-form-item label="仓库" prop="storeId">
-        <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts"></warehous-selector>
+        <warehous-selector style="width: 200px" :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts"></warehous-selector>
       </el-form-item>
       <el-form-item label="备注">
         <el-input v-model.trim="form.text" style="width: 200px"></el-input>
+      </el-form-item>
+      <el-form-item label="盈亏金额" prop="profitSum">
+        <el-input v-model="form.profitSum" style="width: 200px;" disabled placeholder="自动计算"></el-input>
       </el-form-item>
     </el-form>
     <div style="padding: 3px 0;border-top: 1px solid #ddd;">
@@ -33,7 +39,7 @@
       border
       size="mini"
       :max-height="480"
-      :data="form.reserveProductList"
+      :data="form.listDetail"
     >
       <el-table-column type="index" :width="55" label="序号" align="center" />
       <el-table-column :width="60" label="操作" type="action" align="center">
@@ -87,16 +93,24 @@ export default {
       loading: false,
       isEdit: false,
       form: {
-        orderDate: dayjs().format('YYYY-MM-DD'),
+        checkCount: '',
+        checkDate: dayjs().format('YYYY-MM-DD'),
         storeId: [],
+        profitSum: '',
         text: '',
-        reserveProductList: []
+        listDetail: []
       },
       rules: {
         storeId: [
           { required: true, message: '必选', trigger: 'blur' }
         ],
-        orderDate: [
+        profitSum: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        checkCount: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        checkDate: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
       },
@@ -135,18 +149,28 @@ export default {
       this.dialog.show = false;
     },
     actionSuccess(item) {
-      const existItem = this.form.reserveProductList.find(v => v.productId === item.productId);
+      const existItem = this.form.listDetail.find(v => v.productId === item.productId);
       if (existItem) {
         Object.assign(existItem, item);
       } else {
-        this.form.reserveProductList.push(item);
+        this.form.listDetail.push(item);
       }
       this.closeDialog();
+      this.calcTotalCount();
     },
     del(i) {
-      this.form.reserveProductList.splice(i, 1);
+      this.form.listDetail.splice(i, 1);
+      this.calcTotalCount();
+    },
+    calcTotalCount() {
+      let c = 0;
+      this.form.listDetail.forEach((v) => {
+        c += v.currCount || 0;
+      });
+      this.form.checkCount = c;
     },
     confirm() {
+      console.log(this.form);
       this.$refs.stockCheckForm.validate((valid) => {
         if (!valid) return;
         this.loading = true;
