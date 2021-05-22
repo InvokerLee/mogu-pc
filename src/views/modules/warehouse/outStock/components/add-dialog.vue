@@ -7,37 +7,43 @@
     :visible="visible"
     @close="cancel"
   >
-    <el-form ref="contractForm" size="mini" label-width="120px" :model="form" :rules="rules">
+    <el-form ref="outStoreForm" size="mini" label-width="120px" :model="form" :rules="rules">
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="预留产品：" prop="productId">
+          <el-form-item label="产品：" prop="productId">
             <product-selector :params="form" paramsKey="productId" :defaultOpions="productOptions" @selectChange="selectChange"></product-selector>
           </el-form-item>
-          <el-form-item label="条码：">
-            <el-input v-model.trim="form.productBarCode" disabled placeholder="自动带出"></el-input>
+          <el-form-item label="单位：">
+            <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="预留数量：">
-            <el-input-number
-              v-model="form.count"
-              class="w100"
-              :controls="false"
-              :precision="0"
-            >
-            </el-input-number>
+          <el-form-item label="箱数：">
+            <el-input v-model.trim="form.boxCount" disabled placeholder="自动计算"></el-input>
           </el-form-item>
           <el-form-item label="备注：">
             <el-input v-model.trim="form.text"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="规格：">
-            <el-input v-model.trim="form.productSpec" disabled placeholder="自动带出"></el-input>
+          <el-form-item label="条码：">
+            <el-input v-model.trim="form.productBarCode" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="单位：">
-            <el-input v-model.trim="form.productUnit" disabled placeholder="自动带出"></el-input>
+          <el-form-item label="数量：" prop="count">
+            <el-input-number
+              v-model="form.count"
+              placeholder="请选择产品后输入"
+              class="w100"
+              :controls="false"
+              :precision="0"
+              :disabled="!form.productId"
+              @change="countChange"
+            >
+            </el-input-number>
           </el-form-item>
-          <el-form-item label="预留仓库：">
-            <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts" @selectChange="storeChange"></warehous-selector>
+          <el-form-item label="出库仓库：" prop="storeOutId">
+            <warehous-selector :params="form" paramsKey="storeOutId" :defaultOpions="warehouseOpts" @selectChange="storeChange"></warehous-selector>
+          </el-form-item>
+          <el-form-item v-if="orderType === 'outStoreAllocationOutStore'" label="入库仓库：">
+            <warehous-selector :params="form" paramsKey="storeInId" :defaultOpions="warehouseOpts2" @selectChange="inStoreChange"></warehous-selector>
           </el-form-item>
         </el-col>
       </el-row>
@@ -59,7 +65,7 @@ export default {
     ProductSelector,
     WarehousSelector
   },
-  props: ['visible', 'item'],
+  props: ['visible', 'item', 'orderType'],
   data() {
     return {
       isEdit: false,
@@ -67,7 +73,8 @@ export default {
         productId: '',
         count: undefined,
         text: '',
-        storeId: '',
+        storeOutId: '',
+        storeInId: '',
 
         productName: '',
         storeName: '',
@@ -75,13 +82,21 @@ export default {
         productBarCode: '', // 条码
         productUnit: '' // 单位
       },
+      productBoxCount: '',
       rules: {
         productId: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ],
+        count: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        storeOutId: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
       },
       productOptions: [],
-      warehouseOpts: []
+      warehouseOpts: [],
+      warehouseOpts2: []
     };
   },
   created() {
@@ -91,7 +106,8 @@ export default {
         this.form[k] = this.item[k];
       });
       this.productOptions = [{ name: this.item.productName, productId: this.item.productId }];
-      this.warehouseOpts = [{ name: this.item.storeName, id: this.item.storeId }];
+      this.warehouseOpts = [{ name: this.item.storeOutName, id: this.item.storeOutId }];
+      this.warehouseOpts2 = [{ name: this.item.storeInName, id: this.item.storeInId }];
     }
   },
   methods: {
@@ -101,13 +117,22 @@ export default {
       this.form.productSpec = p.spec;
       this.form.productBarCode = p.barCode;
       this.form.productUnit = p.unit;
+      this.productBoxCount = p.boxCount;
+      this.form.count = undefined;
     },
     storeChange(storeList) {
       const s = storeList[0] || {};
-      this.form.storeName = s.name;
+      this.form.storeOutName = s.name;
+    },
+    inStoreChange(storeList) {
+      const s = storeList[0] || {};
+      this.form.storeInName = s.name;
+    },
+    countChange(val) {
+      this.form.boxCount = Math.ceil(val / this.productBoxCount);
     },
     confirm() {
-      this.$refs.contractForm.validate((valid) => {
+      this.$refs.outStoreForm.validate((valid) => {
         if (!valid) return;
         this.$emit('success', this.form);
       });

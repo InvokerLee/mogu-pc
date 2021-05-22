@@ -12,24 +12,24 @@
           <el-option v-for="i in outStockTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="出库数量" prop="reserveCount">
-        <el-input v-model="form.reserveCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
+      <el-form-item label="出库数量" prop="orderCount">
+        <el-input v-model="form.orderCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
       </el-form-item>
-      <el-form-item label="出库日期" prop="startDate">
+      <el-form-item label="出库日期" prop="orderDate">
         <el-date-picker
-          v-model="form.startDate"
+          v-model="form.orderDate"
           style="width: 200px"
           value-format="yyyy-MM-dd"
         />
       </el-form-item>
       <el-form-item label="出库单号">
-        <el-input style="width: 200px" placeholder="系统自动生成" disabled></el-input>
+        <el-input v-model="form.outOrderNo" style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
       <el-form-item label="备注">
         <el-input v-model.trim="form.text" style="width: 200px"></el-input>
       </el-form-item>
       <el-form-item label="出库仓库">
-        <el-input style="width: 200px" placeholder="禁止输入，自动计算" readonly></el-input>
+        <el-input v-model="form.storeName" style="width: 200px" placeholder="禁止输入，自动计算" readonly></el-input>
       </el-form-item>
     </el-form>
     <div style="padding: 3px 0;border-top: 1px solid #ddd;">
@@ -41,7 +41,7 @@
       border
       size="mini"
       :max-height="480"
-      :data="form.reserveProductList"
+      :data="form.orderOutStoreProductList"
     >
       <el-table-column type="index" :width="55" label="序号" align="center" />
       <el-table-column :width="60" label="操作" type="action" align="center">
@@ -56,10 +56,10 @@
       <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
       <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
       <el-table-column :width="80" prop="count" label="数量" align="center" />
-      <el-table-column :width="80" prop="count" label="箱数" align="center" />
-      <el-table-column :width="90" prop="storeName" label="出库仓库" align="center" />
-      <el-table-column :width="90" prop="storeName" label="入库仓库" align="center" />
-      <el-table-column prop="text" label="备注" align="center" />
+      <el-table-column :width="80" prop="boxCount" label="箱数" align="center" />
+      <el-table-column :width="90" prop="storeOutName" label="出库仓库" align="center" />
+      <el-table-column :width="90" prop="storeInName" label="入库仓库" align="center" />
+      <el-table-column :min-width="120" prop="text" label="备注" align="center" />
     </el-table>
 
     <div slot="footer">
@@ -78,7 +78,8 @@
 
 <script>
 import addDialog from './add-dialog';
-import { specialreserveInfo, addSpecialreserve, editSpecialreserve } from '@/api/config';
+import dayjs from 'dayjs';
+import { outStockInfo, outStockAdd, outStockEdit } from '@/api/warehouse';
 
 export default {
   components: {
@@ -91,24 +92,22 @@ export default {
       isEdit: false,
       form: {
         orderType: '',
-        startDate: '',
-        endDate: '',
+        orderCount: '',
+        orderDate: dayjs().format('YYYY-MM-DD'),
+        outOrderNo: '',
         text: '',
-        reserveCount: undefined,
-        reserveProductList: []
+        storeName: '',
+        orderOutStoreProductList: []
       },
       rules: {
         orderType: [
           { required: true, message: '必选', trigger: 'blur' }
         ],
-        startDate: [
+        orderDate: [
           { required: true, message: '必选', trigger: 'blur' }
         ],
-        endDate: [
-          { required: true, message: '必选', trigger: 'blur' }
-        ],
-        reserveCount: [
-          { required: true, message: '必填', trigger: 'blur' }
+        orderCount: [
+          { required: true, message: '请选择明细商品', trigger: 'blur' }
         ]
       },
       dialog: {
@@ -130,7 +129,7 @@ export default {
   },
   methods: {
     getInfo(id) {
-      specialreserveInfo(id).then(({ result }) => {
+      outStockInfo(id).then(({ result }) => {
         Object.keys(this.form).forEach((k) => {
           this.form[k] = result[k];
         });
@@ -149,25 +148,28 @@ export default {
       this.dialog.show = false;
     },
     actionSuccess(item) {
-      const existItem = this.form.reserveProductList.find(v => v.productId === item.productId);
+      const existItem = this.form.orderOutStoreProductList.find(v => v.productId === item.productId);
       if (existItem) {
         Object.assign(existItem, item);
       } else {
-        this.form.reserveProductList.push(item);
+        this.form.orderOutStoreProductList.push(item);
       }
       this.closeDialog();
       this.calcTotalCount();
     },
     del(i) {
-      this.form.reserveProductList.splice(i, 1);
+      this.form.orderOutStoreProductList.splice(i, 1);
       this.calcTotalCount();
     },
     calcTotalCount() {
       let c = 0;
-      this.form.reserveProductList.forEach((v) => {
+      const storeName = [];
+      this.form.orderOutStoreProductList.forEach((v) => {
         c += v.count || 0;
+        storeName.push(v.storeOutName);
       });
-      this.form.reserveCount = c;
+      this.form.orderCount = c;
+      this.form.storeName = storeName.join(',');
     },
     confirm() {
       this.$refs.specialPriceForm.validate((valid) => {
@@ -183,8 +185,8 @@ export default {
     },
     saveForm() {
       return this.isEdit
-        ? editSpecialreserve({ id: this.item.id, ...this.form })
-        : addSpecialreserve(this.form);
+        ? outStockEdit({ id: this.item.id, ...this.form })
+        : outStockAdd(this.form);
     },
     cancel() {
       this.$emit('cancel');

@@ -23,6 +23,26 @@ export function orderOutStoreInfoList(data) {
     }
   });
 }
+export function outStockAdd(data) {
+  return request({
+    url: '/orderoutstoreinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function outStockEdit(data) {
+  return request({
+    url: '/orderoutstoreinfo//update',
+    method: 'post',
+    data
+  });
+}
+export function outStockInfo(id) {
+  return request({
+    url: `/orderoutstoreinfo/info/${id}`,
+    method: 'get'
+  });
+}
 
 // 库存盘点
 export function storecheckList(data) {
