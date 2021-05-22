@@ -39,11 +39,11 @@
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="出库仓库：" prop="storeOutId">
-            <warehous-selector :params="form" paramsKey="storeOutId" :defaultOpions="warehouseOpts" @selectChange="storeChange"></warehous-selector>
-          </el-form-item>
-          <el-form-item v-if="orderType === 'outStoreAllocationOutStore'" label="入库仓库：">
+          <el-form-item label="入库仓库：" prop="storeInId">
             <warehous-selector :params="form" paramsKey="storeInId" :defaultOpions="warehouseOpts2" @selectChange="inStoreChange"></warehous-selector>
+          </el-form-item>
+          <el-form-item v-if="orderType === 'outStoreAllocationInStore'" label="出库仓库：" prop="storeOutId">
+            <warehous-selector :params="form" paramsKey="storeOutId" :defaultOpions="warehouseOpts" @selectChange="storeChange"></warehous-selector>
           </el-form-item>
         </el-col>
       </el-row>
@@ -91,6 +91,9 @@ export default {
         ],
         count: [
           { required: true, message: '必填', trigger: 'blur' }
+        ],
+        storeInId: [
+          { required: true, message: '必选', trigger: 'blur' }
         ],
         storeOutId: [
           { required: true, message: '必选', trigger: 'blur' }

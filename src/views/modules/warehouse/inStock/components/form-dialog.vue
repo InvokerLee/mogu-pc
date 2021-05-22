@@ -173,7 +173,7 @@ export default {
       const storeName = [];
       this.form.orderInStoreProductList.forEach((v) => {
         c += v.count || 0;
-        storeName.push(v.storeOutName);
+        storeName.push(v.storeInName);
       });
       this.form.orderCount = c;
       this.form.storeName = storeName.join(',');
