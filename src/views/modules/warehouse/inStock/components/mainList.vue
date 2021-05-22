@@ -3,7 +3,7 @@
     <div slot="header">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item>
-          <el-tag type="info">出库单</el-tag>
+          <el-tag type="info">入库单</el-tag>
         </el-form-item>
         <el-form-item label="单据类型">
           <el-select v-model="params.orderType" placeholder="请选择" class="w120px">
