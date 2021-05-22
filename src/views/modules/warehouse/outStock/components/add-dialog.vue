@@ -74,7 +74,9 @@ export default {
         count: undefined,
         text: '',
         storeOutId: '',
+        storeOutName: '',
         storeInId: '',
+        storeInName: '',
 
         productName: '',
         storeName: '',
