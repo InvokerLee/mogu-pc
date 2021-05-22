@@ -8,7 +8,7 @@
   >
     <el-form ref="specialPriceForm" inline size="mini" label-width="80px" :model="form" :rules="rules">
       <el-form-item label="出库类型" prop="orderType">
-        <el-select v-model="form.orderType" placeholder="请选择" style="width: 200px;">
+        <el-select v-model="form.orderType" placeholder="请选择" style="width: 200px;" :disabled="isEdit">
           <el-option v-for="i in outStockTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
         </el-select>
       </el-form-item>
@@ -119,7 +119,15 @@ export default {
   },
   computed: {
     outStockTypes() {
-      return this.$store.getters.getConstByKey('outStockType');
+      const types = this.$store.getters.getConstByKey('outStockType');
+      if (!this.isEdit) {
+        types.options = [
+          { label: '报损出库', value: 'damageOutStore' },
+          { label: '外仓调拨出库', value: 'outStoreAllocationOutStore' },
+          { label: '其他出库', value: 'otherOutStore' }
+        ];
+      }
+      return types;
     }
   },
   created() {

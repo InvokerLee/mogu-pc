@@ -1,28 +1,28 @@
 <template>
   <el-dialog
     width="960px"
-    :title="isEdit ? '出库单编辑' : '出库单新增'"
+    :title="isEdit ? '入库单编辑' : '入库单新增'"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
   >
     <el-form ref="specialPriceForm" inline size="mini" label-width="80px" :model="form" :rules="rules">
-      <el-form-item label="出库类型" prop="orderType">
-        <el-select v-model="form.orderType" placeholder="请选择" style="width: 200px;">
+      <el-form-item label="入库类型" prop="orderType">
+        <el-select v-model="form.orderType" placeholder="请选择" style="width: 200px;" :disabled="isEdit">
           <el-option v-for="i in outStockTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="出库数量" prop="orderCount">
+      <el-form-item label="入库数量" prop="orderCount">
         <el-input v-model="form.orderCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
       </el-form-item>
-      <el-form-item label="出库日期" prop="orderDate">
+      <el-form-item label="入库日期" prop="orderDate">
         <el-date-picker
           v-model="form.orderDate"
           style="width: 200px"
           value-format="yyyy-MM-dd"
         />
       </el-form-item>
-      <el-form-item label="出库单号">
+      <el-form-item label="入库单号">
         <el-input v-model="form.outOrderNo" style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
       <el-form-item label="备注">
