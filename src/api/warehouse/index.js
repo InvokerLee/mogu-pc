@@ -21,10 +21,29 @@ export function inStockCheck(data) {
     }
   });
 }
-
 export function delInStock(id) {
   return request({
     url: `/orderinstoreinfo/delete/${id}`,
+    method: 'get'
+  });
+}
+export function inStockAdd(data) {
+  return request({
+    url: '/orderinstoreinfo/save',
+    method: 'post',
+    data
+  });
+}
+export function inStockEdit(data) {
+  return request({
+    url: '/orderinstoreinfo//update',
+    method: 'post',
+    data
+  });
+}
+export function inStockInfo(id) {
+  return request({
+    url: `/orderinstoreinfo/info/${id}`,
     method: 'get'
   });
 }

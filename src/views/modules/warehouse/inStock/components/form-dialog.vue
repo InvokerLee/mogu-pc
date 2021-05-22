@@ -9,7 +9,7 @@
     <el-form ref="specialPriceForm" inline size="mini" label-width="80px" :model="form" :rules="rules">
       <el-form-item label="入库类型" prop="orderType">
         <el-select v-model="form.orderType" placeholder="请选择" style="width: 200px;" :disabled="isEdit">
-          <el-option v-for="i in outStockTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
+          <el-option v-for="i in inStockTypes.options" :key="i.value" :label="i.label" :value="i.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="入库数量" prop="orderCount">
@@ -23,12 +23,12 @@
         />
       </el-form-item>
       <el-form-item label="入库单号">
-        <el-input v-model="form.outOrderNo" style="width: 200px" placeholder="系统自动生成" disabled></el-input>
+        <el-input v-model="form.inOrderNo" style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
       <el-form-item label="备注">
         <el-input v-model.trim="form.text" style="width: 200px"></el-input>
       </el-form-item>
-      <el-form-item label="出库仓库">
+      <el-form-item label="入库仓库">
         <el-input v-model="form.storeName" style="width: 200px" placeholder="禁止输入，自动计算" readonly></el-input>
       </el-form-item>
     </el-form>
@@ -41,7 +41,7 @@
       border
       size="mini"
       :max-height="480"
-      :data="form.orderOutStoreProductList"
+      :data="form.orderInStoreProductList"
     >
       <el-table-column type="index" :width="55" label="序号" align="center" />
       <el-table-column :width="60" label="操作" type="action" align="center">
@@ -80,7 +80,7 @@
 <script>
 import addDialog from './add-dialog';
 import dayjs from 'dayjs';
-import { outStockInfo, outStockAdd, outStockEdit } from '@/api/warehouse';
+import { inStockInfo, inStockAdd, inStockEdit } from '@/api/warehouse';
 
 export default {
   components: {
@@ -95,10 +95,10 @@ export default {
         orderType: '',
         orderCount: '',
         orderDate: dayjs().format('YYYY-MM-DD'),
-        outOrderNo: '',
+        inOrderNo: '',
         text: '',
         storeName: '',
-        orderOutStoreProductList: []
+        orderInStoreProductList: []
       },
       rules: {
         orderType: [
@@ -118,8 +118,14 @@ export default {
     };
   },
   computed: {
-    outStockTypes() {
-      return this.$store.getters.getConstByKey('outStockType');
+    inStockTypes() {
+      const types = this.$store.getters.getConstByKey('inStockType');
+      if (!this.isEdit) {
+        types.options = [
+          { label: '其他入库', value: 'otherInStore' }
+        ];
+      }
+      return types;
     }
   },
   created() {
@@ -130,7 +136,7 @@ export default {
   },
   methods: {
     getInfo(id) {
-      outStockInfo(id).then(({ result }) => {
+      inStockInfo(id).then(({ result }) => {
         Object.keys(this.form).forEach((k) => {
           this.form[k] = result[k];
         });
@@ -149,23 +155,23 @@ export default {
       this.dialog.show = false;
     },
     actionSuccess(item) {
-      const existItem = this.form.orderOutStoreProductList.find(v => v.productId === item.productId);
+      const existItem = this.form.orderInStoreProductList.find(v => v.productId === item.productId);
       if (existItem) {
         Object.assign(existItem, item);
       } else {
-        this.form.orderOutStoreProductList.push(item);
+        this.form.orderInStoreProductList.push(item);
       }
       this.closeDialog();
       this.calcTotalCount();
     },
     del(i) {
-      this.form.orderOutStoreProductList.splice(i, 1);
+      this.form.orderInStoreProductList.splice(i, 1);
       this.calcTotalCount();
     },
     calcTotalCount() {
       let c = 0;
       const storeName = [];
-      this.form.orderOutStoreProductList.forEach((v) => {
+      this.form.orderInStoreProductList.forEach((v) => {
         c += v.count || 0;
         storeName.push(v.storeOutName);
       });
@@ -186,8 +192,8 @@ export default {
     },
     saveForm() {
       return this.isEdit
-        ? outStockEdit({ id: this.item.id, ...this.form })
-        : outStockAdd(this.form);
+        ? inStockEdit({ id: this.item.id, ...this.form })
+        : inStockAdd(this.form);
     },
     cancel() {
       this.$emit('cancel');

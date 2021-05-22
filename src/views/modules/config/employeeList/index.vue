@@ -100,7 +100,7 @@ export default {
         pageSize: 20
       },
       total: 0,
-      tableData: [{}],
+      tableData: [],
       dialog: {
         show: false,
         name: '',
