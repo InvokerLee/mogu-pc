@@ -56,24 +56,24 @@
           <el-row type="flex" justify="space-around" align="middle">
             <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
             <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a>
-            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.checkState ? '审核' : '反审' }}</a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '反审' : '审核' }}</a>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column :width="140" prop="reserveNum" label="盘点单号" align="center" />
-      <el-table-column :width="135" prop="startDate" label="盘点日期" align="center" />
-      <el-table-column :width="90" prop="guestName" label="盈亏金额" align="center" />
-      <el-table-column :width="90" prop="reserveCount" label="仓库" align="center" />
+      <el-table-column :width="140" prop="checkNum" label="盘点单号" align="center" />
+      <el-table-column :width="135" prop="checkDate" label="盘点日期" align="center" />
+      <el-table-column :width="90" prop="profitSum" label="盈亏金额" align="center" />
+      <el-table-column :width="90" prop="storeName" label="仓库" align="center" />
       <el-table-column :min-width="120" prop="text" label="备注" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
-            {{ ['已审核', '待审核'][scope.row.checkState] }}
+            {{ ['待审核', '已审核'][scope.row.checkState] }}
           </span>
         </template>
       </el-table-column>
       <el-table-column :width="70" prop="checkUserName" label="审核人" align="center" />
-      <el-table-column :width="135" prop="checkDate" label="审核时间" align="center" />
+      <el-table-column :width="135" prop="auditDate" label="审核时间" align="center" />
     </el-table>
     <el-pagination
       v-if="tableData.length"
@@ -98,7 +98,7 @@
 
 <script>
 import WarehousSelector from '@/components/WarehousSelector';
-import { specialreserveList, checkSpecialreserve, delSpecialreserve } from '@/api/config';
+import { storecheckList, delStorecheck, storeCheck } from '@/api/warehouse';
 
 import formDialog from './form-dialog';
 export default {
@@ -138,7 +138,7 @@ export default {
       });
       Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      specialreserveList(params).then(({ result }) => {
+      storecheckList(params).then(({ result }) => {
         this.tableData = result.dataList;
         this.total = result.totalCount;
       }).finally(() => {
@@ -151,7 +151,6 @@ export default {
     },
     reset() {
       this.dateRange = [];
-
       Object.assign(this.params, this.$options.data.call(this).params);
       this.getList();
     },
@@ -182,7 +181,7 @@ export default {
       this.getList();
     },
     check(item) {
-      checkSpecialreserve({ id: item.id }).then(() => {
+      storeCheck({ id: item.id }).then(() => {
         this.$message.success('操作成功');
         this.getList();
       }).catch(() => {});
@@ -192,7 +191,7 @@ export default {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => delSpecialreserve(item.id)).then(() => {
+      }).then(() => delStorecheck(item.id)).then(() => {
         this.$message.success('删除成功');
         this.getList();
       }).catch(() => {});
