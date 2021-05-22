@@ -18,17 +18,12 @@
               class="w100"
               :controls="false"
               :precision="0"
+              @change="calcBoxCount"
             >
             </el-input-number>
           </el-form-item>
           <el-form-item label="箱数：">
-            <el-input-number
-              v-model="form.boxCount"
-              class="w100"
-              :controls="false"
-              :precision="0"
-            >
-            </el-input-number>
+            <el-input v-model.trim="form.boxCount" disabled placeholder="自动计算"></el-input>
           </el-form-item>
           <el-form-item label="税率：">
             <el-input v-model.trim="form.taxRate" disabled placeholder="自动带出"></el-input>
@@ -137,6 +132,10 @@ export default {
     }
   },
   methods: {
+    calcBoxCount(val) {
+      if (!this.form.productBoxCount || !this.form.count) return;
+      this.form.boxCount = Math.ceil(this.form.count / this.form.productBoxCount);
+    },
     selectChange(products) {
       const p = products[0] || {};
       this.form.productUnit = p.unit;
@@ -145,6 +144,7 @@ export default {
       this.form.noTaxPrice = p.salseNoTaxPrice;
       this.form.taxRate = p.salesTaxRate;
       this.getCanUsedCount();
+      this.calcBoxCount();
     },
     getCanUsedCount() {
       if (!this.form.productId || !this.form.storeId) return;
