@@ -8,7 +8,7 @@
         <el-form-item label="单据类型">
           <el-select v-model="params.orderType" placeholder="请选择" class="w120px">
             <el-option label="全部" value="" />
-            <el-option v-for="item in outStockTypes.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in inStockTypes.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="查询条件">
@@ -66,19 +66,19 @@
       <el-table-column :width="100" label="单据类型" align="center">
         <template slot-scope="scope">
           <span>
-            {{ outStockTypes[scope.row.orderType] }}
+            {{ inStockTypes[scope.row.orderType] }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column :width="180" prop="orderNo" label="出库单号" align="center" />
+      <el-table-column :width="180" prop="inOrderNo" label="入库单号" align="center" />
       <el-table-column :min-width="120" prop="guestName" label="客户/供应商" align="center" />
       <el-table-column :width="180" prop="orderNo" label="订单号" align="center" />
       <el-table-column :width="135" prop="orderDate" label="订单日期" align="center" />
-      <el-table-column :width="135" prop="checkDate" label="出库日期" align="center" />
-      <el-table-column :width="80" prop="orderCount" label="出库数量" align="center" />
-      <el-table-column :width="110" prop="taxSum" label="出库金额(含税)" align="center" />
-      <el-table-column :width="110" prop="noTaxSum" label="出库金额(未税)" align="center" />
-      <el-table-column :min-width="120" prop="" label="地址" align="center" />
+      <el-table-column :width="135" prop="createDate" label="入库日期" align="center" />
+      <el-table-column :width="80" prop="orderCount" label="入库数量" align="center" />
+      <el-table-column :width="110" prop="taxSum" label="入库金额(含税)" align="center" />
+      <el-table-column :width="110" prop="noTaxSum" label="入库金额(未税)" align="center" />
+      <el-table-column :min-width="90" prop="storeName" label="仓库" align="center" />
       <el-table-column :min-width="120" prop="text" label="备注" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { orderOutStoreInfoList, outStockCheck, delOutStock } from '@/api/warehouse';
+import { orderInStoreInfoList, outStockCheck, delOutStock } from '@/api/warehouse';
 
 import formDialog from './form-dialog';
 export default {
@@ -138,8 +138,8 @@ export default {
     };
   },
   computed: {
-    outStockTypes() {
-      return this.$store.getters.getConstByKey('outStockType');
+    inStockTypes() {
+      return this.$store.getters.getConstByKey('inStockType');
     }
   },
   created() {
@@ -155,7 +155,7 @@ export default {
       });
       Object.assign(params, this.formatDate(this.dateRange));
       this.loading = true;
-      orderOutStoreInfoList(params).then(({ result }) => {
+      orderInStoreInfoList(params).then(({ result }) => {
         this.tableData = result.dataList;
         this.total = result.totalCount;
       }).finally(() => {

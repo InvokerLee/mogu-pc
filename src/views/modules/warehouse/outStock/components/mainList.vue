@@ -70,11 +70,11 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column :width="180" prop="orderNo" label="出库单号" align="center" />
+      <el-table-column :width="180" prop="outOrderNo" label="出库单号" align="center" />
       <el-table-column :min-width="120" prop="guestName" label="客户/供应商" align="center" />
       <el-table-column :width="180" prop="orderNo" label="订单号" align="center" />
       <el-table-column :width="135" prop="orderDate" label="订单日期" align="center" />
-      <el-table-column :width="135" prop="checkDate" label="出库日期" align="center" />
+      <el-table-column :width="135" prop="createDate" label="出库日期" align="center" />
       <el-table-column :width="80" prop="orderCount" label="出库数量" align="center" />
       <el-table-column :width="110" prop="taxSum" label="出库金额(含税)" align="center" />
       <el-table-column :width="110" prop="noTaxSum" label="出库金额(未税)" align="center" />

@@ -1,5 +1,17 @@
 import request from '@/utils/request/index';
 
+// 入库
+export function orderInStoreInfoList(data) {
+  return request({
+    url: '/orderinstoreinfo/list',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+
 // 库存
 export function storestockList(data) {
   return request({
