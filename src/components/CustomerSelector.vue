@@ -38,6 +38,10 @@ export default {
       type: String,
       default: ''
     },
+    orderType: {
+      type: String,
+      default: ''
+    },
     defaultOpions: {
       type: Array,
       default() {
@@ -54,6 +58,20 @@ export default {
       loading: false,
       options: []
     };
+  },
+  computed: {
+    oType() {
+      if (this.orderType.startsWith('sales')) {
+        return 'sales';
+      }
+      if (this.orderType.startsWith('shoppe')) {
+        return 'shoppe';
+      }
+      if (this.orderType.startsWith('sample')) {
+        return 'sample';
+      }
+      return 'other';
+    }
   },
   watch: {
     defaultOpions(val) {
@@ -76,7 +94,7 @@ export default {
       this.loading = true;
       commonSelectGuest({
         name: query,
-        orderType: 'other'
+        orderType: this.oType
       }).then((res) => {
         this.options = res.result;
       }).catch(() => {

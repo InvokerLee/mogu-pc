@@ -20,7 +20,7 @@
       </el-form-item>
       <el-form-item v-else label="客户" prop="guestId">
         <div class="w200px">
-          <customer-selector :params="form" paramsKey="guestId" :defaultOpions="guestOptions" @selectChange="selectChange"></customer-selector>
+          <customer-selector :params="form" paramsKey="guestId" :orderType="form.orderType" :defaultOpions="guestOptions" @selectChange="selectChange"></customer-selector>
         </div>
       </el-form-item>
       <el-form-item label="日期：" prop="orderDate">
