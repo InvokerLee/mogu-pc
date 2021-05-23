@@ -80,7 +80,7 @@
 <script>
 import WarehousSelector from '@/components/WarehousSelector';
 import addDialog from './add-dialog';
-import { specialreserveInfo, addSpecialreserve, editSpecialreserve } from '@/api/config';
+import { storecheckInfo, addStoreCheck, editStoreCheck } from '@/api/config';
 import dayjs from 'dayjs';
 
 export default {
@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     getInfo(id) {
-      specialreserveInfo(id).then(({ result }) => {
+      storecheckInfo(id).then(({ result }) => {
         Object.keys(this.form).forEach((k) => {
           this.form[k] = result[k];
         });
@@ -193,8 +193,8 @@ export default {
     },
     saveForm() {
       return this.isEdit
-        ? editSpecialreserve({ id: this.item.id, ...this.form })
-        : addSpecialreserve(this.form);
+        ? editStoreCheck({ id: this.item.id, ...this.form })
+        : addStoreCheck(this.form);
     },
     cancel() {
       this.$emit('cancel');
