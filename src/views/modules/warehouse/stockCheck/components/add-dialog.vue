@@ -11,7 +11,9 @@
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <el-form-item label="产品：" prop="productId">
-            <product-selector :params="form" paramsKey="productId" :defaultOpions="productOptions" @selectChange="selectChange"></product-selector>
+            <el-select v-model="form.productId" placeholder="请选择商品" class="w100" @change="selectChange">
+              <el-option v-for="i in productOptions" :key="i.productId" :label="i.productName" :value="i.productId" />
+            </el-select>
           </el-form-item>
           <el-form-item label="原有数量：" prop="oldCount">
             <el-input v-model.trim="form.oldCount" disabled placeholder="自动带出"></el-input>
@@ -19,8 +21,8 @@
           <el-form-item label="批号：">
             <el-input v-model.trim="form.batchNum" disabled placeholder="自动带出"></el-input>
           </el-form-item>
-          <el-form-item label="盈亏数：" prop="profirCost">
-            <el-input v-model.trim="form.profirCost" disabled placeholder="自动计算"></el-input>
+          <el-form-item label="盈亏数：" prop="profirCount">
+            <el-input v-model.trim="form.profirCount" disabled placeholder="自动计算"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -52,13 +54,11 @@
 </template>
 
 <script>
-import ProductSelector from '@/components/ProductSelector';
-
+import { storeDetailStoreProduct } from '@/api/warehouse';
 export default {
   components: {
-    ProductSelector
   },
-  props: ['visible', 'item'],
+  props: ['visible', 'item', 'storeId'],
   data() {
     return {
       isEdit: false,
@@ -66,12 +66,13 @@ export default {
         productId: '',
         oldCount: '',
         batchNum: '',
-        profirCost: '',
+        profirCount: '',
         currCount: undefined,
 
         productName: '',
         productDate: '',
-        productUnit: '' // 单位
+        productUnit: '', // 单位
+        oldCost: ''
       },
       rules: {
         productId: [
@@ -83,7 +84,7 @@ export default {
         productUnit: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
-        profirCost: [
+        profirCount: [
           { required: true, message: '必填', trigger: 'blur' }
         ],
         currCount: [
@@ -99,23 +100,34 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
-      this.productOptions = [{ name: this.item.productName, productId: this.item.productId }];
     }
+    this.getStoreProduct();
   },
   methods: {
-    selectChange(products) {
-      const p = products[0] || {};
-      this.form.productName = p.name;
-      this.form.productUnit = p.unit;
+    getStoreProduct() {
+      const params = {
+        storeId: this.storeId
+      };
+      storeDetailStoreProduct(params).then((res) => {
+        this.productOptions = res.result;
+      }).catch(() => {});
+    },
+    selectChange(pId) {
+      const p = this.productOptions.find((v) => v.productId === pId);
+      this.form.productName = p.productName;
+      this.form.productUnit = p.productUnit;
       this.form.productDate = p.productDate; // 生产日期
-      // 批号
-      // 原有数量
+      this.form.productBarCode = p.productBarCode;
+
+      this.form.batchNum = p.batchNum;
+      this.form.oldCount = p.oldCount;
+      this.form.oldCost = p.oldCost;
 
       this.calcProfirCost();
     },
     calcProfirCost() {
       if (this.form.oldCount && this.form.currCount) {
-        this.form.profirCost = Number(this.form.currCount) - Number(this.form.oldCount);
+        this.form.profirCount = Number(this.form.currCount) - Number(this.form.oldCount);
       }
     },
     confirm() {

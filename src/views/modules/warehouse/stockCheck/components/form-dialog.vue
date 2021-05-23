@@ -50,14 +50,14 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
-      <el-table-column prop="" label="批号" align="center" />
-      <el-table-column prop="" label="生产日期" align="center" />
+      <el-table-column :min-width="100" prop="productBarCode" label="条码" align="center" />
+      <el-table-column :min-width="120" prop="batchNum" label="批号" align="center" />
+      <el-table-column :width="135" prop="productDate" label="生产日期" align="center" />
       <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
-      <el-table-column :width="80" prop="" label="原有数量" align="center" />
-      <el-table-column :width="80" prop="" label="现有数量" align="center" />
-      <el-table-column :width="80" prop="" label="盈亏数" align="center" />
-      <el-table-column :width="100" prop="" label="原数量成本额" align="center" />
+      <el-table-column :width="80" prop="oldCount" label="原有数量" align="center" />
+      <el-table-column :width="80" prop="currCount" label="现有数量" align="center" />
+      <el-table-column :width="80" prop="profirCount" label="盈亏数" align="center" />
+      <el-table-column :width="100" prop="oldCost" label="原数量成本额" align="center" />
       <el-table-column :width="100" prop="" label="现数量成本额" align="center" />
       <el-table-column :width="100" prop="" label="盈亏成本额" align="center" />
     </el-table>
@@ -70,6 +70,7 @@
       v-if="dialog.show"
       :visible="dialog.show"
       :item="dialog.item"
+      :storeId="form.storeId"
       @success="actionSuccess"
       @cancel="closeDialog"
     ></add-dialog>
@@ -137,10 +138,18 @@ export default {
       }).catch(() => {});
     },
     add() {
+      if (!this.form.storeId) {
+        this.$message.warning('请先选择仓库');
+        return;
+      }
       this.dialog.item = {};
       this.dialog.show = true;
     },
     edit(item) {
+      if (!this.form.storeId) {
+        this.$message.warning('请先选择仓库');
+        return;
+      }
       this.dialog.item = item;
       this.dialog.show = true;
     },

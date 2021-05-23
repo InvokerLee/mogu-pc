@@ -211,6 +211,16 @@ export function storecheckInfo(id) {
   });
 }
 
+export function storeDetailStoreProduct(data) {
+  return request({
+    url: '/storecheckdetail/queryCheckProductList',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
 export function getStorecheckdetailList(data) {
   return request({
     url: '/storecheckdetail/list',
