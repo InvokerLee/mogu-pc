@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
-// import { getToken, setToken } from '@/utils/cookie';
+import { getToken, setToken } from '@/utils/cookie';
 // eslint-disable-next-line
 import qs from 'qs';
 import store from '@/store';
 
-// const AUTH_KEY = 'Bearer';
-const INVALID_TOKENS = [100001, 100002, 50012, 50014];
+const INVALID_TOKENS = [];
 
 const request = axios.create({
   baseURL: process.env.VUE_APP_BASE_API
@@ -15,9 +14,9 @@ const request = axios.create({
 
 // 请求拦截
 request.interceptors.request.use((config) => {
-  // if (getToken()) {
-  //   config.headers['Authorization'] = AUTH_KEY + getToken();
-  // }
+  if (getToken()) {
+    config.headers['x-token'] = getToken();
+  }
   if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
     config.data = qs.stringify(config.data);
   }
@@ -26,10 +25,10 @@ request.interceptors.request.use((config) => {
 
 // 响应拦截
 request.interceptors.response.use((response) => {
-  // if (response.headers.authorization) {
-  //   const token = response.headers.authorization.split(' ')[1];
-  //   setToken(token);
-  // }
+  if (response.headers.authorization) {
+    const token = response.headers.authorization;
+    setToken(token);
+  }
   // blob
   if (response.config.responseType === 'blob') {
     return response;

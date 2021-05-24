@@ -10,7 +10,7 @@
           <div class="en">Mogu smart Management System</div>
         </div>
       </div>
-      <el-form ref="accountForm" inline :model="loginForm" :rules="rules" class="form">
+      <el-form ref="accountForm" :model="loginForm" :rules="rules" class="form">
         <el-form-item prop="username">
           <el-input
             v-model.trim="loginForm.username"
@@ -27,7 +27,17 @@
             @keyup.enter.native="handleLogin"
           />
         </el-form-item>
-        <el-button type="primary" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
+        <el-form-item prop="captcha">
+          <el-row type="flex" align="middle" class="w280">
+            <el-input
+              v-model="loginForm.captcha"
+              style="width: 180px;"
+            >
+            </el-input>
+            <img alt="验证码" style="flex: 1;margin-left:15px;" height="40" :src="checkCodeApi" @click="changeCheckCode">
+          </el-row>
+        </el-form-item>
+        <el-button class="w280" type="primary" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
       </el-form>
     </section>
     <div class="icp">
@@ -45,11 +55,15 @@ export default {
     return {
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        captcha: ''
       },
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        captcha: [
+          { required: true, message: '请输入验证码', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -57,7 +71,9 @@ export default {
         ]
       },
       loading: false,
-      redirect: undefined
+      redirect: undefined,
+      checkCodeApi: ''
+
     };
   },
   watch: {
@@ -68,6 +84,9 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.changeCheckCode();
+  },
   methods: {
     handleLogin() {
       this.$refs.accountForm.validate(valid => {
@@ -75,13 +94,16 @@ export default {
         this.loading = true;
         this.$store.dispatch('user/login', this.loginForm)
           .then(() => {
-            this.$router.push({ path: this.redirect || '/' });
+            this.$router.push({ path: '/' });
           })
           .catch(() => {})
           .finally(() => {
             this.loading = false;
           });
       });
+    },
+    changeCheckCode() {
+      this.checkCodeApi = `${process.env.VUE_APP_BASE_API}/getVerify?s=${Math.random()}`;
     }
   }
 };
@@ -97,9 +119,10 @@ export default {
 
   .box {
     width: 100%;
-    background-color: rgba(0,0,0, 0.5);
+    background-color: rgba(0,0,0, 0.58);
+    padding: 25px 0;
     min-height: 300px;
-    margin-top: 160px;
+    margin-top: 60px;
     color: #fff;
     display: flex;
     align-items: center;

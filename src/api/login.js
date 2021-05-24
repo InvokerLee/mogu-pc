@@ -2,16 +2,19 @@ import request from '@/utils/request/index';
 
 export function login(data) {
   return request({
-    url: '/login',
+    url: '/sys/login',
     method: 'post',
-    data
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
 
 export function logout() {
   return request({
     url: '/logout',
-    method: 'post'
+    method: 'get'
   });
 }
 

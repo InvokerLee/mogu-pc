@@ -1,7 +1,7 @@
 import { login, logout } from '@/api/login';
 import { getUserInfo } from '@/api/auth/user';
 
-import { getToken, removeToken } from '@/utils/cookie';
+import { removeToken } from '@/utils/cookie';
 
 const getDefaultState = () => {
   return {
@@ -41,7 +41,7 @@ const actions = {
   // 登出
   logout({ dispatch, commit }) {
     return new Promise((resolve, reject) => {
-      logout(getToken()).then(() => {
+      logout().then(() => {
         dispatch('resetAll');
         resolve();
       }).catch(error => {
