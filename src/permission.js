@@ -1,7 +1,7 @@
 import router from './router';
 import NProgress from 'nprogress'; // progress bar
 import 'nprogress/nprogress.css'; // progress bar style
-import localStorage from '@/utils/local-storage';
+import { getToken } from '@/utils/cookie';
 import store from './store';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
@@ -17,7 +17,7 @@ const reLogin = (to, next) => {
 router.beforeEach(async(to, from, next) => {
   NProgress.start();
 
-  const hasToken = localStorage.get('token');
+  const hasToken = getToken();
   if (hasToken) {
     if (to.path === '/login') {
       next({ path: '/' });

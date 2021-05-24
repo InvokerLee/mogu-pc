@@ -1,7 +1,7 @@
 import { login, logout } from '@/api/login';
 import { getUserInfo } from '@/api/auth/user';
 
-import localStorage from '@/utils/local-storage';
+import { removeToken } from '@/utils/cookie';
 
 const getDefaultState = () => {
   return {
@@ -64,7 +64,7 @@ const actions = {
   resetAll({ commit, state }) {
     commit('RESET_USER_STATE'); // 清除用户信息
     commit('permission/SET_EMPTY_ROUTES', [], { root: true }); // 清除路由信息
-    localStorage.remove('token'); // 清除Token
+    removeToken(); // 清除Token
   }
 };
 

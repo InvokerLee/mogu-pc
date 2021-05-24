@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
-import localStorage from '@/utils/local-storage';
+import { getToken, setToken } from '@/utils/cookie';
 // eslint-disable-next-line
 import qs from 'qs';
-// import store from '@/store';
+import store from '@/store';
 
-// const INVALID_TOKENS = [];
+const INVALID_TOKENS = [];
 
 const request = axios.create({
   baseURL: process.env.VUE_APP_BASE_API
@@ -14,10 +14,8 @@ const request = axios.create({
 
 // 请求拦截
 request.interceptors.request.use((config) => {
-  const token = localStorage.get('token');
-  console.log(token);
-  if (token) {
-    config.headers['x-token'] = token;
+  if (getToken()) {
+    config.headers['x-token'] = getToken();
   }
   if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
     config.data = qs.stringify(config.data);
@@ -28,7 +26,7 @@ request.interceptors.request.use((config) => {
 // 响应拦截
 request.interceptors.response.use((response) => {
   if (response.data.token) {
-    localStorage.set('token', response.data.token);
+    setToken(response.data.token);
   }
   // blob
   if (response.config.responseType === 'blob') {
@@ -38,12 +36,11 @@ request.interceptors.response.use((response) => {
   if (response.data.code === 200) {
     return Promise.resolve(response.data);
   }
-
-  // if (INVALID_TOKENS.includes(response.data.code)) {
-  //   store.dispatch('user/resetAll');
-  //   location.reload();
-  //   return;
-  // }
+  if (INVALID_TOKENS.includes(response.data.code)) {
+    store.dispatch('user/resetAll');
+    location.reload();
+    return;
+  }
 
   // if (response.data.code === 100400) {
   //   // 错误
