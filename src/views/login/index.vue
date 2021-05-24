@@ -96,7 +96,9 @@ export default {
           .then(() => {
             this.$router.push({ path: '/' });
           })
-          .catch(() => {})
+          .catch(() => {
+            this.changeCheckCode();
+          })
           .finally(() => {
             this.loading = false;
           });

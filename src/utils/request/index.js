@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
-import { getToken, setToken } from '@/utils/cookie';
+import localStorage from '@/utils/local-storage';
 // eslint-disable-next-line
 import qs from 'qs';
 import store from '@/store';
@@ -14,8 +14,9 @@ const request = axios.create({
 
 // 请求拦截
 request.interceptors.request.use((config) => {
-  if (getToken()) {
-    config.headers['x-token'] = getToken();
+  const token = localStorage.get('token');
+  if (token) {
+    config.headers['x-token'] = token;
   }
   if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
     config.data = qs.stringify(config.data);
@@ -25,9 +26,8 @@ request.interceptors.request.use((config) => {
 
 // 响应拦截
 request.interceptors.response.use((response) => {
-  if (response.headers.authorization) {
-    const token = response.headers.authorization;
-    setToken(token);
+  if (response.data.token) {
+    localStorage.set('token', response.data.token);
   }
   // blob
   if (response.config.responseType === 'blob') {
