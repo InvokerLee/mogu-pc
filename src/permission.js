@@ -18,10 +18,9 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start();
 
   const hasToken = localStorage.get('token');
-  if (!hasToken) {
+  if (hasToken) {
     if (to.path === '/login') {
-      // next({ path: '/' });
-      next();
+      next({ path: '/' });
       NProgress.done();
     } else {
       const hasMenus = store.state.permission.routes && store.state.permission.routes.length > 0;

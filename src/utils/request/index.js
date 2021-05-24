@@ -3,9 +3,9 @@ import { Message } from 'element-ui';
 import localStorage from '@/utils/local-storage';
 // eslint-disable-next-line
 import qs from 'qs';
-import store from '@/store';
+// import store from '@/store';
 
-const INVALID_TOKENS = [];
+// const INVALID_TOKENS = [];
 
 const request = axios.create({
   baseURL: process.env.VUE_APP_BASE_API
@@ -15,6 +15,7 @@ const request = axios.create({
 // 请求拦截
 request.interceptors.request.use((config) => {
   const token = localStorage.get('token');
+  console.log(token);
   if (token) {
     config.headers['x-token'] = token;
   }
@@ -37,11 +38,12 @@ request.interceptors.response.use((response) => {
   if (response.data.code === 200) {
     return Promise.resolve(response.data);
   }
-  if (INVALID_TOKENS.includes(response.data.code)) {
-    store.dispatch('user/resetAll');
-    location.reload();
-    return;
-  }
+
+  // if (INVALID_TOKENS.includes(response.data.code)) {
+  //   store.dispatch('user/resetAll');
+  //   location.reload();
+  //   return;
+  // }
 
   // if (response.data.code === 100400) {
   //   // 错误
