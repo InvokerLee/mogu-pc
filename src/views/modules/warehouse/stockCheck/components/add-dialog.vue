@@ -63,6 +63,7 @@ export default {
     return {
       isEdit: false,
       form: {
+        id: '',
         productId: '',
         oldCount: '',
         batchNum: '',
@@ -131,8 +132,6 @@ export default {
       this.form.profirCount = Number(this.form.currCount) - Number(this.form.oldCount);
       this.form.currCost = this.form.stockPrice * this.form.currCount;
       this.form.profirCost = this.form.stockPrice * this.form.profirCount;
-      console.log(this.form.profirCount, this.form.stockPrice);
-      console.log(this.form.profirCost);
     },
     confirm() {
       this.$refs.contractForm.validate((valid) => {

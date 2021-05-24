@@ -56,24 +56,24 @@
         @current-change="handleCurrentChange"
       />
     </el-card>
-    <detail-form
+    <add-dialog
       v-if="dialog.show"
       :visible="dialog.show"
       :item="dialog.item"
-      :orderId="rowId"
+      :storeId="dialog.item && dialog.item.storeId"
       @success="actionSuccess"
       @cancel="closeDialog"
-    ></detail-form>
+    ></add-dialog>
   </div>
 </template>
 
 <script>
-import { getStorecheckdetailList, delStorecheckdetail } from '@/api/warehouse';
-import detailForm from './detail-form';
+import { getStorecheckdetailList, delStorecheckdetail, editStorecheckdetail } from '@/api/warehouse';
+import addDialog from './add-dialog';
 
 export default {
   components: {
-    detailForm
+    addDialog
   },
   props: ['rowId'],
   data() {
@@ -142,9 +142,13 @@ export default {
       this.dialog.name = '';
       this.dialog.show = false;
     },
-    actionSuccess() {
-      this.getList();
-      this.closeDialog();
+    actionSuccess(item) {
+      editStorecheckdetail(item).then(() => {
+        this.$message.success('修改成功');
+        this.getList();
+      }).catch(() => {}).finally(() => {
+        this.closeDialog();
+      });
     },
     del(item) {
       this.$confirm('确认要删除吗?', '删除提示', {
