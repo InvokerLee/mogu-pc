@@ -17,7 +17,7 @@
         <el-date-picker
           v-model="form.checkDate"
           style="width: 200px"
-          value-format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd HH:mm:ss"
         />
       </el-form-item>
       <el-form-item label="仓库" prop="storeId">
@@ -58,8 +58,8 @@
       <el-table-column :width="80" prop="currCount" label="现有数量" align="center" />
       <el-table-column :width="80" prop="profirCount" label="盈亏数" align="center" />
       <el-table-column :width="100" prop="oldCost" label="原数量成本额" align="center" />
-      <el-table-column :width="100" prop="" label="现数量成本额" align="center" />
-      <el-table-column :width="100" prop="" label="盈亏成本额" align="center" />
+      <el-table-column :width="100" prop="currCost" label="现数量成本额" align="center" />
+      <el-table-column :width="100" prop="profirCost" label="盈亏成本额" align="center" />
     </el-table>
 
     <div slot="footer">
@@ -80,7 +80,7 @@
 <script>
 import WarehousSelector from '@/components/WarehousSelector';
 import addDialog from './add-dialog';
-import { storecheckInfo, addStoreCheck, editStoreCheck } from '@/api/config';
+import { storecheckInfo, addStoreCheck, editStoreCheck } from '@/api/warehouse';
 import dayjs from 'dayjs';
 
 export default {
@@ -95,7 +95,7 @@ export default {
       isEdit: false,
       form: {
         checkCount: '',
-        checkDate: dayjs().format('YYYY-MM-DD'),
+        checkDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         storeId: [],
         profitSum: '',
         text: '',
@@ -173,13 +173,15 @@ export default {
     },
     calcTotalCount() {
       let c = 0;
+      let p = 0;
       this.form.listDetail.forEach((v) => {
         c += v.currCount || 0;
+        p += v.profirCost || 0;
       });
       this.form.checkCount = c;
+      this.form.profitSum = p;
     },
     confirm() {
-      console.log(this.form);
       this.$refs.stockCheckForm.validate((valid) => {
         if (!valid) return;
         this.loading = true;

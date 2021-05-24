@@ -72,7 +72,8 @@ export default {
         productName: '',
         productDate: '',
         productUnit: '', // 单位
-        oldCost: ''
+        oldCost: '',
+        stockPrice: ''
       },
       rules: {
         productId: [
@@ -122,13 +123,16 @@ export default {
       this.form.batchNum = p.batchNum;
       this.form.oldCount = p.oldCount;
       this.form.oldCost = p.oldCost;
+      this.form.stockPrice = p.stockPrice;
 
       this.calcProfirCost();
     },
     calcProfirCost() {
-      if (this.form.oldCount && this.form.currCount) {
-        this.form.profirCount = Number(this.form.currCount) - Number(this.form.oldCount);
-      }
+      this.form.profirCount = Number(this.form.currCount) - Number(this.form.oldCount);
+      this.form.currCost = this.form.stockPrice * this.form.currCount;
+      this.form.profirCost = this.form.stockPrice * this.form.profirCount;
+      console.log(this.form.profirCount, this.form.stockPrice);
+      console.log(this.form.profirCost);
     },
     confirm() {
       this.$refs.contractForm.validate((valid) => {
