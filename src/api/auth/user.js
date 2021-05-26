@@ -43,9 +43,9 @@ export function editPwd(data) {
   });
 }
 
-export function getUserInfo() {
+export function getLoginUser() {
   return request({
-    url: '/user/userMenu',
+    url: '/sys/user/info',
     method: 'get'
   });
 }

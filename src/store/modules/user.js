@@ -1,15 +1,14 @@
 import { login, logout } from '@/api/login';
-import { getUserInfo } from '@/api/auth/user';
+import { getLoginUser } from '@/api/auth/user';
 
 import { removeToken } from '@/utils/cookie';
 
 const getDefaultState = () => {
   return {
     userInfo: { // 用户信息
-      id: '',
-      username: '',
       realname: '',
-      menuList: []
+      phone: '',
+      sysMenuList: []
     }
   };
 };
@@ -52,9 +51,9 @@ const actions = {
   // get user info
   getUserInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getUserInfo().then((data) => {
-        commit('SET_USER_INFO', data.data);
-        resolve(data.data.menuList);
+      getLoginUser().then((data) => {
+        commit('SET_USER_INFO', data.result);
+        resolve(data.result.sysMenuList);
       }).catch(error => {
         reject(error);
       });

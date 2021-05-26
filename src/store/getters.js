@@ -1,7 +1,7 @@
 const getters = {
   sidebar: state => state.app.sidebar,
   realname: state => state.user.userInfo.realname,
-  menuList: state => state.user.userInfo.menuList,
+  menuList: state => state.user.userInfo.sysMenuList,
   cachedViews: state => state.tagsView.cachedViews,
   routes: state => state.permission.routes,
   getConstByKey: state => (key) => {

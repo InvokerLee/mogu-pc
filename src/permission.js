@@ -28,10 +28,8 @@ router.beforeEach(async(to, from, next) => {
         next();
       } else {
         try {
-          // const permissionList = await store.dispatch('user/getUserInfo');
-          // const accessRoutes = await store.dispatch('permission/generateRoutes', permissionList);
-          const accessRoutes = await store.dispatch('permission/generateRoutes', []);
-
+          const permissionList = await store.dispatch('user/getUserInfo');
+          const accessRoutes = await store.dispatch('permission/generateRoutes', permissionList);
           router.addRoutes(accessRoutes);
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true });

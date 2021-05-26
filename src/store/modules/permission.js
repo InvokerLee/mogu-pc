@@ -8,8 +8,10 @@ import { asyncRoutes, constantRoutes } from '@/router';
 function hasPermission(permissionList, route) {
   if (route.hidden) {
     return true;
+  } else if (route.children && route.children.length === 1) {
+    return true;
   } else if (route.path) {
-    const per = permissionList.find(p => p.route === route.name);
+    const per = permissionList.find(p => p.url === route.name);
     if (per) {
       route.meta.title = per.name;
     }
@@ -57,10 +59,9 @@ const mutations = {
 const actions = {
   generateRoutes({ commit }, permissionList) {
     return new Promise(resolve => {
-      // const accessedRoutes = filterAsyncRoutes(asyncRoutes, permissionList);
-      // commit('SET_ROUTES', accessedRoutes);
-      commit('SET_ROUTES', asyncRoutes);
-      resolve(asyncRoutes);
+      const accessedRoutes = filterAsyncRoutes(asyncRoutes, permissionList);
+      commit('SET_ROUTES', accessedRoutes);
+      resolve(accessedRoutes);
     });
   }
 };
