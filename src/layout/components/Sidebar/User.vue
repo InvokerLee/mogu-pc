@@ -5,7 +5,7 @@
       <span>{{ realname || '李四' }}</span>
       <!-- </el-tooltip> -->
     </div>
-    <div class="icon">
+    <!-- <div class="icon">
       <el-badge :value="50">
         <el-popover
           placement="right-end"
@@ -47,7 +47,7 @@
         </el-popover>
       </el-badge>
 
-    </div>
+    </div> -->
     <div class="icon">
       <el-tooltip effect="dark" content="退出登录" placement="bottom">
         <i class="el-icon-switch-button font-red" @click="logout"></i>
@@ -67,9 +67,9 @@ export default {
   },
   methods: {
     async logout() {
-      // const loading = this.$loading({ lock: true });
-      // await this.$store.dispatch('user/logout');
-      // loading.close();
+      const loading = this.$loading({ lock: true });
+      await this.$store.dispatch('user/logout');
+      loading.close();
       this.$router.push('/login');
     }
   }
