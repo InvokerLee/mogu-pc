@@ -20,16 +20,17 @@ export function exceptionMonitor() {
   });
 }
 
-export function getPieData() {
+export function getSaleSort(data) {
   return request({
-    url: '/crm/inside-work-order/demand/statistics',
-    method: 'get'
+    url: '/index/salesSort',
+    method: 'post',
+    data
   });
 }
-
-export function cacheClear() {
+export function getStatistics(data) {
   return request({
-    url: '/home/cacheClear',
-    method: 'patch'
+    url: '/index/salesStatistics',
+    method: 'post',
+    data
   });
 }

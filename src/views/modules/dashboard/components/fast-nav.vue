@@ -67,52 +67,52 @@ export default {
     return {
       array: [
         {
-          url: '',
+          url: 'discount',
           label: '促销管理',
           class: 'el-icon-plus border',
           type: 'icon'
         },
         {
-          url: '',
+          url: 'orderList',
           label: '订单中心',
           img: require('@/assets/imgs/dashboard/u194.png'),
           type: 'image'
         },
         {
-          url: '',
+          url: 'outStock',
           label: '出库单据',
           img: require('@/assets/imgs/dashboard/u197.png'),
           type: 'image'
         },
         {
-          url: '',
+          url: 'inStock',
           label: '入库单据',
           type: 'ruku'
         },
         {
-          url: '',
+          url: 'stock',
           label: '库存查询',
           img: require('@/assets/imgs/dashboard/u203.png'),
           type: 'image'
         },
         {
-          url: '',
+          url: 'saleData',
           label: '销售明细表',
           type: 'sale-detail'
         },
         {
-          url: '',
+          url: 'cusAndGoods',
           label: '销售汇总表',
           type: 'sale'
         },
         {
-          url: '',
+          url: 'stockChangeHistory',
           label: '出入库记录',
           img: require('@/assets/imgs/dashboard/u217.png'),
           type: 'image'
         },
         {
-          url: '',
+          url: 'member',
           label: '会员管理',
           type: 'member'
         }
@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     goto(item) {
-      console.log(item.label);
+      this.$router.push({ name: item.url });
     }
   }
 };
