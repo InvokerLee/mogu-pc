@@ -70,6 +70,7 @@
 <script>
 import dayjs from 'dayjs';
 import LineChart from '@/components/Charts/LineChart.vue';
+import { getStatistics } from '@/api/dashboard';
 
 export default {
   components: {
@@ -103,11 +104,21 @@ export default {
       }
 
       this.date = [start, end];
+      this.getData();
     },
     getData() {
+      // const params = {
+      //   startDate: this.date[0],
+      //   endDate: this.date[1],
+      //   sortType: 'asc'
+      // };
+      // getStatistics(params).then((res) => {
+      //   console.log(res);
+      // }).catch(() => {});
+      // console.log(params);
       this.chartData = {
-        categoryData: ['ttt', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        valueData: [82140, 932, 901, 934, 1290, 1330, 1320]
+        categoryData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        valueData: [820, 932, 901, 934, 1290, 1330, 1320]
       };
     }
   }
