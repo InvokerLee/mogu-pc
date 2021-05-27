@@ -63,7 +63,32 @@ export default {
           dimensions,
           source
         },
-        xAxis: { type: 'category' },
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            interval: 0,
+            formatter: function(value) {
+              var str = '';
+              var num = 6; // 每行显示字数
+              var valLength = value.length; // 该项x轴字数
+              var rowNum = Math.ceil(valLength / num); // 行数
+
+              if (rowNum > 1) {
+                for (var i = 0; i < rowNum; i++) {
+                  var temp = '';
+                  var start = i * num;
+                  var end = start + num;
+
+                  temp = value.substring(start, end) + '\n';
+                  str += temp;
+                }
+                return str;
+              } else {
+                return value;
+              }
+            }
+          }
+        },
         yAxis: {},
         series: [
           { type: 'bar' },

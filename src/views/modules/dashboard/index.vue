@@ -86,15 +86,10 @@ export default {
     fetchData() {
       currentDayData().then(res => {
         this.orderDaily = res.result;
-        // this.lineChartData.categoryData = res.data.orderChart.x1;
-        // this.lineChartData.valueData = res.data.orderChart.paid;
       });
       orderCount().then(res => {
         this.waitDealEvent = res.result;
       });
-      // getPieData().then(res => {
-      //   this.pieCardData = res.data;
-      // });
     }
   }
 };

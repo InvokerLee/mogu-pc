@@ -54,7 +54,7 @@
               class="date-picker"
               size="mini"
               type="daterange"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd"
               range-separator="~"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -70,7 +70,7 @@
 <script>
 import dayjs from 'dayjs';
 import LineChart from '@/components/Charts/LineChart.vue';
-import { getStatistics } from '@/api/dashboard';
+// import { getStatistics } from '@/api/dashboard';
 
 export default {
   components: {
@@ -78,48 +78,54 @@ export default {
   },
   data() {
     return {
-      type: '',
+      type: 'week',
       date: [],
       chartData: {
         categoryData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        valueData: [820, 932, 901, 934, 1290, 1330, 1320]
+        valueData: []
+      },
+      form: {
+        startDate: '',
+        endDate: '',
+        sortType: ''
       }
     };
   },
+  watch: {
+    date(val) {
+      if (val) {
+        this.form.startDate = val[0];
+        this.form.endDate = val[1];
+        this.getData();
+      }
+    }
+  },
   created() {
-    this.type = 'week';
     this.change(this.type);
   },
   methods: {
     change(val) {
       let start, end;
       if (val === 'week') {
-        start = dayjs().startOf('week').add('1', 'day').format('YYYY-MM-DD HH:mm:ss');
-        end = dayjs().endOf('week').add('1', 'day').format('YYYY-MM-DD HH:mm:ss');
+        start = dayjs().startOf('week').add('1', 'day').format('YYYY-MM-DD');
+        end = dayjs().endOf('week').add('1', 'day').format('YYYY-MM-DD');
       }
 
       if (val === 'month') {
-        start = dayjs().startOf('month').format('YYYY-MM-DD HH:mm:ss');
-        end = dayjs().endOf('month').format('YYYY-MM-DD HH:mm:ss');
+        start = dayjs().startOf('month').format('YYYY-MM-DD');
+        end = dayjs().endOf('month').format('YYYY-MM-DD');
       }
 
       this.date = [start, end];
-      this.getData();
     },
     getData() {
-      // const params = {
-      //   startDate: this.date[0],
-      //   endDate: this.date[1],
-      //   sortType: 'asc'
-      // };
-      // getStatistics(params).then((res) => {
-      //   console.log(res);
-      // }).catch(() => {});
-      // console.log(params);
-      this.chartData = {
-        categoryData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        valueData: [820, 932, 901, 934, 1290, 1330, 1320]
-      };
+      console.log('stat', this.form);
+      this.$nextTick(() => {
+        this.chartData = {
+          categoryData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          valueData: [Math.random() * 1000, 932, 901, 934, 1290, 1330, 1320]
+        };
+      });
     }
   }
 };
