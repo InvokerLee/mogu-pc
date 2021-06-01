@@ -24,13 +24,19 @@ export function getSaleSort(data) {
   return request({
     url: '/index/salesSort',
     method: 'post',
-    data
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }
 export function getStatistics(data) {
   return request({
     url: '/index/salesStatistics',
     method: 'post',
-    data
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 }

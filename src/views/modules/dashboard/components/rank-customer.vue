@@ -32,7 +32,7 @@
 <script>
 import dayjs from 'dayjs';
 import BarChart from '@/components/Charts/BarChart.vue';
-// import { getSaleSort } from '@/api/dashboard';
+import { getSaleSort } from '@/api/dashboard';
 
 export default {
   components: {
@@ -49,8 +49,7 @@ export default {
       form: {
         salesType: 'guest',
         startDate: '',
-        endDate: '',
-        rank: 4
+        endDate: ''
       }
     };
   },
@@ -82,15 +81,16 @@ export default {
       this.date = [start, end];
     },
     getData() {
-      console.log('cc', this.form);
-      this.$nextTick(() => {
-        this.chartData.source = [
-          { name: '3', '销售额': 243.3, '毛利额': 85.8 },
-          { name: '2', '销售额': 83.1, '毛利额': 73.4 },
-          { name: '1', '销售额': 86.4, '毛利额': 65.2 },
-          { name: '44', '销售额': 72.4, '毛利额': 53.9 }
-        ];
-      });
+      getSaleSort(this.form).then(({ result }) => {
+        if (result.dimensions && result.source) {
+          this.$nextTick(() => {
+            this.chartData = {
+              dimensions: result.dimensions,
+              source: result.source
+            };
+          });
+        }
+      }).catch(() => {});
     }
   }
 };

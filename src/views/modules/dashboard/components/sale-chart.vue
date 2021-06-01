@@ -8,36 +8,51 @@
     <div class="content">
       <div class="left">
         <div>
-          <div class="title">本周销售金额</div>
-          <div class="price">900</div>
+          <div class="title">销售金额</div>
+          <div class="price">{{ info.order && info.order.orderTaxSum }}</div>
           <div class="desc">
-            <span class="up">
+            <span
+              :class="{
+                'up': info.order && info.order.orderTaxRate && info.order.orderTaxRate >= 0,
+                'down': info.order && info.order.orderTaxRate && info.order.orderTaxRate < 0,
+              }"
+            >
               <i class="el-icon-caret-top" />
-              10%
+              {{ info.order && info.order.orderTaxRate }}%
             </span>
-            同比上周
+            同比上期
           </div>
         </div>
         <div>
-          <div class="title">本周回单金额</div>
-          <div class="price">1000</div>
+          <div class="title">回单金额</div>
+          <div class="price">{{ info.checkMap && info.checkMap.checkTaxSum }}</div>
           <div class="desc">
-            <span class="down">
+            <span
+              :class="{
+                'up': info.checkMap && info.checkMap.checkTaxRate && info.checkMap.checkTaxRate >= 0,
+                'down': info.checkMap && info.checkMap.checkTaxRate && info.checkMap.checkTaxRate < 0,
+              }"
+            >
               <i class="el-icon-caret-bottom" />
-              10%
+              {{ info.checkMap && info.checkMap.checkTaxRate }}%
             </span>
-            同比上周
+            同比上期
           </div>
         </div>
         <div>
-          <div class="title">本周销售金额</div>
-          <div class="price">900</div>
+          <div class="title">退货金额</div>
+          <div class="price">{{ info.returnMap && info.returnMap.returnTaxSum }}</div>
           <div class="desc">
-            <span class="up">
+            <span
+              :class="{
+                'up': info.returnMap && info.returnMap.returnRate && info.returnMap.returnRate >= 0,
+                'down': info.returnMap && info.returnMap.returnRate && info.returnMap.returnRate < 0,
+              }"
+            >
               <i class="el-icon-caret-top" />
-              1%
+              {{ info.returnMap && info.returnMap.returnRate }}%
             </span>
-            同比上周
+            同比上期
           </div>
         </div>
       </div>
@@ -70,7 +85,7 @@
 <script>
 import dayjs from 'dayjs';
 import LineChart from '@/components/Charts/LineChart.vue';
-// import { getStatistics } from '@/api/dashboard';
+import { getStatistics } from '@/api/dashboard';
 
 export default {
   components: {
@@ -85,9 +100,18 @@ export default {
         valueData: []
       },
       form: {
+        cycleType: 2,
         startDate: '',
         endDate: '',
-        sortType: ''
+        sortType: 'asc'
+      },
+      info: {
+        'order': {
+        },
+        'checkMap': {
+        },
+        'returnMap': {
+        }
       }
     };
   },
@@ -119,13 +143,20 @@ export default {
       this.date = [start, end];
     },
     getData() {
-      console.log('stat', this.form);
-      this.$nextTick(() => {
-        this.chartData = {
-          categoryData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          valueData: [Math.random() * 1000, 932, 901, 934, 1290, 1330, 1320]
-        };
-      });
+      getStatistics(this.form).then(({ result }) => {
+        if (result.order && result.order.categoryData) {
+          this.$nextTick(() => {
+            this.chartData = {
+              categoryData: result.order.categoryData,
+              valueData: result.order.valueData
+            };
+          });
+        }
+
+        if (result.rate) {
+          this.info = result.rate;
+        }
+      }).catch(() => {});
     }
   }
 };
