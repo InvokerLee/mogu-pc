@@ -9,11 +9,11 @@
     <div class="right">
       <div class="logo">
         <img :src="require('@/assets/imgs/login/logo.png')" width="35" height="35" alt="">
-        <div class="logo-name">mogujie</div>
+        <!-- <div class="logo-name">mogujie</div> -->
       </div>
-      <p class="sub-title">this is xiao mogu</p>
+      <!-- <p class="sub-title">this is xiao mogu</p> -->
       <div class="tab">
-        账号登录
+        <!-- 账号登录 -->
       </div>
       <el-form ref="accountForm" :model="loginForm" label-position="top" :rules="rules" class="form">
         <el-form-item prop="username" label="账号：">
@@ -166,9 +166,9 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+      height: 70px;
       .logo-name {
         margin-left: 15px;
-        line-height: 70px;
         font-size: 26px;
         color: #7f63f4;
       }
