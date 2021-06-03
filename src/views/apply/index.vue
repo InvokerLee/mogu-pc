@@ -32,14 +32,14 @@
         </el-form-item>
       </el-form>
       <div class="m-t-10">
-        <el-checkbox v-model="applyForm.isAgree">
+        <el-checkbox v-model="isAgree">
           <span>同意</span>
           <a class="link" target="_blank" :href="`${publicPath}/use-protocol.pdf`">小摩菇智慧管理平台用户协议</a>
           <a class="link" target="_blank" :href="`${publicPath}/pricy-protocol.pdf`">小摩菇智慧管理平台用户隐私政策</a>
         </el-checkbox>
       </div>
       <div style="margin-top: 20px;">
-        <el-button class="w280" type="primary" @click.native.prevent="handleApply">申请</el-button>
+        <el-button class="w280" type="primary" :disabled="!isAgree" @click.native.prevent="handleApply">申请</el-button>
       </div>
     </section>
     <el-dialog
@@ -70,9 +70,9 @@ export default {
         companyName: '',
         phone: '',
         checkCode: '',
-        contactName: '',
-        isAgree: ''
+        contactName: ''
       },
+      isAgree: '',
       rules: {
         companyName: [
           { required: true, message: '请输入公司名称', trigger: 'blur' }
