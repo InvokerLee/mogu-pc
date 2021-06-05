@@ -36,6 +36,7 @@
             <el-input
               v-model="loginForm.captcha"
               style="width: 180px;"
+              @keyup.enter.native="handleLogin"
             >
             </el-input>
             <img alt="验证码" style="flex: 1;margin-left:15px;" height="40" :src="checkCodeApi" @click="changeCheckCode">
