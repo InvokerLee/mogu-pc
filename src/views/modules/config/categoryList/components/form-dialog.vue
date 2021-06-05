@@ -18,7 +18,7 @@
           <el-form-item label="状态：" prop="state">
             <el-radio-group v-model="form.state">
               <el-radio :label="1">有效</el-radio>
-              <el-radio :label="2">停用</el-radio>
+              <el-radio :label="0">停用</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="备注：">
