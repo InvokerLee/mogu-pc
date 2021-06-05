@@ -170,7 +170,7 @@ export default {
       }).catch(() => {});
     },
     download() {
-      this.$download('/salescontractdetail/export', { ...this.params });
+      this.$download('/salescontractdetail/export', { ...this.params, salesContractId: this.rowId });
     },
     uploadRequest(params) {
       const formData = new FormData();

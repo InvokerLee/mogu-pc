@@ -50,7 +50,7 @@
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
-            {{ ['启用', '停用'][scope.row.state] }}
+            {{ ['停用', '启用'][scope.row.state] }}
           </span>
         </template>
       </el-table-column>

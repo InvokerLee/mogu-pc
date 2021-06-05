@@ -98,8 +98,7 @@ export default {
       productSafeStoreList({
         productId: this.rowId
       }).then(({ result }) => {
-        this.tableData = result.dataList;
-        // this.total = result.totalCount;
+        this.tableData = result;
       }).finally(() => {
         this.loading = false;
       });
