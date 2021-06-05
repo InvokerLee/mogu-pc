@@ -13,7 +13,7 @@
             <el-input v-model.trim="form.name"></el-input>
           </el-form-item>
           <el-form-item label="手机：" prop="phone">
-            <el-input v-model.trim="form.phone" :maxlength="11"></el-input>
+            <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
           <el-form-item label="是否业务员" prop="isBizMan">
             <el-radio-group v-model="form.isBizMan">
@@ -63,7 +63,7 @@ export default {
           { required: true, message: '必填', trigger: 'blur' }
         ],
         phone: [
-          { pattern: /^[0-9]{11}$/, message: '格式为11位数字', trigger: 'blur' }
+          { pattern: /(^(\d{3,4}-)?\d{7,8})$|(1[3|5|7|8|9]\d{9})/, message: '格式为电话或手机', trigger: 'blur' }
         ],
         state: [
           { required: true, message: '必选', trigger: 'blur' }

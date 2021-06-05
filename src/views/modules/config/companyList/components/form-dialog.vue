@@ -60,7 +60,7 @@ export default {
           { required: true, message: '必填', trigger: 'blur' }
         ],
         phone: [
-          { pattern: /^[0-9]*$/, message: '格式为数字', trigger: 'blur' }
+          { pattern: /(^(\d{3,4}-)?\d{7,8})$|(1[3|5|7|8|9]\d{9})/, message: '格式为电话或手机', trigger: 'blur' }
         ],
         state: [
           { required: true, message: '必选', trigger: 'blur' }
