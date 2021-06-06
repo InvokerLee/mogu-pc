@@ -54,8 +54,22 @@
       <el-table-column :width="120" label="操作" type="action" align="center">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-around" align="middle">
-            <a class="font-blue el-icon-edit font-16" @click.stop="edit(scope.row)"></a>
-            <a class="font-red el-icon-delete font-16" @click.stop="del(scope.row)"></a>
+            <el-button
+              type="text"
+              :disabled="scope.row.state === 1"
+              icon="el-icon-edit"
+              @click.stop="edit(scope.row)"
+            >
+            </el-button>
+            <el-button
+              style="margin-left: 0;"
+              :class="scope.row.state !== 1 && 'font-red'"
+              type="text"
+              :disabled="scope.row.state === 1"
+              icon="el-icon-delete"
+              @click.stop="del(scope.row)"
+            >
+            </el-button>
             <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '反审' : '审核' }}</a>
           </el-row>
         </template>

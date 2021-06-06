@@ -63,10 +63,10 @@
           <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
           <el-table-column :width="80" prop="purchaseCount" label="当前数量" align="center" />
           <el-table-column :width="80" prop="purchaseBoxCount" label="当前箱数" align="center" />
-          <el-table-column :width="110" prop="" label="当前库存成本额" align="center" />
+          <el-table-column :width="110" prop="currStoreCostMoney" label="当前库存成本额" align="center" />
           <el-table-column :width="100" prop="planOutCount" label="计划出库数量" align="center" />
           <el-table-column :width="100" prop="planOutBoxCount" label="计划出库箱数" align="center" />
-          <el-table-column :min-width="100" prop="realOutCount" label="实际可用数量" align="center" />
+          <el-table-column :min-width="100" prop="canUsedCount" label="实际可用数量" align="center" />
           <el-table-column :width="80" prop="stockPrice" label="成本单价" align="center" />
           <el-table-column :width="110" prop="lastStockPrice" label="最近一次采购价" align="center" />
         </el-table>
