@@ -8,6 +8,7 @@
     readonly
     reserve-keyword
     placeholder=""
+    filterable
     :loading="loading"
     @change="change"
     @focus="remoteMethod"

@@ -106,6 +106,7 @@
         :visible="dialog.show"
         :item="dialog.item"
         :parentId="rowId"
+        :clientType="clientType"
         @success="actionSuccess"
         @cancel="closeDialog"
       />
@@ -123,7 +124,7 @@ export default {
     StaffSelector,
     hqAdd
   },
-  props: ['rowId'],
+  props: ['rowId', 'clientType'],
   data() {
     return {
       loading: false,

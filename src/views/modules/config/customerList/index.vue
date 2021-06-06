@@ -1,7 +1,7 @@
 <template>
   <base-wrapper>
     <headquarters @rowClickChange="rowClickChange"></headquarters>
-    <branch-list :rowId="selectRowId"></branch-list>
+    <branch-list :rowId="selectRow.id" :clientType="selectRow.clientType"></branch-list>
   </base-wrapper>
 </template>
 
@@ -16,12 +16,12 @@ export default {
   },
   data() {
     return {
-      selectRowId: ''
+      selectRow: {}
     };
   },
   methods: {
     rowClickChange(row) {
-      this.selectRowId = row ? row.id : '';
+      this.selectRow = row || {};
     }
   }
 };

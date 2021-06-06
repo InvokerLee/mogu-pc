@@ -23,7 +23,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="客户类型：" prop="clientType">
-            <el-select v-model="form.clientType" placeholder="请选择" class="w100">
+            <el-select v-model="form.clientType" placeholder="请选择" class="w100" :disabled="disabled">
               <el-option label="全部" value="" />
               <el-option label="正常客户" :value="0" />
               <el-option label="专柜客户" :value="1" />
@@ -50,7 +50,7 @@
               <el-radio :label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="账期：" prop="paymentDays">
+          <el-form-item v-if="form.isCheck" label="账期：" prop="paymentDays">
             <el-input v-model.trim="form.paymentDays"></el-input>
           </el-form-item>
           <el-form-item label="电话：">
@@ -89,7 +89,7 @@ export default {
   components: {
     StaffSelector
   },
-  props: ['visible', 'item', 'parentId'],
+  props: ['visible', 'item', 'parentId', 'clientType'],
   data() {
     return {
       loading: false,
@@ -140,6 +140,11 @@ export default {
       defaultOpions: []
     };
   },
+  computed: {
+    disabled() {
+      return typeof this.clientType === 'number';
+    }
+  },
   created() {
     if (this.item && this.item.id) {
       this.isEdit = true;
@@ -150,6 +155,10 @@ export default {
         name: this.item.bizManName,
         id: this.item.bizManId
       }];
+    }
+
+    if (this.disabled) {
+      this.form.clientType = this.clientType;
     }
   },
   methods: {
