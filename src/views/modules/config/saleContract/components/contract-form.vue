@@ -109,7 +109,7 @@ export default {
         backDay: 1,
         payDay: 1,
         companyTital: '',
-        state: 0,
+        state: 1,
         signDate: '',
         closeDay: 1,
         creditValue: undefined,
