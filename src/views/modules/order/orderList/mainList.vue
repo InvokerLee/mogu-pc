@@ -14,16 +14,16 @@
         <el-form-item label="查询条件">
           <el-input v-model.trim="params.searchPar" placeholder="单号/客户/供应商/产品" />
         </el-form-item>
-        <el-form-item label="生产日期">
+        <el-form-item label="日期">
           <el-date-picker
             v-model="dateRange"
             style="width: 250px;"
-            type="monthrange"
+            type="daterange"
             unlink-panels
             range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
-            value-format="yyyy-MM"
+            value-format="yyyy-MM-dd HH:mm:ss"
             :editable="false"
             :default-time="['00:00:00', '23:59:59']"
           />
@@ -85,10 +85,13 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column :min-width="100" label="客户/供应商" align="center">
+      <el-table-column :min-width="150" label="客户/供应商" align="center">
         <template slot-scope="scope">
           <span>
-            {{ scope.row.provderName }}
+            {{ scope.row.guestName }}
+          </span>
+          <span v-if="scope.row.provderName">
+            /{{ scope.row.provderName }}
           </span>
         </template>
       </el-table-column>
