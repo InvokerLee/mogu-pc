@@ -13,7 +13,7 @@
             <el-input v-model.trim="form.roleName"></el-input>
           </el-form-item>
           <el-form-item label="备注：">
-            <el-input v-model.trim="form.remark" type="textarea" :autosize="{ minRows: 2, maxRows:4 }">
+            <el-input v-model="form.remark" type="textarea" :autosize="{ minRows: 2, maxRows:4 }">
             </el-input>
           </el-form-item>
         </el-form>

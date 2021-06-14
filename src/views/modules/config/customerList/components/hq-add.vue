@@ -37,7 +37,7 @@
             <el-input v-model.trim="form.contactMan"></el-input>
           </el-form-item>
           <el-form-item label="备注：">
-            <el-input v-model.trim="form.text"></el-input>
+            <el-input v-model="form.text"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">

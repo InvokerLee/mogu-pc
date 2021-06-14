@@ -23,7 +23,7 @@
             </el-input-number>
           </el-form-item>
           <el-form-item label="备注：" prop="text">
-            <el-input v-model.trim="form.text"></el-input>
+            <el-input v-model="form.text"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">

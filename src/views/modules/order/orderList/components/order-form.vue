@@ -38,7 +38,7 @@
         <el-input v-model="form.address" placeholder="自动带出客户地址" class="w200px" readonly></el-input>
       </el-form-item>
       <el-form-item label="备注：">
-        <el-input v-model.trim="form.text" class="w200px"></el-input>
+        <el-input v-model="form.text" class="w200px"></el-input>
       </el-form-item>
       <template v-if="isShoppeSales">
         <el-form-item label="会员：">

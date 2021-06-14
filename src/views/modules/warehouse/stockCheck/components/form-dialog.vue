@@ -24,7 +24,7 @@
         <warehous-selector style="width: 200px" :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts"></warehous-selector>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input v-model.trim="form.text" style="width: 200px"></el-input>
+        <el-input v-model="form.text" style="width: 200px"></el-input>
       </el-form-item>
       <el-form-item label="盈亏金额" prop="profitSum">
         <el-input v-model="form.profitSum" style="width: 200px;" disabled placeholder="自动计算"></el-input>

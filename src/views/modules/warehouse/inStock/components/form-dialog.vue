@@ -26,7 +26,7 @@
         <el-input v-model="form.inOrderNo" style="width: 200px" placeholder="系统自动生成" disabled></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input v-model.trim="form.text" style="width: 200px"></el-input>
+        <el-input v-model="form.text" style="width: 200px"></el-input>
       </el-form-item>
       <el-form-item label="入库仓库">
         <el-input v-model="form.storeName" style="width: 200px" placeholder="禁止输入，自动计算" readonly></el-input>

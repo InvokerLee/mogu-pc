@@ -25,7 +25,7 @@
         <el-input v-model="form.reserveCount" style="width: 200px;" disabled placeholder="自动计算"></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input v-model.trim="form.text" style="width: 200px"></el-input>
+        <el-input v-model="form.text" style="width: 200px"></el-input>
       </el-form-item>
       <el-form-item label="结束日期" prop="endDate">
         <el-date-picker

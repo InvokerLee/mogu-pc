@@ -33,7 +33,7 @@
             <warehous-selector :params="form" paramsKey="storeId" :defaultOpions="warehouseOpts" @selectChange="warehouseChange"></warehous-selector>
           </el-form-item>
           <el-form-item label="备注：">
-            <el-input v-model.trim="form.text"></el-input>
+            <el-input v-model="form.text"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">

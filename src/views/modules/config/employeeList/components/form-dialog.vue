@@ -28,7 +28,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="备注：">
-            <el-input v-model.trim="form.text" type="textarea" :autosize="{ minRows: 2, maxRows:4 }">
+            <el-input v-model="form.text" type="textarea" :autosize="{ minRows: 2, maxRows:4 }">
             </el-input>
           </el-form-item>
         </el-form>
