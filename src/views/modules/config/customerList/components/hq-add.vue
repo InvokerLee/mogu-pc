@@ -53,7 +53,7 @@
           <el-form-item v-if="form.isCheck" label="账期：" prop="paymentDays">
             <el-input v-model.trim="form.paymentDays"></el-input>
           </el-form-item>
-          <el-form-item label="电话：">
+          <el-form-item label="电话：" prop="phone">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
           <el-form-item label="付款方式：">
@@ -131,7 +131,7 @@ export default {
           { pattern: /^[0-9]*$/, message: '格式为数字', trigger: 'blur' }
         ],
         phone: [
-          { pattern: /(^(\d{3,4}-)?\d{7,8})$|(1[3|5|7|8|9]\d{9})/, message: '格式为电话或手机', trigger: 'blur' }
+          { pattern: /(^(\d{3,4}-)?\d{7,8})$|^(1[3|5|7|8|9]\d{9})$/, message: '格式为电话或手机', trigger: 'blur' }
         ],
         state: [
           { required: true, message: '必选', trigger: 'blur' }
