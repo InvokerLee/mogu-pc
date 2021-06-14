@@ -6,7 +6,7 @@ import { removeToken } from '@/utils/cookie';
 const getDefaultState = () => {
   return {
     userInfo: { // 用户信息
-      realname: '',
+      realName: '',
       phone: '',
       sysMenuList: []
     }
