@@ -27,8 +27,8 @@
         <el-table-column prop="productSpec" label="规格" align="center" />
         <el-table-column :width="80" prop="productBarCode" label="条码" align="center" />
         <el-table-column :width="80" prop="storeName" label="仓库" align="center" />
-        <el-table-column prop="minValue" label="库存上限" align="center" />
-        <el-table-column prop="maxValue" label="库存下线" align="center" />
+        <el-table-column prop="maxValue" label="库存上限" align="center" />
+        <el-table-column prop="minValue" label="库存下线" align="center" />
       </el-table>
       <!-- <el-pagination
         v-if="tableData.length"

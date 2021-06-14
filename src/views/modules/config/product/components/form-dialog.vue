@@ -16,7 +16,7 @@
           <el-form-item label="条码：" prop="barCode">
             <el-input v-model.trim="form.barCode"></el-input>
           </el-form-item>
-          <el-form-item label="品牌：">
+          <el-form-item label="品牌：" prop="productBrandId">
             <brand-search :params="form" paramsKey="productBrandId"></brand-search>
           </el-form-item>
           <el-form-item label="箱单位：" prop="boxUnit">
@@ -35,7 +35,7 @@
           <el-form-item label="毛利率(%)：">
             <el-input v-model.trim="form.grossProfitRate" placeholder="自动计算" disabled></el-input>
           </el-form-item>
-          <el-form-item label="进货税率(%)：">
+          <el-form-item label="进货税率(%)：" prop="stockTaxRate">
             <el-input-number
               v-model="form.stockTaxRate"
               class="w100"
@@ -91,7 +91,7 @@
             >
             </el-input-number>
           </el-form-item>
-          <el-form-item label="发货税率(%)：">
+          <el-form-item label="发货税率(%)：" prop="salesTaxRate">
             <el-input-number
               v-model="form.salesTaxRate"
               class="w100"
@@ -171,6 +171,15 @@ export default {
         ],
         state: [
           { required: true, message: '必选', trigger: 'blur' }
+        ],
+        productBrandId: [
+          { required: true, message: '必选', trigger: 'blur' }
+        ],
+        salesTaxRate: [
+          { required: true, message: '必填', trigger: 'blur' }
+        ],
+        stockTaxRate: [
+          { required: true, message: '必填', trigger: 'blur' }
         ]
       }
     };

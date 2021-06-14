@@ -13,7 +13,7 @@
             <product-selector :params="form" paramsKey="productId" :defaultOpions="options" @selectChange="selectChange"></product-selector>
           </el-form-item>
           <el-form-item label="条码：" required>
-            <el-input v-model.trim="form.productCode" disabled placeholder="自动带出"></el-input>
+            <el-input v-model.trim="form.productBarCode" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="供货价(含税)：" prop="taxPrice">
             <el-input-number
@@ -63,7 +63,7 @@ export default {
       isEdit: false,
       form: {
         productId: '',
-        productCode: '', // 条码
+        productBarCode: '', // 条码
         taxPrice: undefined, // 供货价含税
         goodsNum: '',
         productUnit: '', // 单位
@@ -94,9 +94,9 @@ export default {
   methods: {
     selectChange(products) {
       const p = products[0] || {};
-      this.form.productCode = p.barCode;
+      this.form.productBarCode = p.barCode;
       this.form.productUnit = p.unit;
-      this.form.taxPrice = '';
+      this.form.taxPrice = undefined;
       this.form.salesTaxRate = p.salesTaxRate;
     },
     calcPrice(val) {

@@ -48,7 +48,7 @@
         </el-table-column>
         <el-table-column prop="productName" label="品名规格" align="center" />
         <el-table-column prop="goodsNum" label="货号" align="center" />
-        <el-table-column :width="100" prop="productCode" label="条码" align="center" />
+        <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
         <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
         <el-table-column :min-width="100" prop="taxPrice" label="供货价(含税)" align="center" />
         <el-table-column :min-width="100" prop="noTaxPrice" label="供货价(未税)" align="center" />
