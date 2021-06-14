@@ -17,7 +17,7 @@
         <el-date-picker
           v-model="form.startDate"
           style="width: 200px"
-          value-format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd HH:mm:ss"
         />
       </el-form-item>
       <el-form-item label="预留数量" prop="reserveCount">
@@ -31,7 +31,7 @@
         <el-date-picker
           v-model="form.endDate"
           style="width: 200px"
-          value-format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd HH:mm:ss"
         />
       </el-form-item>
     </el-form>

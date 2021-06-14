@@ -24,11 +24,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="productName" label="赠送产品" align="center" />
-        <el-table-column :width="100" prop="productBarCode" label="条码" align="center" />
-        <el-table-column :width="60" prop="productUnit" label="单位" align="center" />
+        <el-table-column prop="productBarCode" label="条码" align="center" />
+        <el-table-column :width="90" prop="productUnit" label="单位" align="center" />
         <el-table-column :width="100" prop="taxPrice" label="含税赠品单价" align="center" />
         <el-table-column :width="100" prop="noTaxPrice" label="未税赠品单价" align="center" />
-        <el-table-column :width="90" prop="limitCount" label="限量" align="center" />
+        <el-table-column :width="100" prop="limitCount" label="限量" align="center" />
       </el-table>
       <el-pagination
         v-if="tableData.length"
