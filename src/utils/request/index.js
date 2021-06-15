@@ -8,8 +8,8 @@ import store from '@/store';
 const INVALID_TOKENS = [];
 
 const request = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API
-  // withCredentials: true // 跨域允许携带cookie
+  baseURL: process.env.VUE_APP_BASE_API,
+  withCredentials: true // 跨域允许携带cookie
 });
 
 // 请求拦截
@@ -75,12 +75,14 @@ export function downloadFile(url, params) {
   });
   request({
     url,
-    methods: 'get',
-    params: p,
+    method: 'post',
+    data: p,
     responseType: 'blob'
-  }).then((blob) => {
-    console.log(blob);
-    // download(blob, '123');
+  }).then((res) => {
+    console.log();
+    console.log(res.data, res.headers['content-disposition']);
+    // var filename = 'fasda'.match(/(?<=filename=).*/)[0]
+    // download(res.data, decodeURI(filename));
   }).catch(() => {});
 }
 
