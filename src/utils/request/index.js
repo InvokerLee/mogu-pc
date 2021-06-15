@@ -65,19 +65,34 @@ request.interceptors.response.use((response) => {
   return Promise.reject(error);
 });
 
-function formatParams(params) {
-  let result = '';
-  Object.keys(params).forEach((key) => {
-    if (!Object.is(params[key], undefined) && !Object.is(params[key], null) && !Object.is(JSON.stringify(params[key]), '{}')) {
-      result += key + '=' + params[key] + '&';
-    }
-  });
-  return result;
-}
 // 通用下载方法
 export function downloadFile(url, params) {
-  const p = formatParams(params);
-  window.open(`${process.env.VUE_APP_BASE_API}${url}?${p}`);
+  const p = {};
+  Object.keys(params).forEach((key) => {
+    if (params[key]) {
+      p[key] = params[key];
+    }
+  });
+  request({
+    url,
+    methods: 'get',
+    params: p,
+    responseType: 'blob'
+  }).then((blob) => {
+    console.log(blob);
+    // download(blob, '123');
+  }).catch(() => {});
+}
+
+export function download(content, fileName) {
+  const blob = new Blob([content]);
+  const a = document.createElement('a');
+  const url = window.URL.createObjectURL(blob);
+  const filename = fileName;
+  a.href = url;
+  a.download = filename;
+  a.click();
+  window.URL.revokeObjectURL(url);
 }
 
 export default request;
