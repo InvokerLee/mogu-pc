@@ -59,7 +59,7 @@
             <el-input v-model.trim="form.noTaxPrice" disabled placeholder="自动带出"></el-input>
           </el-form-item>
           <el-form-item label="价格提示：">
-            <el-input v-model.trim="form.priceTip"></el-input>
+            <el-input v-model.trim="form.priceTip" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>

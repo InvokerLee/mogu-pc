@@ -218,13 +218,13 @@ export default {
     typeChange() {
       // 重置表单输入
       Object.assign(this.form, initForm());
+      this.guestOptions = [];
     },
     selectChange(guests) {
       const g = guests[0] || {};
       this.form.address = g.address;
     },
     confirm() {
-      console.log(this.form);
       this.$refs.orderForm.validate((valid) => {
         if (!valid) return;
         this.loading = true;
