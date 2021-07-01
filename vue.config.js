@@ -1,5 +1,6 @@
 'use strict';
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -33,12 +34,31 @@ module.exports = {
       }
     }
   },
-  configureWebpack: {
-    resolve: {
-      alias: {
-        '@': resolve('src')
-      }
+  configureWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      // 为生产环境修改配置
+      config.plugins.push(
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            compress: {
+              drop_debugger: true,
+              drop_console: false // 生产环境自动删除console
+            },
+            warnings: false
+          },
+          sourceMap: false,
+          parallel: true // 使用多进程并行运行来提高构建速度。默认并发运行数：os.cpus().length - 1。
+        })
+      );
     }
+
+    return {
+      resolve: {
+        alias: {
+          '@': resolve('src')
+        }
+      }
+    };
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
