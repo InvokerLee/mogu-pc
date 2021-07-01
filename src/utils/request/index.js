@@ -79,7 +79,6 @@ export function downloadFile(url, params) {
     data: p,
     responseType: 'blob'
   }).then((res) => {
-    console.log();
     console.log(res.data, res.headers['content-disposition']);
     // var filename = 'fasda'.match(/(?<=filename=).*/)[0]
     // download(res.data, decodeURI(filename));

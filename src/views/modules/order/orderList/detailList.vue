@@ -39,8 +39,8 @@
         <el-table-column :width="60" prop="boxCount" label="箱数" align="center" />
         <el-table-column :width="80" prop="taxPrice" label="含税单价" align="center" />
         <el-table-column :width="80" prop="noTaxPrice" label="未税单价" align="center" />
-        <el-table-column :width="90" prop="1" label="含税箱单价" align="center" />
-        <el-table-column :width="90" prop="1" label="未税箱单价" align="center" />
+        <el-table-column :width="90" prop="taxBoxPrice" label="含税箱单价" align="center" />
+        <el-table-column :width="90" prop="noTaxBoxPrice" label="未税箱单价" align="center" />
         <el-table-column :width="80" prop="taxSum" label="含税金额" align="center" />
         <el-table-column :width="80" prop="noTaxSum" label="未税金额" align="center" />
         <el-table-column :width="90" prop="storeName" label="仓库" align="center" />
