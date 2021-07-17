@@ -51,6 +51,7 @@
               class="w100"
               :controls="false"
               :precision="2"
+              @change="calcPrice"
             >
             </el-input-number>
           </el-form-item>
@@ -76,6 +77,7 @@ import { addOrderDetail, editOrderDetail } from '@/api/order';
 import { commonCanUsedCount } from '@/api/common';
 import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
+import BigNumber from 'bignumber.js';
 
 export default {
   components: {
@@ -145,6 +147,11 @@ export default {
       this.form.taxRate = p.salesTaxRate;
       this.getCanUsedCount();
       this.calcBoxCount();
+    },
+    calcPrice(val) {
+      if (!this.form.taxRate) return;
+      const a = new BigNumber(val).times(this.form.taxRate).dividedBy(100);
+      this.form.noTaxPrice = new BigNumber(val).minus(a).toFixed(2);
     },
     getCanUsedCount() {
       if (!this.form.productId || !this.form.storeId) return;
