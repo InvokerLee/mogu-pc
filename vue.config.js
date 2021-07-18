@@ -25,11 +25,11 @@ module.exports = {
     open: true,
     // public: '',
     proxy: {
-      '/api': {
-        target: 'http://www.kaerp.com:9090',
+      '/erp': {
+        target: 'http://47.100.77.98:9090',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/erp': ''
         }
       }
     }
