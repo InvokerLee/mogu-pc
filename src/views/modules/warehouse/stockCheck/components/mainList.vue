@@ -63,7 +63,7 @@
             </el-button>
             <el-button
               style="margin-left: 0;"
-              :class="scope.row.state !== 1 && 'font-red'"
+              class="font-red"
               type="text"
               :disabled="scope.row.state === 1"
               icon="el-icon-delete"
