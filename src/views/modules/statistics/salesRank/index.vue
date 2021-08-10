@@ -5,7 +5,6 @@
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="销售计算方式">
           <el-select v-model="params.salesReportType" placeholder="请选择" class="w120px">
-            <el-option label="全部" value="" />
             <el-option label="验收-退货" :value="0" />
             <el-option label="验收" :value="1" />
             <el-option label="发货" :value="2" />
@@ -13,14 +12,12 @@
         </el-form-item>
         <el-form-item label="排序方式">
           <el-select v-model="params.sortType" placeholder="请选择" class="w90px">
-            <el-option label="全部" value="" />
             <el-option label="滞销" :value="1" />
             <el-option label="畅销" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item label="统计标准">
           <el-select v-model="params.statisticsType" placeholder="请选择" class="w90px">
-            <el-option label="全部" value="" />
             <el-option label="数量" :value="1" />
             <el-option label="金额" :value="0" />
           </el-select>
@@ -88,9 +85,9 @@ export default {
     return {
       loading: false,
       params: {
-        salesReportType: '',
-        sortType: '',
-        statisticsType: '',
+        salesReportType: 0,
+        sortType: 1,
+        statisticsType: 1,
         curentPage: 1,
         pageSize: 10
       },

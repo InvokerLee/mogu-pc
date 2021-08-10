@@ -47,7 +47,7 @@
           <el-table-column :width="90" prop="returnTaxSum" label="退货金额" align="center" />
           <el-table-column :min-width="100" prop="returnOutCount" label="退货出库数量" align="center" />
           <el-table-column :min-width="100" prop="returnOutTaxSum" label="退货出库金额" align="center" />
-          <el-table-column :width="80" prop="" label="单价" align="center" />
+          <el-table-column :width="80" prop="stockPrice" label="单价" align="center" />
           <el-table-column :width="80" prop="stockCount" label="采购数量" align="center" />
           <el-table-column :width="90" prop="stockTaxSum" label="采购金额" align="center" />
         </el-table>

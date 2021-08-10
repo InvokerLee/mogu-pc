@@ -45,7 +45,7 @@
           <el-table-column prop="productTypeName" label="类别" align="center" />
           <el-table-column :min-width="120" prop="productName" label="产品" align="center" />
           <el-table-column :width="80" prop="productBarCode" label="条码" align="center" />
-          <el-table-column prop="salesCount" label="库存量" align="center" />
+          <el-table-column prop="purchaseCount" label="库存量" align="center" />
           <el-table-column prop="batchNum" label="批号" align="center" />
           <el-table-column prop="productDate" label="生产日期" align="center" />
           <el-table-column :width="70" prop="productValidityDate" label="有效期" align="center" />

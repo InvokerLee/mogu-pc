@@ -4,7 +4,7 @@
     <div class="outOfStockRate">
       <el-form ref="searchForm" hide-details size="mini" inline :model="params">
         <el-form-item label="客户">
-          <el-input v-model.trim="params.productName" placeholder="客户名称" />
+          <el-input v-model.trim="params.guestName" placeholder="客户名称" />
         </el-form-item>
         <el-form-item label="订单缺货率大于">
           <el-input v-model.trim="params.orderLackRate" placeholder="" class="w90px" />
@@ -72,7 +72,7 @@ export default {
     return {
       loading: false,
       params: {
-        productName: '',
+        guestName: '',
         orderLackRate: '',
         outLackRate: '',
         curentPage: 1,

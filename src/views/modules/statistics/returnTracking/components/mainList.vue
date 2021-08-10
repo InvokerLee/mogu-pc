@@ -35,18 +35,18 @@
         </template>
       </el-table-column>
       <el-table-column :min-width="120" prop="guestName" label="客户" align="center" />
-      <el-table-column :width="160" prop="orderNo" label="订单号" align="center" />
+      <el-table-column :width="160" prop="returnNo" label="订单号" align="center" />
       <el-table-column :width="135" prop="orderDate" label="订单日期" align="center" />
       <el-table-column :width="135" prop="orderInDate" label="入库日期" align="center" />
       <el-table-column :width="90 " prop="orderCount" label="入库数量" align="center" />
-      <el-table-column :min-width="120" prop="noTaxSum" label="入库金额(含税)" align="center" />
-      <el-table-column :min-width="120" prop="taxSum" label="入库金额(未税)" align="center" />
+      <el-table-column :min-width="120" prop="taxSum" label="入库金额(含税)" align="center" />
+      <el-table-column :min-width="120" prop="noTaxSum" label="入库金额(未税)" align="center" />
       <el-table-column :width="90" prop="storeName" label="仓库" align="center" />
       <el-table-column :min-width="120" prop="text" label="备注" align="center" />
       <el-table-column :width="60" label="状态" align="center">
         <template slot-scope="scope">
           <span>
-            {{ ['停用', '有效'][scope.row.state] }}
+            {{ ['待审核', '已审核'][scope.row.state] }}
           </span>
         </template>
       </el-table-column>

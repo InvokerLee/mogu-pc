@@ -77,7 +77,7 @@
           <el-table-column prop="outStoreTaxSum" label="出库金额" align="center" />
           <el-table-column prop="boxCount" label="箱数" align="center" />
           <el-table-column prop="storeName" label="仓库" align="center" />
-          <el-table-column prop="text" label="单据备注" align="center" />
+          <el-table-column prop="orderText" label="单据备注" align="center" />
           <el-table-column :width="150" prop="parentOrderNo" label="上级单号" align="center" />
           <el-table-column :width="70" prop="checkMan" label="审核人" align="center" />
         </el-table>

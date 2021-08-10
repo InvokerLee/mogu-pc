@@ -41,7 +41,7 @@
           :data="tableData"
         >
           <el-table-column width="55" type="index" label="序号" align="center" />
-          <el-table-column prop="orderData" label="订单日期" align="center" />
+          <el-table-column prop="orderDate" label="订单日期" align="center" />
           <el-table-column prop="orderNo" label="订单号" align="center" />
           <el-table-column :min-width="120" prop="guestName" label="客户" align="center" />
           <el-table-column :min-width="120" prop="productName" label="产品" align="center" />
