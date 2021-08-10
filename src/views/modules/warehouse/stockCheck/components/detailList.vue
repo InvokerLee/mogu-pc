@@ -26,8 +26,8 @@
         <el-table-column :width="60" label="操作" type="action" align="center">
           <template slot-scope="scope">
             <el-row type="flex" justify="space-around" class="font-16">
-              <a class="font-blue el-icon-edit" @click="edit(scope.row)"></a>
-              <a class="font-red el-icon-delete" @click="del(scope.row)"></a>
+              <el-button type="text" :disabled="disabled" icon="el-icon-edit" @click.stop="edit(scope.row)"></el-button>
+              <el-button type="text" :disabled="disabled" icon="el-icon-delete" class="font-red" @click.stop="del(scope.row)"></el-button>
             </el-row>
           </template>
         </el-table-column>
@@ -75,7 +75,7 @@ export default {
   components: {
     addDialog
   },
-  props: ['rowId'],
+  props: ['rowId', 'rowState'],
   data() {
     return {
       loading: false,
@@ -91,6 +91,11 @@ export default {
         item: {}
       }
     };
+  },
+  computed: {
+    disabled() {
+      return this.rowState === 1;
+    }
   },
   watch: {
     rowId(val) {
