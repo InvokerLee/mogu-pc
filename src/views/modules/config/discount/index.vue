@@ -1,7 +1,7 @@
 <template>
   <base-wrapper>
     <main-list @rowClickChange="rowClickChange"></main-list>
-    <detail-list :rowId="selectRowId"></detail-list>
+    <detail-list :rowId="row.id" :rowState="row.state"></detail-list>
   </base-wrapper>
 </template>
 
@@ -16,12 +16,12 @@ export default {
   },
   data() {
     return {
-      selectRowId: ''
+      row: {}
     };
   },
   methods: {
     rowClickChange(row) {
-      this.selectRowId = row ? row.id : '';
+      this.row = row || {};
     }
   }
 };

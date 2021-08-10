@@ -142,6 +142,9 @@ div:focus {
 }
 .font-red {
   color: $--color-danger !important;
+  &.is-disabled {
+    opacity: 0.6;
+  }
 }
 .font-gray {
   color: $--color-info !important;

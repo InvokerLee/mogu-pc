@@ -53,7 +53,7 @@
             <el-button type="text" :disabled="scope.row.state === 1" icon="el-icon-edit" @click.stop="edit(scope.row)">
             </el-button>
             <!-- <a class="font-red el-icon-delete font-16" @click="del(scope.row)"></a> -->
-            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '取消审核' : '审核' }}</a>
+            <a class="font-blue" @click.stop="check(scope.row)">{{ scope.row.state ? '反审' : '审核' }}</a>
           </el-row>
         </template>
       </el-table-column>
