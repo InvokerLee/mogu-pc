@@ -143,6 +143,7 @@ export default {
     selectChange(products) {
       const p = products[0] || {};
       this.form.productBoxCount = p.boxCount;
+      this.calcBoxCount();
 
       commonSelectProductPrice({
         orderType: this.orderType,
@@ -152,12 +153,13 @@ export default {
         this.form.productName = name;
         this.form.productBarCode = barCode;
         this.form.productUnit = unit;
-        this.form.noTaxPrice = price;
+        this.form.taxPrice = price;
         this.form.taxRate = taxRate;
         this.form.priceTip = priceTip;
+
+        this.calcPrice(this.form.taxPrice);
       });
       this.getCanUsedCount();
-      this.calcBoxCount();
     },
     calcPrice(val) {
       if (!this.form.taxRate) return;
