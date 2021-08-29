@@ -11,7 +11,6 @@
     filterable
     :loading="loading"
     @change="change"
-    @focus="remoteMethod"
   >
     <el-option
       v-for="i in options"
@@ -37,12 +36,6 @@ export default {
       type: String,
       default: ''
     },
-    defaultOpions: {
-      type: Array,
-      default() {
-        return [];
-      }
-    },
     multiple: {
       type: Boolean,
       default: false
@@ -55,12 +48,10 @@ export default {
     };
   },
   created() {
-    if (this.defaultOpions) {
-      this.options = this.defaultOpions;
-    }
+    this.getOptions();
   },
   methods: {
-    remoteMethod() {
+    getOptions() {
       this.loading = true;
       commonSelectType().then((res) => {
         this.options = res.result;

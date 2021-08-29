@@ -10,7 +10,7 @@
       <el-col :span="20">
         <el-form ref="categoryForm" size="mini" label-width="100px" :model="form" :rules="rules">
           <el-form-item label="上级类别：">
-            <category-search :params="form" paramsKey="parentId" :defaultOpions="defaultOpions"></category-search>
+            <category-search :params="form" paramsKey="parentId"></category-search>
           </el-form-item>
           <el-form-item label="类别名称：" prop="name">
             <el-input v-model.trim="form.name"></el-input>
@@ -62,8 +62,7 @@ export default {
         state: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
-      },
-      defaultOpions: []
+      }
     };
   },
   created() {
@@ -72,10 +71,6 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
-      this.defaultOpions = [{
-        name: this.item.parentName,
-        id: this.item.parentId
-      }];
     }
   },
   methods: {

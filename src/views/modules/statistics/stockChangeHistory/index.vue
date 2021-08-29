@@ -19,7 +19,7 @@
           <category-search :params="params" paramsKey="productTypeId"></category-search>
         </el-form-item>
         <el-form-item label="品牌">
-          <brand-search :params="params" paramsKey="productBrandId">></brand-search>
+          <brand-search :params="params" paramsKey="productBrandId"></brand-search>
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
