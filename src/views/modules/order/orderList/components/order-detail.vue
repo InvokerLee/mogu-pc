@@ -76,7 +76,7 @@
 <script>
 import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
-import { commonCanUsedCount } from '@/api/common';
+import { commonCanUsedCount, commonSelectProductPrice } from '@/api/common';
 import BigNumber from 'bignumber.js';
 
 export default {
@@ -84,7 +84,7 @@ export default {
     ProductSelector,
     WarehousSelector
   },
-  props: ['visible', 'item', 'storeType'],
+  props: ['visible', 'item', 'storeType', 'orderType'],
   data() {
     return {
       loading: false,
@@ -142,13 +142,20 @@ export default {
     },
     selectChange(products) {
       const p = products[0] || {};
-      this.form.productName = p.name;
-      this.form.productBarCode = p.barCode;
-      this.form.productUnit = p.unit;
-      // TODO:可用数量
       this.form.productBoxCount = p.boxCount;
-      this.form.noTaxPrice = p.salseNoTaxPrice;
-      this.form.taxRate = p.salesTaxRate;
+
+      commonSelectProductPrice({
+        orderType: this.orderType,
+        productId: this.form.productId
+      }).then(({ result }) => {
+        const { name, barCode, unit, price, taxRate, priceTip } = result;
+        this.form.productName = name;
+        this.form.productBarCode = barCode;
+        this.form.productUnit = unit;
+        this.form.noTaxPrice = price;
+        this.form.taxRate = taxRate;
+        this.form.priceTip = priceTip;
+      });
       this.getCanUsedCount();
       this.calcBoxCount();
     },

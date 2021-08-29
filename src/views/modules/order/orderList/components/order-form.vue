@@ -113,6 +113,7 @@
       :visible="dialog.show"
       :item="dialog.item"
       :storeType="dialog.storeType"
+      :orderType="dialog.orderType"
       @finish="insertProduct"
       @cancel="closeDialog"
     />
@@ -175,6 +176,7 @@ export default {
       dialog: {
         show: false,
         storeType: '',
+        orderType: '',
         item: {}
       },
       guestOptions: [],
@@ -247,6 +249,7 @@ export default {
     openDialog(item) {
       this.dialog.item = item || {};
       this.dialog.storeType = this.getStoreType();
+      this.dialog.orderType = this.getOrderType();
       this.dialog.show = true;
     },
     getStoreType() {
@@ -256,6 +259,9 @@ export default {
         return 'sample';
       }
       return 'public';
+    },
+    getOrderType() {
+      return ['sales', 'stock', 'sample', 'shoppe'].find((type) => this.form.orderType.startsWith(type));
     },
     closeDialog() {
       this.dialog.show = false;

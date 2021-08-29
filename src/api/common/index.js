@@ -85,3 +85,13 @@ export function commonSelectProduct(data) {
     }
   });
 }
+export function commonSelectProductPrice(data) {
+  return request({
+    url: '/common/selectProductPrice',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

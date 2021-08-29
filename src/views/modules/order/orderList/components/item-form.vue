@@ -74,7 +74,7 @@
 
 <script>
 import { addOrderDetail, editOrderDetail } from '@/api/order';
-import { commonCanUsedCount } from '@/api/common';
+import { commonCanUsedCount, commonSelectProductPrice } from '@/api/common';
 import ProductSelector from '@/components/ProductSelector';
 import WarehousSelector from '@/components/WarehousSelector';
 import BigNumber from 'bignumber.js';
@@ -140,11 +140,20 @@ export default {
     },
     selectChange(products) {
       const p = products[0] || {};
-      this.form.productUnit = p.unit;
-      // TODO:可用数量
       this.form.productBoxCount = p.boxCount;
-      this.form.noTaxPrice = p.salseNoTaxPrice;
-      this.form.taxRate = p.salesTaxRate;
+
+      commonSelectProductPrice({
+        orderType: this.getOrderType(),
+        productId: this.form.productId
+      }).then(({ result }) => {
+        const { name, barCode, unit, price, taxRate, priceTip } = result;
+        this.form.productName = name;
+        this.form.productBarCode = barCode;
+        this.form.productUnit = unit;
+        this.form.noTaxPrice = price;
+        this.form.taxRate = taxRate;
+        this.form.priceTip = priceTip;
+      });
       this.getCanUsedCount();
       this.calcBoxCount();
     },
@@ -170,6 +179,9 @@ export default {
         return 'sample';
       }
       return 'public';
+    },
+    getOrderType() {
+      return ['sales', 'stock', 'sample', 'shoppe'].find((type) => this.order.orderType.startsWith(type));
     },
     confirm() {
       this.$refs.orderDetailForm.validate((valid) => {
