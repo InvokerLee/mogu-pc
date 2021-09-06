@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    width="640px"
+    width="70%"
     :title="isEdit ? '订单产品编辑' : '订单产品新增'"
     :close-on-click-modal="false"
     :visible="visible"

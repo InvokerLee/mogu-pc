@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="orderDialog"
-    width="1000px"
+    width="80%"
     :title="isEdit ? '订单编辑' : '订单新增'"
     :close-on-click-modal="false"
     :visible="visible"
@@ -273,7 +273,6 @@ export default {
       } else {
         this.orderProductList.push(item);
       }
-      this.closeDialog();
     },
     del(i) {
       this.orderProductList.splice(i, 1);

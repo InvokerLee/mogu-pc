@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    width="640px"
+    width="70%"
     :title="isEdit ? '订单产品编辑' : '订单产品新增'"
     :close-on-click-modal="false"
     :append-to-body="true"
@@ -79,6 +79,27 @@ import WarehousSelector from '@/components/WarehousSelector';
 import { commonCanUsedCount, commonSelectProductPrice } from '@/api/common';
 import BigNumber from 'bignumber.js';
 
+const initForm = (defaultParams) => {
+  return Object.assign({
+    productId: '',
+    productName: '',
+    productBarCode: '',
+    productUnit: '',
+    taxRate: '',
+    count: undefined,
+    boxCount: undefined,
+    storeId: '',
+    storeName: '',
+    text: '',
+
+    taxPrice: undefined,
+    noTaxPrice: '',
+    productBoxCount: '',
+    priceTip: '',
+    canUsedCount: ''
+  }, defaultParams);
+};
+
 export default {
   components: {
     ProductSelector,
@@ -89,24 +110,7 @@ export default {
     return {
       loading: false,
       isEdit: false,
-      form: {
-        productId: '',
-        productName: '',
-        productBarCode: '',
-        productUnit: '',
-        taxRate: '',
-        count: undefined,
-        boxCount: undefined,
-        storeId: '',
-        storeName: '',
-        text: '',
-
-        taxPrice: undefined,
-        noTaxPrice: '',
-        productBoxCount: '',
-        priceTip: '',
-        canUsedCount: ''
-      },
+      form: initForm(),
       rules: {
         productId: [
           { required: true, message: '必填', trigger: 'blur' }
@@ -191,7 +195,14 @@ export default {
           taxSum: this.form.taxPrice * this.form.count,
           noTaxSum: this.form.noTaxPrice * this.form.count
         };
+
         this.$emit('finish', product);
+        if (this.isEdit) {
+          this.cancel();
+        } else {
+          this.$message.success('添加成功，已重置');
+          this.form = initForm();
+        }
       });
     },
     cancel() {
