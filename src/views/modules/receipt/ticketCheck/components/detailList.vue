@@ -1,5 +1,5 @@
 <template>
-  <div v-if="rowId">
+  <div v-if="row.id">
     <el-card shadow="never" class="detail-list">
       <div slot="header">
         <el-form ref="searchForm" hide-details size="mini" inline :model="params">
@@ -78,7 +78,7 @@ export default {
   components: {
     itemForm
   },
-  props: ['rowId'],
+  props: ['row'],
   data() {
     return {
       loading: false,
@@ -96,8 +96,8 @@ export default {
     };
   },
   watch: {
-    rowId(val) {
-      if (!val) {
+    row(val) {
+      if (!val || !val.id) {
         Object.assign(this.params, this.$options.data.call(this).params);
         return;
       }
@@ -107,7 +107,7 @@ export default {
   methods: {
     getList() {
       const params = {
-        orderId: this.rowId
+        orderId: this.row.id
       };
       Object.keys(this.params).forEach((key) => {
         if (this.params[key] !== '') {
