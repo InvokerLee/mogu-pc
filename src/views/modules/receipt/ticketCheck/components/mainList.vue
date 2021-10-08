@@ -57,7 +57,7 @@
     >
       <el-table-column :width="80" label="操作" type="action" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="uddateState(scope.row)">
+          <el-button size="mini" type="text" @click.stop="uddateState(scope.row)">
             {{ scope.row.state === 0 ? '验收' : '取消验收' }}
           </el-button>
         </template>
