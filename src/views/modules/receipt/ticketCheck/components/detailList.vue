@@ -39,13 +39,13 @@
         <el-table-column prop="returnCount" label="退货数量" align="center" />
         <el-table-column prop="returnBoxCount" label="退货箱数" align="center" />
         <el-table-column prop="damageCount" label="损耗数量" align="center" />
-        <el-table-column :width="100" prop="1" label="含税验收单价" align="center" />
+        <el-table-column :width="100" prop="taxPrice" label="含税验收单价" align="center" />
         <el-table-column :width="100" prop="checkTaxSum" label="含税验收金额" align="center" />
-        <el-table-column :width="100" prop="1" label="含税成本单价" align="center" />
-        <el-table-column :width="100" prop="1" label="含税损耗成本" align="center" />
+        <el-table-column :width="100" prop="taxNoPrice" label="含税成本单价" align="center" />
+        <el-table-column :width="100" prop="damageNoTaxSum" label="含税损耗成本" align="center" />
         <el-table-column prop="taxRate" label="税率" align="center" />
-        <el-table-column prop="1" label="毛利额" align="center" />
-        <el-table-column prop="1" label="毛利率" align="center" />
+        <el-table-column prop="grossMargin" label="毛利额" align="center" />
+        <el-table-column prop="grossRate" label="毛利率" align="center" />
         <el-table-column prop="storeName" label="仓库" align="center" />
         <el-table-column :min-width="200" prop="text" label="备注" align="center" />
       </el-table>
