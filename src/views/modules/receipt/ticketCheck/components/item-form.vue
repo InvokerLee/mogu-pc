@@ -8,7 +8,12 @@
   >
     <el-form ref="itemForm" size="mini" label-width="130px" :model="form" :rules="rules">
       <el-form-item label="订单产品：" prop="realname">
-        <product-selector :params="form" paramsKey="productId" :defaultOpions="productOpts" @selectChange="selectChange"></product-selector>
+        <product-selector
+          :params="form"
+          paramsKey="productId"
+          :defaultOpions="productOpts"
+          @selectChange="selectChange"
+        ></product-selector>
       </el-form-item>
       <el-row type="flex" justify="center">
         <el-col :span="12">
@@ -149,7 +154,6 @@ export default {
 
       this.productOpts = [{ name: this.item.productName, productId: this.item.productId }];
     }
-    console.log(this.item);
   },
   methods: {
     selectChange(product) {
