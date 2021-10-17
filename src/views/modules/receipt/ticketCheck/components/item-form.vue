@@ -1,33 +1,102 @@
 <template>
   <el-dialog
     width="750px"
-    :title="isEdit ? '合同产品编辑(主表)' : '合同产品新增(主表)'"
+    title="修改明细"
     :close-on-click-modal="false"
     :visible="visible"
     @close="cancel"
   >
-    <el-form ref="itemForm" size="mini" label-width="120px" :model="form" :rules="rules">
+    <el-form ref="itemForm" size="mini" label-width="130px" :model="form" :rules="rules">
+      <el-form-item label="订单产品：" prop="realname">
+        <product-selector :params="form" paramsKey="productId" :defaultOpions="productOpts" @selectChange="selectChange"></product-selector>
+      </el-form-item>
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form-item label="产品：" prop="realname">
-            <product-selector :params="form" paramsKey="productId" @selectChange="selectChange"></product-selector>
+          <el-form-item label="发货数量：">
+            <el-input-number
+              v-model="form.count"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
           </el-form-item>
-          <el-form-item label="条码：" required>
-            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
+          <el-form-item label="含税发货单价：">
+            <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="供货价(含税)：">
+          <el-form-item label="未税发货单价：">
+            <el-input v-model.trim="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="验收数量：">
+            <el-input-number
+              v-model="form.count"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="含税验收单价：">
+            <el-input v-model.trim="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="未税验收单价：">
+            <el-input v-model.trim="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="损耗数量：">
+            <el-input-number
+              v-model="form.count"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="含税成本单价：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="货号">
+          <el-form-item label="箱数：">
+            <el-input-number
+              v-model="form.count"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="含税发货金额：">
             <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="单位：" required>
-            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
+          <el-form-item label="未税发货金额：">
+            <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
-          <el-form-item label="供货价(未税)：" required>
-            <el-input v-model.trim="form.phone" disabled placeholder="自动带出"></el-input>
+          <el-form-item label="验收箱数：">
+            <el-input-number
+              v-model="form.count"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="含税验收金额：">
+            <el-input v-model.trim="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="未税验收金额：">
+            <el-input v-model.trim="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="损耗箱数：">
+            <el-input-number
+              v-model="form.count"
+              class="w100"
+              :controls="false"
+              :precision="0"
+            >
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="含税损耗成本：">
+            <el-input v-model.trim="form.phone"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -67,7 +136,8 @@ export default {
         status: [
           { required: true, message: '必选', trigger: 'blur' }
         ]
-      }
+      },
+      productOpts: []
     };
   },
   created() {
@@ -76,9 +146,10 @@ export default {
       Object.keys(this.form).forEach((k) => {
         this.form[k] = this.item[k];
       });
-      // 默认给一个筛选框
-      // this.options = [{ value: this.form.id, label: this.form.label }];
+
+      this.productOpts = [{ name: this.item.productName, productId: this.item.productId }];
     }
+    console.log(this.item);
   },
   methods: {
     selectChange(product) {

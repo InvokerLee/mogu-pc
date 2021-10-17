@@ -25,7 +25,7 @@
         <el-table-column type="index" :width="55" align="center" />
         <el-table-column label="操作" type="action" :width="100" align="center">
           <template slot-scope="scope">
-            <!-- <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button> -->
+            <el-button size="mini" type="text" @click="edit(scope.row)">编辑</el-button>
             <el-button size="mini" type="text" class="font-red" @click="reject(scope.row)">拒收</el-button>
           </template>
         </el-table-column>
@@ -132,8 +132,8 @@ export default {
       this.getList();
     },
     edit(item) {
-      // this.dialog.item = item;
-      // this.dialog.show = true;
+      this.dialog.item = item;
+      this.dialog.show = true;
     },
     reject(item) {
       rejectReceiptOrderDetail(item.id).then(() => {
